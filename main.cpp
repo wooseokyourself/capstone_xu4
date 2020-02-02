@@ -1,7 +1,3 @@
-/*
- The original code is from github.com/CrazyThink/Project/blob/master/FTP/server.c
- */
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -69,7 +65,7 @@ main (int argc, char *argv[]) {
     ling.l_linger = 0;	// linger timeout set
     
     /* LINGER 설정: 서버소켓 */
-    setsockopt (servSock, SOL_SOCKET, SO_LINGER, (char *) &ling, sizeof(ling));
+    // setsockopt (servSock, SOL_SOCKET, SO_LINGER, (char *) &ling, sizeof(ling));
 
     /* 지역 주소에 바인드 */
     if (bind (servSock, (struct sockaddr *) &servAddr, sizeof(servAddr)) < 0)
@@ -93,7 +89,7 @@ main (int argc, char *argv[]) {
     socklen_t clntAddrLen = sizeof(clntAddr);
 
     /* LINGER 설정: 클라이언트소켓 */
-    setsockopt (clntSock, SOL_SOCKET, SO_LINGER, (char *) &ling, sizeof(ling));
+    // setsockopt (clntSock, SOL_SOCKET, SO_LINGER, (char *) &ling, sizeof(ling));
 
     /* 클라이언트의 연결을 기다림 */
     clntSock = accept (servSock, (struct sockaddr *) &clntAddr, &clntAddrLen);
@@ -113,62 +109,49 @@ main (int argc, char *argv[]) {
 
 
     for (;;) {
+	/* from send(sock, buf, 100, 0); */
 	recv (clntSock, buf, 100, 0);
+
 	sscanf (buf, "%s", command);
-	if (!strcmp (command, "ls")) {
-	    system ("ls >temps.txt");
-	    stat ("temps.txt", &obj);
-	    size = obj.st_size;
-	    send (clntSock, &size, sizeof(int), 0);
-	    fileHandle = open ("temps.txt", O_RDONLY);
-	    sendfile (clntSock, fileHandle, NULL, size);
-	}
-	else if (!strcmp (command, "get")) {
-	    sscanf (buf, "%s%s", filename, filename);
-	    stat (filename, &obj);
-	    fileHandle = open (filename, O_RDONLY);
-	    size = obj.st_size;
-	    if (fileHandle == -1)
-		size = 0;
-	    send (clntSock, &size, sizeof(int), 0);
-	    if (size)
-		sendfile (clntSock, fileHandle, NULL, size);
-	}
-	else if (!strcmp (command, "put")) {
-	    int c = 0, len;
+	if (!strcmp (command, "put")) {
+	    int len;
+	    int report = 0;
 	    char *f;
 	    sscanf (buf + strlen(command), "%s", filename);
-	    recv (clntSock, &size, sizeof(int), 0);
+
+	    /* from send(sock, &size, sizeof(int), 0); */
+	    recv (clntSock, &size, sizeof(int), 0); 
 
 	    while (1) {
 		fileHandle = open (filename, O_CREAT | O_EXCL | O_WRONLY, 0666);
 		if (fileHandle == -1)
-		    sprintf (filename + strlen(filename), "_1");
+		    sprintf (filename + strlen(filename), "_1"); // overlapped file handling
 		else
-		    break;
+		    break; // if the file is not exist in this repo
 	    }
 	    f = (char *)malloc(size);
-	    recv (clntSock, f, size, 0);
-	    c = write (fileHandle, f, size);
+
+	    /* from sendfile(sock, filehandle, NULL, size); 
+	       Get message from Client. */
+	    ssize_t numBytesRcvd = recv (clntSock, f, size, 0);
+
+	    if (numBytesRcvd < 0)
+		error_handling ("recv() error");
+
+	    // THIS IS NOT WORK!
+	    /* // Transfer continue 
+	    while (numBytesRcvd > 0) {
+		numBytesRcvd = recv (clntSock, f, size, 0);
+		if (numBytesRcvd < 0)
+		    error_handling ("recv() error");
+	    }
+	    */
+
+	    report = write (fileHandle, f, size);
 	    close (fileHandle);
-	    send (clntSock, &c, sizeof(int), 0);
-	}
-	else if (!strcmp (command, "pwd")) {
-	    system ("pwd>temp.txt");
-	    i = 0;
-	    FILE *f = fopen ("temp.txt", "r");
-	    while (!feof(f))
-		buf[i++] = fgetc(f);
-	    buf[i-1] = '\0';
-	    fclose (f);
-	    send (clntSock, buf, 100, 0);
-	}
-	else if (!strcmp (command, "cd")) {
-	    if (chdir(buf + 3) == 0)
-		c = 1;
-	    else
-		c = 0;
-	    send (clntSock, &c, sizeof(int), 0);
+
+	    /**/
+	    send (clntSock, &report, sizeof(int), 0); // report the result of writing the file
 	}
 	else if (!strcmp (command, "bye") || !strcmp (command, "quit")) {
 	    printf ("FTP server quit\n");
