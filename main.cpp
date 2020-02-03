@@ -104,9 +104,7 @@ main (int argc, char *argv[]) {
 
     for (;;) {
 	/* from send(sock, buf, 100, 0); */
-        // recv (clntSock, buf, 100, 0); // 여기 buf엔 put 혹은 quit이 들어온다.
-        if (read (clntSock, buf, 100, 0) == -1)
-            error_handling ("read() error");
+        recv (clntSock, buf, 100, 0); // 여기 buf엔 put 혹은 quit이 들어온다.
 
         sscanf (buf, "%s", command);
         if (!strcmp (command, "put")) {
@@ -116,9 +114,7 @@ main (int argc, char *argv[]) {
             sscanf (buf + strlen(command), "%s", filename);
 
             /* from send(sock, &size, sizeof(int), 0); */
-            // recv (clntSock, &size, sizeof(int), 0); 
-            if (read (clntSock, &size, sizeof(int), 0) == -1)
-                error_handling ("read() error");
+            recv (clntSock, &size, sizeof(int), 0);
 
             while (1) {
                 fileHandle = open (filename, O_CREAT | O_EXCL | O_WRONLY, 0666);
@@ -131,25 +127,19 @@ main (int argc, char *argv[]) {
 
             /* from sendfile(sock, filehandle, NULL, size); 
             Get message from Client. */
-            // recv (clntSock, f, size, 0);
-            if (read (clntSock, f, size, 0) < 0)
-                error_handling ("read() error");
+            recv (clntSock, f, size, 0);
 
 
             report = write (fileHandle, f, size);
             close (fileHandle);
 
             /**/
-            // send (clntSock, &report, sizeof(int), 0); // report the result of writing the file
-            if (write (clntSock, &report, sizeof(int), 0) == -1)
-                error_handling ("write() error");
+            send (clntSock, &report, sizeof(int), 0); // report the result of writing the file
         }
         else if (!strcmp (command, "bye") || !strcmp (command, "quit")) {
             printf ("FTP server quit\n");
             i = 1;
-            // send (clntSock, &i, sizeof(int), 0);
-            if (write (clntSock, &i, sizeof(int), 0) == -1)
-                error_handling ("write() error");
+            send (clntSock, &i, sizeof(int), 0);
             exit(0);
         }
     }
