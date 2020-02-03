@@ -22,9 +22,6 @@ error_handling (char *message) {
 }
 
 int
-serv_file_upload (int, char *);
-
-int
 main (int argc, char *argv[]) {
 
 /* SERVER dafult set start */
