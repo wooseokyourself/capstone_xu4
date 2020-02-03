@@ -97,13 +97,13 @@ main (int argc, char *argv[]) {
     /* 연결된 클라이언트의 정보를 출력하는 기능 */
     char clntName[INET_ADDRSTRLEN]; // 클라이언트의 주소를 담기 위한 문자열
     if (inet_ntop (AF_INET, &clntAddr.sin_addr.s_addr, clntName, sizeof(clntName)) != NULL)
-	printf ("Handling client %s%d\n", clntName, ntohs(clntAddr.sin_port));
+	printf ("Client connectec %s%d\n", clntName, ntohs(clntAddr.sin_port));
     else
 	puts ("Unable to get client address");
 
 
     for (;;) {
-	    /*  
+	/*  
             from: send(sock, buf, 100, 0);
             put 혹은 quit 이 buf 로 들어옴
         */
@@ -111,9 +111,6 @@ main (int argc, char *argv[]) {
 
         sscanf (buf, "%s", command);
         if (!strcmp (command, "put")) {
-            int len;
-            int report = 0;
-            char *f;
             sscanf (buf + strlen(command), "%s", fileName);
 
             /* 
@@ -122,7 +119,7 @@ main (int argc, char *argv[]) {
             */
             recv (clntSock, &fileSize, sizeof(int), 0);
 
-printf ("fileSize: %s\n", fileSize);
+printf ("fileSize: %d\n", fileSize);
 
             /*  fileSize, fileName 를 토대로 파일 생성 */
             while (1) { 
@@ -132,20 +129,29 @@ printf ("fileSize: %s\n", fileSize);
                 else // 파일을 정상적으로 생성할 수 있다면
                     break;
             }
-            f = (char *)malloc(fileSize); // fileSize 만큼의 메모리 할당
+            char *f = (char *)malloc(fileSize); // fileSize 만큼의 메모리 할당
 
             /*
                 from: sendfile(sock, filehandle, NULL, imgSize); 
                 파일 수신
             */
-            recv (clntSock, f, fileSize, 0);
+            // recv (clntSock, f, fileSize, 0);
+            
+	    /*	File write */
+	    // int result = write (fileHandle, f, fileSize);
 
-            /*  수신한 파일을 현재 디렉토리에 쓰기 */
-            report = write (fileHandle, f, fileSize);
-            close (fileHandle);
+
+	    /*
+		from: sendfile
+	     */
+	    int len, result;
+	    while ((len = recv(clntSock, f, 30, 0)) != 0)
+		result = write (fileHandle, f, len);
+
+	    close (fileHandle);
 
             /*  파일생성의 성공여부를 클라이언트에게 전송 */
-            send (clntSock, &report, sizeof(int), 0);
+            send (clntSock, &result, sizeof(int), 0);
         }
         else if (!strcmp (command, "quit")) {
             printf ("FTP server quit\n");
