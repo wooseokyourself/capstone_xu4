@@ -28,8 +28,8 @@ main (int argc, char *argv[]) {
 
     /* 명령어 인자의 개수 확인 */
     if (argc != 2) {
-	printf("Usage: %s <PORT>\n", argv[0]);
-	exit(1);
+	    printf("Usage: %s <PORT>\n", argv[0]);
+	    exit(1);
     }
 
     /* SET FOR SERVER SOCKET */
@@ -42,7 +42,7 @@ main (int argc, char *argv[]) {
     /* 외부의 연결 요청을 처리하는 서버소켓 생성 */
     int servSock = socket (AF_INET, SOCK_STREAM, IPPROTO_TCP);
     if (servSock == -1)
-	error_handling ("socket() error");
+	    error_handling ("socket() error");
     
     /* 지역 주소 구조체 생성 */
     struct sockaddr_in servAddr;
@@ -104,7 +104,9 @@ main (int argc, char *argv[]) {
 
     for (;;) {
 	/* from send(sock, buf, 100, 0); */
-        recv (clntSock, buf, 100, 0); // 여기 buf엔 put 혹은 quit이 들어온다.
+        // recv (clntSock, buf, 100, 0); // 여기 buf엔 put 혹은 quit이 들어온다.
+        if (read (clntSock, buf, 100, 0) == -1)
+            error_handling ("read() error");
 
         sscanf (buf, "%s", command);
         if (!strcmp (command, "put")) {
@@ -114,43 +116,40 @@ main (int argc, char *argv[]) {
             sscanf (buf + strlen(command), "%s", filename);
 
             /* from send(sock, &size, sizeof(int), 0); */
-            recv (clntSock, &size, sizeof(int), 0); 
+            // recv (clntSock, &size, sizeof(int), 0); 
+            if (read (clntSock, &size, sizeof(int), 0) == -1)
+                error_handling ("read() error");
 
             while (1) {
-            fileHandle = open (filename, O_CREAT | O_EXCL | O_WRONLY, 0666);
-            if (fileHandle == -1)
-                sprintf (filename + strlen(filename), "_1"); // overlapped file handling
-            else
-                break; // if the file is not exist in this repo
+                fileHandle = open (filename, O_CREAT | O_EXCL | O_WRONLY, 0666);
+                if (fileHandle == -1)
+                    sprintf (filename + strlen(filename), "_1"); // overlapped file handling
+                else
+                    break; // if the file is not exist in this repo
             }
             f = (char *)malloc(size);
 
             /* from sendfile(sock, filehandle, NULL, size); 
             Get message from Client. */
-            ssize_t numBytesRcvd = recv (clntSock, f, size, 0);
+            // recv (clntSock, f, size, 0);
+            if (read (clntSock, f, size, 0) < 0)
+                error_handling ("read() error");
 
-            if (numBytesRcvd < 0)
-            error_handling ("recv() error");
-
-            // THIS IS NOT WORK!
-            /* // Transfer continue 
-            while (numBytesRcvd > 0) {
-            numBytesRcvd = recv (clntSock, f, size, 0);
-            if (numBytesRcvd < 0)
-                error_handling ("recv() error");
-            }
-            */
 
             report = write (fileHandle, f, size);
             close (fileHandle);
 
             /**/
-            send (clntSock, &report, sizeof(int), 0); // report the result of writing the file
+            // send (clntSock, &report, sizeof(int), 0); // report the result of writing the file
+            if (write (clntSock, &report, sizeof(int), 0) == -1)
+                error_handling ("write() error");
         }
         else if (!strcmp (command, "bye") || !strcmp (command, "quit")) {
             printf ("FTP server quit\n");
             i = 1;
-            send (clntSock, &i, sizeof(int), 0);
+            // send (clntSock, &i, sizeof(int), 0);
+            if (write (clntSock, &i, sizeof(int), 0) == -1)
+                error_handling ("write() error");
             exit(0);
         }
     }
