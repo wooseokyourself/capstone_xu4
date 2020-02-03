@@ -52,10 +52,10 @@ main (int argc, char *argv[]) {
     servAddr.sin_port = htons (servPort);	    // 지역포트
 
     /* 필요 변수들 생성 */
-    char buf[100], command[5], filename[20];
+    char buf[100], command[5], fileName[20];
     int k;
     int i;
-    int size;
+    int fileSize; // 받고자 할 파일의 사이즈
     int c;
     int fileHandle;
     
@@ -103,40 +103,51 @@ main (int argc, char *argv[]) {
 
 
     for (;;) {
-	/* from send(sock, buf, 100, 0); */
-        recv (clntSock, buf, 100, 0); // 여기 buf엔 put 혹은 quit이 들어온다.
+	    /*  
+            from: send(sock, buf, 100, 0);
+            put 혹은 quit 이 buf 로 들어옴
+        */
+        recv (clntSock, buf, 100, 0);
 
         sscanf (buf, "%s", command);
         if (!strcmp (command, "put")) {
             int len;
             int report = 0;
             char *f;
-            sscanf (buf + strlen(command), "%s", filename);
+            sscanf (buf + strlen(command), "%s", fileName);
 
-            /* from send(sock, &size, sizeof(int), 0); */
-            recv (clntSock, &size, sizeof(int), 0);
+            /* 
+                from: send(sock, &imgSize, sizeof(int), 0); 
+                &imgSize 를 &fileSize 로 받음
+            */
+            recv (clntSock, &fileSize, sizeof(int), 0);
 
-            while (1) {
-                fileHandle = open (filename, O_CREAT | O_EXCL | O_WRONLY, 0666);
-                if (fileHandle == -1)
-                    sprintf (filename + strlen(filename), "_1"); // overlapped file handling
-                else
-                    break; // if the file is not exist in this repo
+printf ("fileSize: %s\n", fileSize);
+
+            /*  fileSize, fileName 를 토대로 파일 생성 */
+            while (1) { 
+                fileHandle = open (fileName, O_CREAT | O_EXCL | O_WRONLY, 0666);
+                if (fileHandle == -1) // 만약 동일한파일이 서버에 존재한다면
+                    sprintf (fileName + strlen(fileName), "_1"); // 이름 뒤에 _1 붙이기
+                else // 파일을 정상적으로 생성할 수 있다면
+                    break;
             }
-            f = (char *)malloc(size);
+            f = (char *)malloc(fileSize); // fileSize 만큼의 메모리 할당
 
-            /* from sendfile(sock, filehandle, NULL, size); 
-            Get message from Client. */
-            recv (clntSock, f, size, 0);
+            /*
+                from: sendfile(sock, filehandle, NULL, imgSize); 
+                파일 수신
+            */
+            recv (clntSock, f, fileSize, 0);
 
-
-            report = write (fileHandle, f, size);
+            /*  수신한 파일을 현재 디렉토리에 쓰기 */
+            report = write (fileHandle, f, fileSize);
             close (fileHandle);
 
-            /**/
-            send (clntSock, &report, sizeof(int), 0); // report the result of writing the file
+            /*  파일생성의 성공여부를 클라이언트에게 전송 */
+            send (clntSock, &report, sizeof(int), 0);
         }
-        else if (!strcmp (command, "bye") || !strcmp (command, "quit")) {
+        else if (!strcmp (command, "quit")) {
             printf ("FTP server quit\n");
             i = 1;
             send (clntSock, &i, sizeof(int), 0);
