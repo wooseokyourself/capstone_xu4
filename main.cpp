@@ -22,15 +22,18 @@ error_handling (char *message) {
 }
 
 int
+serv_file_upload (int, char *);
+
+int
 main (int argc, char *argv[]) {
+
+/* SERVER dafult set start */
+
     /* 명령어 인자의 개수 확인 */
     if (argc != 2) {
 	printf("Usage: %s <PORT>\n", argv[0]);
 	exit(1);
     }
-
-
-
 
     /* SET FOR SERVER SOCKET */
     
@@ -75,10 +78,6 @@ main (int argc, char *argv[]) {
     if (listen (servSock, MAXPENDING) < 0)
 	error_handling ("listen() error");
 
-
-
-
-
     /* SET FOR CLIENT SOCKET */
 
     /* 클라이언트 소켓 생성 */
@@ -94,11 +93,9 @@ main (int argc, char *argv[]) {
     /* 클라이언트의 연결을 기다림 */
     clntSock = accept (servSock, (struct sockaddr *) &clntAddr, &clntAddrLen);
 
-
+/* SERVER dafult set end */
 
     /* 이 시점에서 clntSock 이 실제 외부에서 연결을 요청한 클라이언트와 연결됨 */
-
-
 
     /* 연결된 클라이언트의 정보를 출력하는 기능 */
     char clntName[INET_ADDRSTRLEN]; // 클라이언트의 주소를 담기 위한 문자열
@@ -110,55 +107,55 @@ main (int argc, char *argv[]) {
 
     for (;;) {
 	/* from send(sock, buf, 100, 0); */
-	recv (clntSock, buf, 100, 0);
+        recv (clntSock, buf, 100, 0); // 여기 buf엔 put 혹은 quit이 들어온다.
 
-	sscanf (buf, "%s", command);
-	if (!strcmp (command, "put")) {
-	    int len;
-	    int report = 0;
-	    char *f;
-	    sscanf (buf + strlen(command), "%s", filename);
+        sscanf (buf, "%s", command);
+        if (!strcmp (command, "put")) {
+            int len;
+            int report = 0;
+            char *f;
+            sscanf (buf + strlen(command), "%s", filename);
 
-	    /* from send(sock, &size, sizeof(int), 0); */
-	    recv (clntSock, &size, sizeof(int), 0); 
+            /* from send(sock, &size, sizeof(int), 0); */
+            recv (clntSock, &size, sizeof(int), 0); 
 
-	    while (1) {
-		fileHandle = open (filename, O_CREAT | O_EXCL | O_WRONLY, 0666);
-		if (fileHandle == -1)
-		    sprintf (filename + strlen(filename), "_1"); // overlapped file handling
-		else
-		    break; // if the file is not exist in this repo
-	    }
-	    f = (char *)malloc(size);
+            while (1) {
+            fileHandle = open (filename, O_CREAT | O_EXCL | O_WRONLY, 0666);
+            if (fileHandle == -1)
+                sprintf (filename + strlen(filename), "_1"); // overlapped file handling
+            else
+                break; // if the file is not exist in this repo
+            }
+            f = (char *)malloc(size);
 
-	    /* from sendfile(sock, filehandle, NULL, size); 
-	       Get message from Client. */
-	    ssize_t numBytesRcvd = recv (clntSock, f, size, 0);
+            /* from sendfile(sock, filehandle, NULL, size); 
+            Get message from Client. */
+            ssize_t numBytesRcvd = recv (clntSock, f, size, 0);
 
-	    if (numBytesRcvd < 0)
-		error_handling ("recv() error");
+            if (numBytesRcvd < 0)
+            error_handling ("recv() error");
 
-	    // THIS IS NOT WORK!
-	    /* // Transfer continue 
-	    while (numBytesRcvd > 0) {
-		numBytesRcvd = recv (clntSock, f, size, 0);
-		if (numBytesRcvd < 0)
-		    error_handling ("recv() error");
-	    }
-	    */
+            // THIS IS NOT WORK!
+            /* // Transfer continue 
+            while (numBytesRcvd > 0) {
+            numBytesRcvd = recv (clntSock, f, size, 0);
+            if (numBytesRcvd < 0)
+                error_handling ("recv() error");
+            }
+            */
 
-	    report = write (fileHandle, f, size);
-	    close (fileHandle);
+            report = write (fileHandle, f, size);
+            close (fileHandle);
 
-	    /**/
-	    send (clntSock, &report, sizeof(int), 0); // report the result of writing the file
-	}
-	else if (!strcmp (command, "bye") || !strcmp (command, "quit")) {
-	    printf ("FTP server quit\n");
-	    i = 1;
-	    send (clntSock, &i, sizeof(int), 0);
-	    exit(0);
-	}
+            /**/
+            send (clntSock, &report, sizeof(int), 0); // report the result of writing the file
+        }
+        else if (!strcmp (command, "bye") || !strcmp (command, "quit")) {
+            printf ("FTP server quit\n");
+            i = 1;
+            send (clntSock, &i, sizeof(int), 0);
+            exit(0);
+        }
     }
     return 0;
 }
