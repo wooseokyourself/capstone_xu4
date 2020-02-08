@@ -136,19 +136,24 @@ printf ("fileSize: %d\n", fileSize);
                 파일 수신
             */
             // recv (clntSock, f, fileSize, 0);
-            
-	    /*	File write */
-	    // int result = write (fileHandle, f, fileSize);
+                
+            /*	File write */
+            // int result = write (fileHandle, f, fileSize);
 
 
-	    /*
-		from: sendfile
-	     */
-	    int len, result;
-	    while ((len = recv(clntSock, f, 30, 0)) != 0)
-		result = write (fileHandle, f, len);
+            /*
+            from: sendfile
+            */
+            int len, result;
+            // 원래 코드: while ((len = recv(clntSock, f, 30, 0)) != 0)
+            while (true) {
+                len = recv(clntSock, f, 30, 0))
+                if (len < 0)
+                    break;
+            }
+            result = write (fileHandle, f, len);
 
-	    close (fileHandle);
+            close (fileHandle);
 
             /*  파일생성의 성공여부를 클라이언트에게 전송 */
             send (clntSock, &result, sizeof(int), 0);
