@@ -12,6 +12,9 @@
 #include <fcntl.h>
 #include <unistd.h>
 
+#define MAXLINE 511
+#define MAXBUF 1024
+
 static const int MAXPENDING = 5;    // 연결 요청을 대기할 수 있는 최대 수
 
 void
@@ -52,7 +55,7 @@ main (int argc, char *argv[]) {
     servAddr.sin_port = htons (servPort);	    // 지역포트
 
     /* 필요 변수들 생성 */
-    char buf[100], command[5], fileName[20];
+    char buf[MAXBUF], fileName[MAXLINE];
     int k;
     int i;
     int fileSize; // 받고자 할 파일의 사이즈
@@ -102,68 +105,47 @@ main (int argc, char *argv[]) {
 	puts ("Unable to get client address");
 
 
-    for (;;) {
 	/*  
             from: send(sock, buf, 100, 0);
             put 혹은 quit 이 buf 로 들어옴
         */
-        recv (clntSock, buf, 100, 0);
-
-        sscanf (buf, "%s", command);
-        if (!strcmp (command, "put")) {
-            sscanf (buf + strlen(command), "%s", fileName);
+    memset (buf, 0x00, MAXBUF);
+    recv (clntSock, buf, 100, 0);
+    
+    sscanf (buf, "%s", fileName); // fileName 저장
 
             /* 
                 from: send(sock, &imgSize, sizeof(int), 0); 
                 &imgSize 를 &fileSize 로 받음
             */
-            recv (clntSock, &fileSize, sizeof(int), 0);
+    recv (clntSock, &fileSize, sizeof(int), 0);
+    printf ("fileSize: %d\n", fileSize);
 
-printf ("fileSize: %d\n", fileSize);
-
-            /*  fileSize, fileName 를 토대로 파일 생성 */
-            while (1) { 
-                fileHandle = open (fileName, O_CREAT | O_EXCL | O_WRONLY, 0666);
-                if (fileHandle == -1) // 만약 동일한파일이 서버에 존재한다면
-                    sprintf (fileName + strlen(fileName), "_1"); // 이름 뒤에 _1 붙이기
-                else // 파일을 정상적으로 생성할 수 있다면
-                    break;
-            }
-            char *f = (char *)malloc(fileSize); // fileSize 만큼의 메모리 할당
-
-            /*
-                from: sendfile(sock, filehandle, NULL, imgSize); 
-                파일 수신
-            */
-            // recv (clntSock, f, fileSize, 0);
-                
-            /*	File write */
-            // int result = write (fileHandle, f, fileSize);
-
-
-            /*
-            from: sendfile
-            */
-            int len, result;
-            // 원래 코드: while ((len = recv(clntSock, f, 30, 0)) != 0)
-            while (true) {
-                len = recv(clntSock, f, 30, 0))
-                if (len < 0)
-                    break;
-            }
-            result = write (fileHandle, f, len);
-
-            close (fileHandle);
-
-            /*  파일생성의 성공여부를 클라이언트에게 전송 */
-            send (clntSock, &result, sizeof(int), 0);
+    /*  fileSize, fileName 를 토대로 파일 생성 */
+    while (1) { 
+        fileHandle = open (fileName, O_CREAT | O_EXCL | O_WRONLY, 0666);
+        if (fileHandle == -1) // 만약 동일한파일이 서버에 존재한다면
+            sprintf (fileName + strlen(fileName), "_1"); // 이름 뒤에 _1 붙이기
+        else // 파일을 정상적으로 생성할 수 있다면
+            break;
         }
-        else if (!strcmp (command, "quit")) {
-            printf ("FTP server quit\n");
-            i = 1;
-            send (clntSock, &i, sizeof(int), 0);
-            exit(0);
-        }
+
+    /*
+        from: sendfile(sock, filehandle, NULL, imgSize); 
+        파일 수신
+    */
+    int file_read_len, written_len;
+	    
+    while ( (file_read_len = recv (clntSock, buf, MAXBUF, 0)) > 0) {
+	written_len = write (fileHandle, buf, file_read_len);
+	if (written_len != file_read_len) {
+	    error_handling ("written_len != file_read_len");
+	}
+	memset (buf, 0x00, MAXBUF);
     }
+
+    close (fileHandle);
+    close (clntSock);
+    
     return 0;
 }
