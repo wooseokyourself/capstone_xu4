@@ -269,14 +269,13 @@ MachineLearning (struct protocol* data) {
 	temp = to_string (tm.tm_hour);
     if (temp.length() == 1) temp = "0" + temp;
 	currTime += temp;
-	temp += to_string (tm.tm_min);
+	temp = to_string (tm.tm_min);
 	if (temp.length() == 1) temp = "0" + temp;
 	currTime += temp;
-	temp += to_string (tm.tm_sec);
+	temp = to_string (tm.tm_sec);
     if (temp.length() == 1) temp = "0" + temp;
 	currTime += temp;
 
-    string currTime = year + month + day + "_" + hour + minute + second;
     string INPUT_IMAGE_PATH = "../uploads" + currTime + ".jpeg";
     string OUTPUT_IMAGE_PATH = "../uploads" + currTime + "_out.jpeg";
 	Mat img;
