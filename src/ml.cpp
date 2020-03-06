@@ -279,7 +279,7 @@ MachineLearning (struct protocol* data) {
     string hour = curr_tm->tm_hour;
     if (hour.length() == 1) day = "0" + day;
     string minute = curr_tm->tm_min; 
-    if (minute.length() == 1) minute = "0" = minute;
+    if (minute.length() == 1) minute = "0" + minute;
     string second = curr_tm->tm_sec;
     if (second.length() == 1) second = "0" + second;
 
