@@ -256,8 +256,8 @@ drawPred (int classId, float conf, int left, int top, int right, int bottom, Mat
 /* 머신러닝을 이용하여 입력받은 파일을 분석하고 결과값 리턴 */
 void 
 MachineLearning (struct protocol* data) {
-    time_t t = time(NULL);
-	struct  tm tm = *localtime(&t);
+    time_t timeObj = time(NULL);
+	struct  tm tm = *localtime(&timeObj);
     string currTime, temp;
 	currTime += to_string (tm.tm_year+1900);
     temp = to_string (tm.tm_mon+1);
