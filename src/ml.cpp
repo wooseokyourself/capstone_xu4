@@ -73,7 +73,7 @@ decoding (struct protocol* dataPtr) {
 
 bool
 setNet (Net& net) {
-    net = readNetFromDarknet (MODEL_PATH, CONFIG_PATH);
+    net = readNet (MODEL_PATH, CONFIG_PATH);
 
     /*
         선호하는 백엔드를 지정. 목록은 다음과 같다.
