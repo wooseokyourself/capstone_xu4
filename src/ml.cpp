@@ -256,32 +256,25 @@ drawPred (int classId, float conf, int left, int top, int right, int bottom, Mat
 /* 머신러닝을 이용하여 입력받은 파일을 분석하고 결과값 리턴 */
 void 
 MachineLearning (struct protocol* data) {
-    // 헤더 파일에 가보면 'typedef long time_t'로 되어 있습니다. 즉, long과 동일하다고 보면 됩니다.
-    time_t curr_time;
- 
-    // 시간 표시를 위한 구조체를 선언합니다.
-    struct tm *curr_tm;
- 
-    // time 함수는 1970년 1월 1일 이후 몇초가 지났는지를 계산합니다. NULL을 인자로 사용합니다.
-    curr_time = time(NULL);
- 
-    // 지역 시간을 기준으로 변환 및 출력 편의를 위하여 tm 구조체에 저장합니다.(포맷팅)
-    curr_tm = localtime(&curr_time);
- 
-    //출력 예제
-    cout << curr_tm->tm_year + 1900 << "년 " << curr_tm->tm_mon + 1 << "일 " << curr_tm->tm_mday << "일" << endl;     
-    cout << curr_tm->tm_hour << "시 " << curr_tm->tm_min << "분 " << curr_tm->tm_sec << "초" << endl << endl;
-    string year = curr_tm->tm_year;
-    string month = curr_tm->tm_mon + 1;
-    if (month.length() == 1) month = "0" + month;
-    string day = curr_tm->tm_mday;
-    if (day.length() == 1) day = "0" + day;
-    string hour = curr_tm->tm_hour;
-    if (hour.length() == 1) day = "0" + day;
-    string minute = curr_tm->tm_min; 
-    if (minute.length() == 1) minute = "0" + minute;
-    string second = curr_tm->tm_sec;
-    if (second.length() == 1) second = "0" + second;
+    time_t t = time(NULL);
+	struct  tm tm = *localtime(&t);
+    string currTime, temp;
+	currTime += to_string (tm.tm_year+1900);
+    temp = to_string (tm.tm_mon+1);
+    if (temp.length() == 1) temp = "0" + temp;
+	currTime += temp;
+    temp = to_string (tm.tm_mday);
+    if (temp.length() == 1) temp = "0" + temp;
+    currTime += temp;
+	temp = to_string (tm.tm_hour);
+    if (temp.length() == 1) temp = "0" + temp;
+	currTime += temp;
+	temp += to_string (tm.tm_min);
+	if (temp.length() == 1) temp = "0" + temp;
+	currTime += temp;
+	temp += to_string (tm.tm_sec);
+    if (temp.length() == 1) temp = "0" + temp;
+	currTime += temp;
 
     string currTime = year + month + day + "_" + hour + minute + second;
     string INPUT_IMAGE_PATH = "../uploads" + currTime + ".jpeg";
