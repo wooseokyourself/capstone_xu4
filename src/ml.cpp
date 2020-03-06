@@ -73,7 +73,9 @@ decoding (struct protocol* dataPtr) {
 
 bool
 setNet (Net& net) {
+    printf ("setNet called! now call readNet()\n");
     net = readNet (MODEL_PATH, CONFIG_PATH);
+    printf ("readNet was done!\n");
 
     /*
         선호하는 백엔드를 지정. 목록은 다음과 같다.
@@ -102,16 +104,21 @@ setNet (Net& net) {
     }
     */
     net.setPreferableTarget(DNN_TARGET_CPU);
+    printf ("setNet() returned.\n");
 }
 
 inline void
 preprocess (const Mat& frame, Net& net, Size inpSize, float scale,
             const Scalar& mean, bool swapRB) {
+    printf ("preprocess called! \n");
     static Mat blob;
     // Create a 4D blob from a frame.
-    if (inpSize.width <= 0) inpSize.width = frame.cols;
-    if (inpSize.height <= 0) inpSize.height = frame.rows;
+    if (inpSize.width <= 0)
+        inpSize.width = frame.cols;
+    if (inpSize.height <= 0)
+        inpSize.height = frame.rows;
 
+    printf ("now call blobFromImage()\n");
 	/*
 	Mat
 	blobFromImage  (
@@ -133,9 +140,11 @@ preprocess (const Mat& frame, Net& net, Size inpSize, float scale,
     blob = blobFromImage(frame, 1.0, inpSize, Scalar(), swapRB, false, CV_8U);
 
     // Run a model.
+    printf ("now call setInput()\n");
     net.setInput(blob, "", scale, mean);
     if (net.getLayer(0)->outputNameToIndex("im_info") != -1)  // Faster-RCNN or R-FCN
     {
+        printf ("Faster-RCNN of R-FCN\n");
         resize(frame, frame, inpSize);
         Mat imInfo = (Mat_<float>(1, 3) << inpSize.height, inpSize.width, 1.6f);
         net.setInput(imInfo, "im_info");
@@ -144,6 +153,7 @@ preprocess (const Mat& frame, Net& net, Size inpSize, float scale,
 
 void
 postprocess (Mat& frame, const std::vector<Mat>& outs, Net& net) {
+    printf ("postprocess called!\n");
     static std::vector<int> outLayers = net.getUnconnectedOutLayers();
     static std::string outLayerType = net.getLayer(outLayers[0])->type;
 
