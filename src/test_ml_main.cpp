@@ -6,10 +6,7 @@
 #include "ml.hpp"
 
 int main (void) {
-    while (true) {
-        struct protocol* dummyptr = NULL;
-		MachineLearning (dummyptr);
-        //SendToWeb (result);
-    }
+    struct protocol* dummyptr = NULL;
+	MachineLearning (dummyptr);
     return 0;
 }

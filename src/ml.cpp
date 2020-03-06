@@ -1,7 +1,7 @@
 #include "ml.hpp"
 
 #ifdef DEBUG_ML
-string IMAGE_PATH = "../test_images/1.jpeg";
+string TEST_IMAGE_PATH = "1.jpeg";
 #endif
 
 string MODEL_PATH = "../model/yolov3.weights";
@@ -9,7 +9,7 @@ string CONFIG_PATH = "../model/yolov3.cfg";
  
 
 float confThreshold, nmsThreshold;
-std::vector<std::string> classes;
+vector<string> classes;
 
 /*
 	struct protocol --> struct decoded 변환
@@ -48,7 +48,7 @@ decoding (struct protocol* dataPtr) {
 	struct  tm tm = *localtime(&t);
 	printf ("sizeof(Mat prevImg) = %d\n", sizeof(decImgPtr->prev));
 	printf ("sizeof(Mat currImg) = %d\n", sizeof(decImgPtr->curr));
-	std::string name;
+	string name;
 	name += "debug/";
 	name += to_string (tm.tm_year+1900);
 	name += "-";
@@ -61,8 +61,8 @@ decoding (struct protocol* dataPtr) {
 	name += to_string (tm.tm_min);
 	name += ":";
 	name += to_string (tm.tm_sec);
-	std::string prevName = name + "_prev.jpeg";
-	std::string currName = name + "_curr.jpeg";
+	string prevName = name + "_prev.jpeg";
+	string currName = name + "_curr.jpeg";
 	imwrite (prevName, decImgPtr->prev);
 	imwrite (currName, decImgPtr->curr);
 #endif
@@ -73,9 +73,7 @@ decoding (struct protocol* dataPtr) {
 
 bool
 setNet (Net& net) {
-    printf ("setNet called! now call readNet()\n");
     net = readNet (MODEL_PATH, CONFIG_PATH);
-    printf ("readNet was done!\n");
 
     /*
         선호하는 백엔드를 지정. 목록은 다음과 같다.
@@ -104,15 +102,11 @@ setNet (Net& net) {
     }
     */
     net.setPreferableTarget(DNN_TARGET_CPU);
-    printf ("setNet() returned.\n");
 }
 
 inline void
 preprocess (const Mat& frame, Net& net, Size inpSize, float scale,
             const Scalar& mean, bool swapRB) {
-    printf ("preprocess called! \n");
-    printf ("inpSize.width = %d\n", inpSize.width);
-    printf ("inpSize.height = %d\n", inpSize.height);
     static Mat blob;
     // Create a 4D blob from a frame.
     if (inpSize.width <= 0)
@@ -120,7 +114,6 @@ preprocess (const Mat& frame, Net& net, Size inpSize, float scale,
     if (inpSize.height <= 0)
         inpSize.height = frame.rows;
 
-    printf ("now call blobFromImage()\n");
 	/*
 	Mat
 	blobFromImage  (
@@ -142,11 +135,9 @@ preprocess (const Mat& frame, Net& net, Size inpSize, float scale,
     blob = blobFromImage(frame, 1.0, inpSize, Scalar(), swapRB, false, CV_8U);
 
     // Run a model.
-    printf ("now call setInput()\n");
     net.setInput(blob, "", scale, mean);
     if (net.getLayer(0)->outputNameToIndex("im_info") != -1)  // Faster-RCNN or R-FCN
     {
-        printf ("Faster-RCNN of R-FCN\n");
         resize(frame, frame, inpSize);
         Mat imInfo = (Mat_<float>(1, 3) << inpSize.height, inpSize.width, 1.6f);
         net.setInput(imInfo, "im_info");
@@ -154,14 +145,13 @@ preprocess (const Mat& frame, Net& net, Size inpSize, float scale,
 }
 
 void
-postprocess (Mat& frame, const std::vector<Mat>& outs, Net& net) {
-    printf ("postprocess called!\n");
-    static std::vector<int> outLayers = net.getUnconnectedOutLayers();
-    static std::string outLayerType = net.getLayer(outLayers[0])->type;
+postprocess (Mat& frame, const vector<Mat>& outs, Net& net) {
+    static vector<int> outLayers = net.getUnconnectedOutLayers();
+    static string outLayerType = net.getLayer(outLayers[0])->type;
 
-    std::vector<int> classIds;
-    std::vector<float> confidences;
-    std::vector<Rect> boxes;
+    vector<int> classIds;
+    vector<float> confidences;
+    vector<Rect> boxes;
     if (outLayerType == "DetectionOutput")
     {
         // Network produces output blob with a shape 1x1xNx7 where N is a number of
@@ -231,7 +221,7 @@ postprocess (Mat& frame, const std::vector<Mat>& outs, Net& net) {
     else
         CV_Error(Error::StsNotImplemented, "Unknown output layer type: " + outLayerType);
 
-    std::vector<int> indices;
+    vector<int> indices;
     NMSBoxes(boxes, confidences, confThreshold, nmsThreshold, indices);
     for (size_t i = 0; i < indices.size(); ++i)
     {
@@ -247,7 +237,7 @@ void
 drawPred (int classId, float conf, int left, int top, int right, int bottom, Mat& frame) {
     rectangle(frame, Point(left, top), Point(right, bottom), Scalar(0, 255, 0));
 
-    std::string label = format("%.2f", conf);
+    string label = format("%.2f", conf);
     if (!classes.empty())
     {
         CV_Assert(classId < (int)classes.size());
@@ -266,7 +256,36 @@ drawPred (int classId, float conf, int left, int top, int right, int bottom, Mat
 /* 머신러닝을 이용하여 입력받은 파일을 분석하고 결과값 리턴 */
 void 
 MachineLearning (struct protocol* data) {
+    // 헤더 파일에 가보면 'typedef long time_t'로 되어 있습니다. 즉, long과 동일하다고 보면 됩니다.
+    time_t curr_time;
+ 
+    // 시간 표시를 위한 구조체를 선언합니다.
+    struct tm *curr_tm;
+ 
+    // time 함수는 1970년 1월 1일 이후 몇초가 지났는지를 계산합니다. NULL을 인자로 사용합니다.
+    curr_time = time(NULL);
+ 
+    // 지역 시간을 기준으로 변환 및 출력 편의를 위하여 tm 구조체에 저장합니다.(포맷팅)
+    curr_tm = localtime(&curr_time);
+ 
+    //출력 예제
+    cout << curr_tm->tm_year + 1900 << "년 " << curr_tm->tm_mon + 1 << "일 " << curr_tm->tm_mday << "일" << endl;     
+    cout << curr_tm->tm_hour << "시 " << curr_tm->tm_min << "분 " << curr_tm->tm_sec << "초" << endl << endl;
+    string year = curr_tm->tm_year;
+    string month = curr_tm->tm_mon + 1;
+    if (month.length() == 1) month = "0" + month;
+    string day = curr_tm->tm_mday;
+    if (day.length() == 1) day = "0" + day;
+    string hour = curr_tm->tm_hour;
+    if (hour.length() == 1) day = "0" + day;
+    string minute = curr_tm->tm_min; 
+    if (minute.length() == 1) minute = "0" = minute;
+    string second = curr_tm->tm_sec;
+    if (second.length() == 1) second = "0" + second;
 
+    string currTime = year + month + day + "_" + hour + minute + second;
+    string INPUT_IMAGE_PATH = "../uploads" + currTime + ".jpeg";
+    string OUTPUT_IMAGE_PATH = "../uploads" + currTime + "_out.jpeg";
 	Mat img;
 
 #ifdef DEBUG_ML
@@ -274,13 +293,17 @@ MachineLearning (struct protocol* data) {
 	test_ml_main.cpp 와 함께 컴파일되었다면,
 	Mat을 struct protocol 이 아닌 .jpeg 이미지파일로부터 생성함.
 */
-	img = imread (IMAGE_PATH, IMREAD_COLOR); // BGR channel
+	img = imread (TEST_IMAGE_PATH, IMREAD_COLOR);
+    imwrite (INPUT_IMAGE_PATH, img);
+    img.release();
+    img = imread (INPUT_IMAGE_PATH, IMREAD_COLOR); // BGR channel
 
 #else
     struct decoded* decImgPtr = decoding (data);
 	/* 이후 decImgPtr.curr 을 딥러닝의 input으로 넣고, 나머지 멤버는 웹출력에서 활용 */
 
 	img = decImgPtr->curr.clone(); // 이건 아마 BGR channel.
+    imwrite (INPUT_IMAGE_PATH, img);
 #endif
 
     /*
@@ -309,19 +332,19 @@ MachineLearning (struct protocol* data) {
 
 
     // Open file with classes names.
-    std::string file = "../model/coco.names";
-    std::ifstream ifs(file.c_str());
+    string file = "../model/coco.names";
+    ifstream ifs(file.c_str());
     if (!ifs.is_open())
         CV_Error(Error::StsError, "File " + file + " not found");
-    std::string line;
-    while (std::getline(ifs, line)) {
+    string line;
+    while (getline(ifs, line)) {
         classes.push_back(line);
     }
 
 	// 모델 로드
     Net net;
     setNet (net);
-    std::vector<String> outNames = net.getUnconnectedOutLayersNames();
+    vector<String> outNames = net.getUnconnectedOutLayersNames();
 
 	/*
 		!! 여기까지는 한번만 실행되면 이후 프로그램이 종료될 때까지 소멸되면 안되는 변수들
@@ -332,18 +355,18 @@ MachineLearning (struct protocol* data) {
     Mat blob;
 	preprocess(img, net, Size(inpWidth, inpHeight), scale, mean, swapRB);
 
-	std::vector<Mat> outs;
+	vector<Mat> outs;
 	net.forward(outs, outNames);
 
 	postprocess(img, outs, net);
 
 
 	/* 박스와 추론시간 기입 */
-	std::vector<double> layersTimes;
+	vector<double> layersTimes;
 	double freq = getTickFrequency() / 1000;
 	double t = net.getPerfProfile(layersTimes) / freq;
-	std::string label = format("Inference time: %.2f ms", t);
+	string label = format("Inference time: %.2f ms", t);
 	putText(img, label, Point(0, 15), FONT_HERSHEY_SIMPLEX, 0.5, Scalar(0, 255, 0));
 
-	imwrite ("dnn_result.jpeg", img);
+	imwrite (OUTPUT_IMAGE_PATH, img);
 }
