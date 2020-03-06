@@ -111,6 +111,8 @@ inline void
 preprocess (const Mat& frame, Net& net, Size inpSize, float scale,
             const Scalar& mean, bool swapRB) {
     printf ("preprocess called! \n");
+    printf ("inpSize.width = %d\n", inpSize.width);
+    printf ("inpSize.height = %d\n", inpSize.height);
     static Mat blob;
     // Create a 4D blob from a frame.
     if (inpSize.width <= 0)
