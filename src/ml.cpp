@@ -1,5 +1,13 @@
 #include "ml.hpp"
 
+#ifdef DEBUG_ML
+string IMAGE_PATH = "../test_images/1.jpeg";
+#endif
+
+string MODEL_PATH = "../model/yolov3.weights";
+string CONFIG_PATH = "../model/yolov3.cfg";
+ 
+
 float confThreshold, nmsThreshold;
 std::vector<std::string> classes;
 
@@ -65,7 +73,7 @@ decoding (struct protocol* dataPtr) {
 
 bool
 setNet (Net& net) {
-    net = readNet(MODEL_PATH, CONFIG_PATH, FRAMEWORK_PATH);
+    net = readNetFromDarknet (MODEL_PATH, CONFIG_PATH);
 
     /*
         선호하는 백엔드를 지정. 목록은 다음과 같다.
@@ -78,7 +86,7 @@ setNet (Net& net) {
                     cv::dnn::DNN_BACKEND_CUDA
         }
     */
-    net.setPreferableBackend(DNN_BACKEND_DEFAULT);
+    net.setPreferableBackend(DNN_BACKEND_OPENCV);
 
     /*
         선호하는 타겟 디바이스를 지정. 목록은 다음과 같다.
@@ -277,8 +285,8 @@ MachineLearning (struct protocol* data) {
     */
    	
 	/* 이 셋은 원본예제의 경우 파서에서 값이 결정되는데 실행예에서는 아예 컴파일옵션에 넣지않음. */
-    confThreshold = "1";
-    nmsThreshold = "1";
+    confThreshold = "0.4";
+    nmsThreshold = "0.5";
 	Scalar mean = Scalar();
 
     float scale = 0.00392;
@@ -289,15 +297,13 @@ MachineLearning (struct protocol* data) {
 
 
     // Open file with classes names.
-    if (/* 만약 클래스가 있으면, 원본예제에서는 --classes 컴파일옵션이 붙은 경우 true */) {
-        std::string file = "classes_pascal_voc.txt";
-        std::ifstream ifs(file.c_str());
-        if (!ifs.is_open())
-            CV_Error(Error::StsError, "File " + file + " not found");
-        std::string line;
-        while (std::getline(ifs, line)) {
-            classes.push_back(line);
-        }
+    std::string file = "../model/coco.names";
+    std::ifstream ifs(file.c_str());
+    if (!ifs.is_open())
+        CV_Error(Error::StsError, "File " + file + " not found");
+    std::string line;
+    while (std::getline(ifs, line)) {
+        classes.push_back(line);
     }
 
 	// 모델 로드

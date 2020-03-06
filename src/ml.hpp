@@ -1,14 +1,6 @@
 #ifndef ML
 #define ML
 
-#define MODEL_PATH      TOSTRING (some model)
-#define CONFIG_PATH     TOSTRING (some config)
-#define FRAMEWORK_PATH  TOSTRING (some framework)
-
-#ifdef DEBUG_ML
-#define IMG_PATH        TOSTRING (some img.jpeg)
-#endif
-
 #include <cstdio>
 #include <cassert>
 
