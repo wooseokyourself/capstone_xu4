@@ -262,7 +262,7 @@ MachineLearning (struct protocol* data) {
 	test_ml_main.cpp 와 함께 컴파일되었다면,
 	Mat을 struct protocol 이 아닌 .jpeg 이미지파일로부터 생성함.
 */
-	img = imread (IMG_PATH, IMREAD_COLOR); // BGR channel
+	img = imread (IMAGE_PATH, IMREAD_COLOR); // BGR channel
 
 #else
     struct decoded* decImgPtr = decoding (data);
@@ -285,8 +285,8 @@ MachineLearning (struct protocol* data) {
     */
    	
 	/* 이 셋은 원본예제의 경우 파서에서 값이 결정되는데 실행예에서는 아예 컴파일옵션에 넣지않음. */
-    confThreshold = "0.4";
-    nmsThreshold = "0.5";
+    confThreshold = 0.4;
+    nmsThreshold = 0.5;
 	Scalar mean = Scalar();
 
     float scale = 0.00392;
