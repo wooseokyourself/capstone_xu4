@@ -1,8 +1,13 @@
 #include "../src/ml.hpp"
 
-int main (void) {
+int main (int argc, char* argv[]) {
+    if (argc != 1) {
+        printf ("./dnn.out <테스트할 이미지 파일의 수>\n");
+        return 0;
+    }
+    int imgNum = atoi(argv[0]);
     OpenCV_DNN dnn;
-    for (int i=1; i<=5; i++) {
+    for (int i=1; i<=imgNum; i++) {
         string TEST_IMAGE_PATH = "debug/test_images/" + to_string(i) + ".jpeg";
         dnn.MachineLearning (TEST_IMAGE_PATH);
     }
