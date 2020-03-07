@@ -359,9 +359,10 @@ MachineLearning (struct protocol* data) {
 	vector<double> layersTimes;
 	double freq = getTickFrequency() / 1000;
 	double t = net.getPerfProfile(layersTimes) / freq;
-	string label = format("Inference time: %.2f ms", t);
-	putText (img, label, Point(0, 15), FONT_HERSHEY_SIMPLEX, 0.5, Scalar(0, 255, 0));
-    putText (img, "Threshold: " + confThreshold, Point(15, 15), FONT_HERSHEY_SIMPLEX, 0.5, Scalar(0, 255, 0));
+	string label_inferTime = format ("Inference time: %.2f ms", t);
+    string label_confThreshold = format ("confThreshold : %.1f", confThreshold);
+	putText (img, label_inferTime, Point(0, 15), FONT_HERSHEY_SIMPLEX, 0.5, Scalar(0, 255, 0));
+    putText (img, label_confThreshold, Point(15, 15), FONT_HERSHEY_SIMPLEX, 0.5, Scalar(0, 255, 0));
 
 	imwrite (OUTPUT_IMAGE_PATH, img);
 }
