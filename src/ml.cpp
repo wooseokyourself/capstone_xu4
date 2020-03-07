@@ -128,7 +128,7 @@ OpenCV_DNN::MachineLearning (struct protocol* dataPtr) {
 }
 
 /* struct protocol --> struct decoded 변환 */
-struct decoded*
+struct OpenCV_DNN::decoded*
 OpenCV_DNN::decoding (struct protocol* dataPtr) {
 #ifdef DEBUG
 	printf ("decoding() called..\n");
@@ -210,7 +210,7 @@ OpenCV_DNN::preprocess (const Mat& frame) {
 }
 
 void
-OpenCV_DNN::postprocess (Mat& frame, const vector<Mat>& outs, Net& net) {
+OpenCV_DNN::postprocess (Mat& frame, const vector<Mat>& outs) {
     static vector<int> outLayers = this->net.getUnconnectedOutLayers();
     static string outLayerType = this->net.getLayer(outLayers[0])->type;
 

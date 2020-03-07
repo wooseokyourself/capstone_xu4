@@ -40,7 +40,7 @@ public:
 
 protected:
 
-    struct decoded*
+    struct OpenCV_DNN::decoded*
     decoding (struct protocol* dataPtr);
 
     inline void
