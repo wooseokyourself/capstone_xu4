@@ -158,8 +158,8 @@ OpenCV_DNN::decoding (struct protocol* dataPtr) {
     decImgPtr->curr = imdecode (dataPtr->currBuf, 1);
     decImgPtr->diffValue = dataPtr->diffValue;
 #ifdef DEBUG
-	string currTime = getCurrTime();
-	string prevName = currTime + "_prev.jpeg";
+	std::string currTime = getCurrTime();
+	std::string prevName = currTime + "_prev.jpeg";
 	string currName = currTime + "_curr.jpeg";
 	imwrite (prevName, decImgPtr->prev);
 	imwrite (currName, decImgPtr->curr);

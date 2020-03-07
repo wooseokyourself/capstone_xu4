@@ -9,7 +9,6 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
-#include <ctime>
 #include <string>
 
 #include <opencv2/core/mat.hpp>
