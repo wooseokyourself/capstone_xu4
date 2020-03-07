@@ -107,12 +107,12 @@ OpenCV_DNN::MachineLearning (struct protocol* dataPtr) {
 
     /* Image Process */
     Mat blob;
-	preprocess(img, net, Size(inpWidth, inpHeight), scale, mean, swapRB);
+	preprocess(img);
 
 	vector<Mat> outs;
 	net.forward(outs, outNames);
 
-	postprocess(img, outs, net);
+	postprocess(img, outs);
 
 
 	/* 박스와 추론시간 기입 */
