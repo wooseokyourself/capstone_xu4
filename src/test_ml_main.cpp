@@ -6,7 +6,8 @@
 #include "ml.hpp"
 
 int main (void) {
+    OpenCV_DNN dnn;
     struct protocol* dummyptr = NULL;
-	MachineLearning (dummyptr);
+	dnn.MachineLearning (dummyptr);
     return 0;
 }

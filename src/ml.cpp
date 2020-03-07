@@ -4,22 +4,132 @@
 string TEST_IMAGE_PATH = "1.jpeg";
 #endif
 
-static string MODEL_PATH = "../model/yolov3.weights";
-static string CONFIG_PATH = "../model/yolov3.cfg";
-static string CLASSES_PATH = "../model/coco.names";
-static string INPUT_IMAGE_PATH = "/home/html/ws/uploads/";
-static string OUTPUT_IMAGE_PATH = "/home/html/ws/uploads/";
+OpenCV_DNN::OpenCV_DNN () {
+    /* 외부 경로 설정 */
+    this.MODEL_PATH = "../model/yolov3.weights";
+    this.CONFIG_PATH = "../model/yolov3.cfg";
+    this.CLASSES_PATH = "../model/coco.names";
+    this.INPUT_IMAGE_PATH = "/home/html/ws/uploads/";
+    this.OUTPUT_IMAGE_PATH = "/home/html/ws/uploads/";
 
-static float confThreshold = 0.4;
-static float nmsThreshold = 0.5;
+    /*
+        원본 예제 실행 예 (frome image or video file)
+        example_dnn_object_detection
+        --config=[PATH-TO-DARKNET]/cfg/yolo.cfg
+        --model=[PATH-TO-DARKNET]/yolo.weights
+        --classes=object_detection_classes_pascal_voc.txt
+        --width=416
+        --height=416
+        --scale=0.00392
+        --input=[PATH-TO-IMAGE-OR-VIDEO-FILE]
+        --rgb
+    */
+   	
+	/* DNN 설정 */
+	this.mean = Scalar();
 
-static vector<string> classes;
+    this.scale = 0.00392;
+    this.swapRB = true;
+    this.inpWidth = 416;
+    this.inpHeight = 416;
 
+    this.confThreshold = 0.4;
+    this.nmsThreshold = 0.5;
+
+    // Open file with classes names.
+    string file = CLASSES_PATH;
+    ifstream ifs(file.c_str());
+    if (!ifs.is_open())
+        CV_Error(Error::StsError, "File " + file + " not found");
+    string line;
+    while (getline(ifs, line)) {
+        classes.push_back(line);
+    }
+
+	// 모델 로드
+    this.net = readNet (MODEL_PATH, CONFIG_PATH);
+
+    /*
+        선호하는 백엔드를 지정. 목록은 다음과 같다.
+        enum  	cv::dnn::Backend {
+                    cv::dnn::DNN_BACKEND_DEFAULT = 0,
+                    cv::dnn::DNN_BACKEND_HALIDE,
+                    cv::dnn::DNN_BACKEND_INFERENCE_ENGINE,
+                    cv::dnn::DNN_BACKEND_OPENCV,
+                    cv::dnn::DNN_BACKEND_VKCOM,
+                    cv::dnn::DNN_BACKEND_CUDA
+        }
+    */
+    this.net.setPreferableBackend(DNN_BACKEND_OPENCV);
+
+    /*
+        선호하는 타겟 디바이스를 지정. 목록은 다음과 같다.
+        enum  	cv::dnn::Target {
+                    cv::dnn::DNN_TARGET_CPU = 0,
+                    cv::dnn::DNN_TARGET_OPENCL,
+                    cv::dnn::DNN_TARGET_OPENCL_FP16,
+                    cv::dnn::DNN_TARGET_MYRIAD,
+                    cv::dnn::DNN_TARGET_VULKAN,
+                    cv::dnn::DNN_TARGET_FPGA,
+                    cv::dnn::DNN_TARGET_CUDA,
+                    cv::dnn::DNN_TARGET_CUDA_FP16
+    }
+    */
+    this.net.setPreferableTarget(DNN_TARGET_CPU);
+    this.outNames = net.getUnconnectedOutLayersNames();
+}
+
+void 
+OpenCV_DNN::MachineLearning (struct protocol* dataPtr) {
+    string currTime = getCurrTime();
+    string input_file = INPUT_IMAGE_PATH + currTime + ".jpeg";
+    string output_file = OUTPUT_IMAGE_PATH + currTime + "_out.jpeg";
+	Mat img;
+
+#ifdef DEBUG_ML
 /*
-	struct protocol --> struct decoded 변환
+	test_ml_main.cpp 와 함께 컴파일되었다면,
+	Mat을 struct protocol 이 아닌 .jpeg 이미지파일로부터 생성함.
 */
+	img = imread (TEST_IMAGE_PATH, IMREAD_COLOR);
+    imwrite (input_file, img);
+    img.release();
+    img = imread (input_file, IMREAD_COLOR); // BGR channel
+
+#else
+    struct decoded* decImgPtr = decoding (data);
+	/* 이후 decImgPtr.curr 을 딥러닝의 input으로 넣고, 나머지 멤버는 웹출력에서 활용 */
+
+	img = decImgPtr->curr.clone(); // 이건 아마 BGR channel.
+    imwrite (input_file, img);
+#endif
+
+
+    /* Image Process */
+    Mat blob;
+	preprocess(img, net, Size(inpWidth, inpHeight), scale, mean, swapRB);
+
+	vector<Mat> outs;
+	net.forward(outs, outNames);
+
+	postprocess(img, outs, net);
+
+
+	/* 박스와 추론시간 기입 */
+	vector<double> layersTimes;
+	double freq = getTickFrequency() / 1000;
+	double t = net.getPerfProfile(layersTimes) / freq;
+	string label_inferTime = format ("Inference time: %.2f ms", t);
+    string label_confThreshold = format ("confThreshold : %.1f", confThreshold);
+	putText (img, label_inferTime, Point(0, 35), FONT_HERSHEY_SIMPLEX, 1.0, Scalar(0, 0, 255), 2);
+    putText (img, label_confThreshold, Point(0, 70), FONT_HERSHEY_SIMPLEX, 1.0, Scalar(0, 0, 255), 2);
+
+	imwrite (output_file, img);
+}
+
+/* struct protocol --> struct decoded 변환 */
 struct decoded*
-decoding (struct protocol* dataPtr) {
+OpenCV_DNN::decoding (struct protocol* dataPtr) {
 #ifdef DEBUG
 	printf ("decoding() called..\n");
 	printf ("ml.cpp/decoding() before decoding..  \n");
@@ -48,25 +158,9 @@ decoding (struct protocol* dataPtr) {
     decImgPtr->curr = imdecode (dataPtr->currBuf, 1);
     decImgPtr->diffValue = dataPtr->diffValue;
 #ifdef DEBUG
-	time_t t = time(NULL);
-	struct  tm tm = *localtime(&t);
-	printf ("sizeof(Mat prevImg) = %d\n", sizeof(decImgPtr->prev));
-	printf ("sizeof(Mat currImg) = %d\n", sizeof(decImgPtr->curr));
-	string name;
-	name += "debug/";
-	name += to_string (tm.tm_year+1900);
-	name += "-";
-	name += to_string (tm.tm_mon+1);
-	name += "-";
-	name += to_string (tm.tm_mday);
-	name += "_";
-	name += to_string (tm.tm_hour);
-	name += ":";
-	name += to_string (tm.tm_min);
-	name += ":";
-	name += to_string (tm.tm_sec);
-	string prevName = name + "_prev.jpeg";
-	string currName = name + "_curr.jpeg";
+	string currTime = getCurrTime();
+	string prevName = currTime + "_prev.jpeg";
+	string currName = currTime + "_curr.jpeg";
 	imwrite (prevName, decImgPtr->prev);
 	imwrite (currName, decImgPtr->curr);
 #endif
@@ -75,48 +169,15 @@ decoding (struct protocol* dataPtr) {
 }
 
 
-bool
-setNet (Net& net) {
-    net = readNet (MODEL_PATH, CONFIG_PATH);
-
-    /*
-        선호하는 백엔드를 지정. 목록은 다음과 같다.
-        enum  	cv::dnn::Backend {
-                    cv::dnn::DNN_BACKEND_DEFAULT = 0,
-                    cv::dnn::DNN_BACKEND_HALIDE,
-                    cv::dnn::DNN_BACKEND_INFERENCE_ENGINE,
-                    cv::dnn::DNN_BACKEND_OPENCV,
-                    cv::dnn::DNN_BACKEND_VKCOM,
-                    cv::dnn::DNN_BACKEND_CUDA
-        }
-    */
-    net.setPreferableBackend(DNN_BACKEND_OPENCV);
-
-    /*
-        선호하는 타겟 디바이스를 지정. 목록은 다음과 같다.
-        enum  	cv::dnn::Target {
-                    cv::dnn::DNN_TARGET_CPU = 0,
-                    cv::dnn::DNN_TARGET_OPENCL,
-                    cv::dnn::DNN_TARGET_OPENCL_FP16,
-                    cv::dnn::DNN_TARGET_MYRIAD,
-                    cv::dnn::DNN_TARGET_VULKAN,
-                    cv::dnn::DNN_TARGET_FPGA,
-                    cv::dnn::DNN_TARGET_CUDA,
-                    cv::dnn::DNN_TARGET_CUDA_FP16
-    }
-    */
-    net.setPreferableTarget(DNN_TARGET_CPU);
-}
-
 inline void
-preprocess (const Mat& frame, Net& net, Size inpSize, float scale,
-            const Scalar& mean, bool swapRB) {
+OpenCV_DNN::preprocess (const Mat& frame) {
     static Mat blob;
+    Size inpSize = Size(this.inpWidth, this.inpHeight);
     // Create a 4D blob from a frame.
-    if (inpSize.width <= 0)
-        inpSize.width = frame.cols;
-    if (inpSize.height <= 0)
-        inpSize.height = frame.rows;
+    if (inpSize.inpWidth <= 0)
+        inpSize.inpWidth = frame.cols;
+    if (inpSize.inpHeight <= 0)
+        inpSize.inpHeight = frame.rows;
 
 	/*
 	Mat
@@ -136,22 +197,22 @@ preprocess (const Mat& frame, Net& net, Size inpSize, float scale,
 			int		ddepth			출력blob의 깊이. CV_32F 또는 CV_8U.
 			)
 	*/
-    blob = blobFromImage(frame, 1.0, inpSize, Scalar(), swapRB, false, CV_8U);
+    blob = blobFromImage(frame, 1.0, inpSize, Scalar(), this.swapRB, false, CV_8U);
 
     // Run a model.
-    net.setInput(blob, "", scale, mean);
+    this.net.setInput(blob, "", this.scale, this.mean);
     if (net.getLayer(0)->outputNameToIndex("im_info") != -1)  // Faster-RCNN or R-FCN
     {
         resize(frame, frame, inpSize);
         Mat imInfo = (Mat_<float>(1, 3) << inpSize.height, inpSize.width, 1.6f);
-        net.setInput(imInfo, "im_info");
+        this.net.setInput(imInfo, "im_info");
     }
 }
 
 void
-postprocess (Mat& frame, const vector<Mat>& outs, Net& net) {
-    static vector<int> outLayers = net.getUnconnectedOutLayers();
-    static string outLayerType = net.getLayer(outLayers[0])->type;
+OpenCV_DNN::postprocess (Mat& frame, const vector<Mat>& outs, Net& net) {
+    static vector<int> outLayers = this.net.getUnconnectedOutLayers();
+    static string outLayerType = this.net.getLayer(outLayers[0])->type;
 
     vector<int> classIds;
     vector<float> confidences;
@@ -226,7 +287,7 @@ postprocess (Mat& frame, const vector<Mat>& outs, Net& net) {
         CV_Error(Error::StsNotImplemented, "Unknown output layer type: " + outLayerType);
 
     vector<int> indices;
-    NMSBoxes(boxes, confidences, confThreshold, nmsThreshold, indices);
+    NMSBoxes(boxes, confidences, this.confThreshold, this.nmsThreshold, indices);
     for (size_t i = 0; i < indices.size(); ++i)
     {
         int idx = indices[i];
@@ -238,11 +299,11 @@ postprocess (Mat& frame, const vector<Mat>& outs, Net& net) {
 
 /* 결과이미지에 박스 그리기 */
 void
-drawPred (int classId, float conf, int left, int top, int right, int bottom, Mat& frame) {
+OpenCV_DNN::drawPred (int classId, float conf, int left, int top, int right, int bottom, Mat& frame) {
     rectangle(frame, Point(left, top), Point(right, bottom), Scalar(0, 255, 0));
 
     string label = format("%.2f", conf);
-    if (!classes.empty())
+    if (!this.classes.empty())
     {
         CV_Assert(classId < (int)classes.size());
         label = classes[classId] + ": " + label;
@@ -257,9 +318,8 @@ drawPred (int classId, float conf, int left, int top, int right, int bottom, Mat
     putText(frame, label, Point(left, top), FONT_HERSHEY_SIMPLEX, 0.5, Scalar());
 }
 
-/* 머신러닝을 이용하여 입력받은 파일을 분석하고 결과값 리턴 */
-void 
-MachineLearning (struct protocol* data) {
+inline string
+OpenCV_DNN::getCurrTime () {
     time_t timeObj = time(NULL);
 	struct  tm tm = *localtime(&timeObj);
     string currTime, temp;
@@ -279,90 +339,5 @@ MachineLearning (struct protocol* data) {
 	temp = to_string (tm.tm_sec);
     if (temp.length() == 1) temp = "0" + temp;
 	currTime += temp;
-
-    INPUT_IMAGE_PATH += currTime + ".jpeg";
-    OUTPUT_IMAGE_PATH += currTime + "_out.jpeg";
-	Mat img;
-
-#ifdef DEBUG_ML
-/*
-	test_ml_main.cpp 와 함께 컴파일되었다면,
-	Mat을 struct protocol 이 아닌 .jpeg 이미지파일로부터 생성함.
-*/
-	img = imread (TEST_IMAGE_PATH, IMREAD_COLOR);
-    imwrite (INPUT_IMAGE_PATH, img);
-    img.release();
-    img = imread (INPUT_IMAGE_PATH, IMREAD_COLOR); // BGR channel
-
-#else
-    struct decoded* decImgPtr = decoding (data);
-	/* 이후 decImgPtr.curr 을 딥러닝의 input으로 넣고, 나머지 멤버는 웹출력에서 활용 */
-
-	img = decImgPtr->curr.clone(); // 이건 아마 BGR channel.
-    imwrite (INPUT_IMAGE_PATH, img);
-#endif
-
-    /*
-        원본 예제 실행 예 (frome image or video file)
-        example_dnn_object_detection
-        --config=[PATH-TO-DARKNET]/cfg/yolo.cfg
-        --model=[PATH-TO-DARKNET]/yolo.weights
-        --classes=object_detection_classes_pascal_voc.txt
-        --width=416
-        --height=416
-        --scale=0.00392
-        --input=[PATH-TO-IMAGE-OR-VIDEO-FILE]
-        --rgb
-    */
-   	
-	/* 이는 원본예제의 경우 파서에서 값이 결정되는데 실행예에서는 아예 컴파일옵션에 넣지않음. */
-	Scalar mean = Scalar();
-
-    float scale = 0.00392;
-    bool swapRB = true;
-    int inpWidth = 416;
-    int inpHeight = 416;
-
-
-
-    // Open file with classes names.
-    string file = CLASSES_PATH;
-    ifstream ifs(file.c_str());
-    if (!ifs.is_open())
-        CV_Error(Error::StsError, "File " + file + " not found");
-    string line;
-    while (getline(ifs, line)) {
-        classes.push_back(line);
-    }
-
-	// 모델 로드
-    Net net;
-    setNet (net);
-    vector<String> outNames = net.getUnconnectedOutLayersNames();
-
-	/*
-		!! 여기까지는 한번만 실행되면 이후 프로그램이 종료될 때까지 소멸되면 안되는 변수들
-		!! 이 이하는 매 사진마다 실행되어야 함
-	*/
-
-    /* Image Process */
-    Mat blob;
-	preprocess(img, net, Size(inpWidth, inpHeight), scale, mean, swapRB);
-
-	vector<Mat> outs;
-	net.forward(outs, outNames);
-
-	postprocess(img, outs, net);
-
-
-	/* 박스와 추론시간 기입 */
-	vector<double> layersTimes;
-	double freq = getTickFrequency() / 1000;
-	double t = net.getPerfProfile(layersTimes) / freq;
-	string label_inferTime = format ("Inference time: %.2f ms", t);
-    string label_confThreshold = format ("confThreshold : %.1f", confThreshold);
-	putText (img, label_inferTime, Point(0, 35), FONT_HERSHEY_SIMPLEX, 1.0, Scalar(0, 0, 255), 2);
-    putText (img, label_confThreshold, Point(0, 70), FONT_HERSHEY_SIMPLEX, 1.0, Scalar(0, 0, 255), 2);
-
-	imwrite (OUTPUT_IMAGE_PATH, img);
+    return currTime;
 }

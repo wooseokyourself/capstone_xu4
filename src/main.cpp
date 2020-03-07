@@ -6,9 +6,10 @@
 
 
 int main (void) {
+    OpenCV_DNN dnn;
     while (true) {
         struct protocol* dataPtr = RecvBuffer ();
-		MachineLearning (dataPtr);
+		dnn.MachineLearning (dataPtr);
     }
     return 0;
 }

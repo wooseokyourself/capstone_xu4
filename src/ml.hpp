@@ -29,30 +29,62 @@ using namespace std;
 using namespace cv;
 using namespace dnn;
 
-struct decoded {
-    Mat prev;
-    Mat curr;
-    uint32_t diffValue;
+
+class OpenCV_DNN {
+public:
+
+    OpenCV_DNN();
+
+    void 
+    MachineLearning (struct protocol* dataPtr);
+
+protected:
+
+    struct decoded*
+    decoding (struct protocol* dataPtr);
+
+    inline void
+    preprocess (const Mat& frame);
+    
+    void
+    postprocess (Mat& frame, const vector<Mat>& outs);
+
+    void
+    drawPred (int classId, float conf, int left, int top, int right, int bottom, Mat& frame);
+    
+    inline string
+    getCurrTime ();
+
+private:
+
+    struct decoded {
+        Mat prev;
+        Mat curr;
+        uint32_t diffValue;
+    };
+
+    string MODEL_PATH;
+    string CONFIG_PATH;
+    string CLASSES_PATH;
+    string INPUT_IMAGE_PATH;
+    string OUTPUT_IMAGE_PATH;
+
+    Net net;
+
+    Scalar mean;
+
+    float scale;
+    bool swapRB;
+    int inpWidth;
+    int inpHeight;
+
+    float confThreshold;
+    float nmsThreshold;
+
+    vector<string> classes;
+    vector<String> outNames
 };
 
 
-struct decoded*
-decoding (struct protocol* dataPtr);
-
-bool
-setNet (Net& net);
-
-inline void
-preprocess (const Mat& frame, Net& net, Size inpSize, float scale,
-            const Scalar& mean, bool swapRB);
-
-void
-postprocess (Mat& frame, const std::vector<Mat>& out, Net& net);
-
-void
-drawPred (int classId, float conf, int left, int top, int right, int bottom, Mat& frame);
-
-void 
-MachineLearning (struct protocol* dataPtr);
 
 #endif
