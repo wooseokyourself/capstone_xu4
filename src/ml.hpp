@@ -57,8 +57,7 @@ protected:
 
 private:
 
-    class Decoded {
-    public:
+    struct Decoded {
         Mat prev;
         Mat curr;
         uint32_t diffValue;
