@@ -40,7 +40,7 @@ public:
 
 protected:
 
-    struct OpenCV_DNN::decoded*
+    Decoded*
     decoding (struct protocol* dataPtr);
 
     inline void
@@ -57,11 +57,12 @@ protected:
 
 private:
 
-    struct decoded {
+    class Decoded {
+    public:
         Mat prev;
         Mat curr;
         uint32_t diffValue;
-    };
+    }
 
     string MODEL_PATH;
     string CONFIG_PATH;
