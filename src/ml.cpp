@@ -174,10 +174,10 @@ OpenCV_DNN::preprocess (const Mat& frame) {
     static Mat blob;
     Size inpSize = Size(this->inpWidth, this->inpHeight);
     // Create a 4D blob from a frame.
-    if (inpSize.inpWidth <= 0)
-        inpSize.inpWidth = frame.cols;
-    if (inpSize.inpHeight <= 0)
-        inpSize.inpHeight = frame.rows;
+    if (inpSize.width <= 0)
+        inpSize.width = frame.cols;
+    if (inpSize.height <= 0)
+        inpSize.height = frame.rows;
 
 	/*
 	Mat
