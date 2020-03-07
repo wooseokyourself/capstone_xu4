@@ -9,8 +9,14 @@ OpenCV_DNN::OpenCV_DNN () {
     this->MODEL_PATH = "model/yolov3.weights";
     this->CONFIG_PATH = "model/yolov3.cfg";
     this->CLASSES_PATH = "model/coco.names";
+
+#ifdef DEBUG_ML
     this->INPUT_IMAGE_PATH = "/home/html/ws/uploads/";
     this->OUTPUT_IMAGE_PATH = "/home/html/ws/uploads/";
+#else
+    this->INPUT_IMAGE_PATH = "/home/html/ws/cam/";
+    this->OUTPUT_IMAGE_PATH = "/home/html/ws/cam/";
+#endif
 
     /*
         원본 예제 실행 예 (frome image or video file)
