@@ -361,8 +361,8 @@ MachineLearning (struct protocol* data) {
 	double t = net.getPerfProfile(layersTimes) / freq;
 	string label_inferTime = format ("Inference time: %.2f ms", t);
     string label_confThreshold = format ("confThreshold : %.1f", confThreshold);
-	putText (img, label_inferTime, Point(0, 15), FONT_HERSHEY_SIMPLEX, 0.5, Scalar(0, 255, 0));
-    putText (img, label_confThreshold, Point(0, 30), FONT_HERSHEY_SIMPLEX, 0.5, Scalar(0, 255, 0));
+	putText (img, label_inferTime, Point(0, 15), FONT_HERSHEY_SIMPLEX, 3.5, Scalar(0, 255, 0));
+    putText (img, label_confThreshold, Point(0, 30), FONT_HERSHEY_SIMPLEX, 3.5, Scalar(0, 255, 0));
 
 	imwrite (OUTPUT_IMAGE_PATH, img);
 }
