@@ -9,11 +9,8 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
-
-#ifdef DEBUG
 #include <ctime>
 #include <string>
-#endif
 
 #include <opencv2/core/mat.hpp>
 #include <opencv2/dnn.hpp>
