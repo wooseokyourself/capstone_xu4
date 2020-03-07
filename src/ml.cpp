@@ -79,6 +79,50 @@ OpenCV_DNN::OpenCV_DNN () {
     this->outNames = net.getUnconnectedOutLayersNames();
 }
 
+#ifdef DEBUG_ML
+void
+OpenCV_DNN::MachineLearning (string TEST_IMAGE_PATH) {
+    string currTime += getCurrTime();
+    string input_file = INPUT_IMAGE_PATH + currTime + ".jpeg";
+    string output_file = OUTPUT_IMAGE_PATH + currTime + "_out.jpeg";
+	Mat img;
+
+    /*
+	    test_ml_main.cpp 와 함께 컴파일되었다면,
+	    Mat을 struct protocol 이 아닌 .jpeg 이미지파일로부터 생성함.
+        기존의 MachineLearning과 밑 4줄만 다르다.
+    */
+	img = imread (TEST_IMAGE_PATH, IMREAD_COLOR);
+    imwrite (input_file, img);
+    img.release();
+    img = imread (input_file, IMREAD_COLOR); // BGR channel
+
+    /* Image Process */
+    Mat blob;
+	preprocess(img);
+
+	vector<Mat> outs;
+	net.forward(outs, outNames);
+
+	postprocess(img, outs);
+
+
+	/* 박스와 추론시간 기입 */
+	vector<double> layersTimes;
+	double freq = getTickFrequency() / 1000;
+	double t = net.getPerfProfile(layersTimes) / freq;
+	string label_inferTime = format ("Inference time: %.2f ms", t);
+    string label_confThreshold = format ("confThreshold: %.1f", confThreshold);
+    string label_resolution = format ("Resolution: %d X %d", img.rows, img.cols);
+	putText (img, label_inferTime, Point(0, 35), FONT_HERSHEY_SIMPLEX, 1.0, Scalar(0, 0, 255), 2);
+    putText (img, label_confThreshold, Point(0, 70), FONT_HERSHEY_SIMPLEX, 1.0, Scalar(0, 0, 255), 2);
+    putText (img, label_resolution, Point(0, 105), FONT_HERSHEY_SIMPLEX, 1.0, Scalar(0, 0, 255), 2);
+
+	imwrite (output_file, img);
+}
+#endif
+
+
 void 
 OpenCV_DNN::MachineLearning (struct protocol* dataPtr) {
     string currTime = getCurrTime();
@@ -86,23 +130,12 @@ OpenCV_DNN::MachineLearning (struct protocol* dataPtr) {
     string output_file = OUTPUT_IMAGE_PATH + currTime + "_out.jpeg";
 	Mat img;
 
-#ifdef DEBUG_ML
-/*
-	test_ml_main.cpp 와 함께 컴파일되었다면,
-	Mat을 struct protocol 이 아닌 .jpeg 이미지파일로부터 생성함.
-*/
-	img = imread (TEST_IMAGE_PATH, IMREAD_COLOR);
-    imwrite (input_file, img);
-    img.release();
-    img = imread (input_file, IMREAD_COLOR); // BGR channel
-
-#else
     struct Decoded* decImgPtr = decoding (data);
 	/* 이후 decImgPtr.curr 을 딥러닝의 input으로 넣고, 나머지 멤버는 웹출력에서 활용 */
 
 	img = decImgPtr->curr.clone(); // 이건 아마 BGR channel.
     imwrite (input_file, img);
-#endif
+
 
 
     /* Image Process */

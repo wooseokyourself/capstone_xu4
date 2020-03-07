@@ -39,6 +39,11 @@ public:
     void 
     MachineLearning (struct protocol* dataPtr);
 
+#ifdef DEBUG_ML
+    void
+    MachineLearning (string TEST_IMAGE_PATH);
+#endif
+
 protected:
 
     struct Decoded*
