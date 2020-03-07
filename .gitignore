@@ -1,4 +1,3 @@
 .vscode
 model/*.weights
 model/*.cfg
-debug/*
