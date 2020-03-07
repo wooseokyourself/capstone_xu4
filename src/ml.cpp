@@ -82,7 +82,7 @@ OpenCV_DNN::OpenCV_DNN () {
 #ifdef DEBUG_ML
 void
 OpenCV_DNN::MachineLearning (string TEST_IMAGE_PATH) {
-    string currTime += getCurrTime();
+    string currTime = getCurrTime();
     string input_file = INPUT_IMAGE_PATH + currTime + ".jpeg";
     string output_file = OUTPUT_IMAGE_PATH + currTime + "_out.jpeg";
 	Mat img;
@@ -130,7 +130,7 @@ OpenCV_DNN::MachineLearning (struct protocol* dataPtr) {
     string output_file = OUTPUT_IMAGE_PATH + currTime + "_out.jpeg";
 	Mat img;
 
-    struct Decoded* decImgPtr = decoding (data);
+    struct Decoded* decImgPtr = decoding (dataPtr);
 	/* 이후 decImgPtr.curr 을 딥러닝의 input으로 넣고, 나머지 멤버는 웹출력에서 활용 */
 
 	img = decImgPtr->curr.clone(); // 이건 아마 BGR channel.
