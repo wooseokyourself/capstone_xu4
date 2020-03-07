@@ -276,8 +276,8 @@ MachineLearning (struct protocol* data) {
     if (temp.length() == 1) temp = "0" + temp;
 	currTime += temp;
 
-    string INPUT_IMAGE_PATH = "../uploads" + currTime + ".jpeg";
-    string OUTPUT_IMAGE_PATH = "../uploads" + currTime + "_out.jpeg";
+    string INPUT_IMAGE_PATH = "../uploads/" + currTime + ".jpeg";
+    string OUTPUT_IMAGE_PATH = "../uploads/" + currTime + "_out.jpeg";
 	Mat img;
 
 #ifdef DEBUG_ML
