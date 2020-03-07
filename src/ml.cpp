@@ -6,11 +6,11 @@ string TEST_IMAGE_PATH = "1.jpeg";
 
 OpenCV_DNN::OpenCV_DNN () {
     /* 외부 경로 설정 */
-    this.MODEL_PATH = "../model/yolov3.weights";
-    this.CONFIG_PATH = "../model/yolov3.cfg";
-    this.CLASSES_PATH = "../model/coco.names";
-    this.INPUT_IMAGE_PATH = "/home/html/ws/uploads/";
-    this.OUTPUT_IMAGE_PATH = "/home/html/ws/uploads/";
+    this->MODEL_PATH = "../model/yolov3.weights";
+    this->CONFIG_PATH = "../model/yolov3.cfg";
+    this->CLASSES_PATH = "../model/coco.names";
+    this->INPUT_IMAGE_PATH = "/home/html/ws/uploads/";
+    this->OUTPUT_IMAGE_PATH = "/home/html/ws/uploads/";
 
     /*
         원본 예제 실행 예 (frome image or video file)
@@ -26,15 +26,15 @@ OpenCV_DNN::OpenCV_DNN () {
     */
    	
 	/* DNN 설정 */
-	this.mean = Scalar();
+	this->mean = Scalar();
 
-    this.scale = 0.00392;
-    this.swapRB = true;
-    this.inpWidth = 416;
-    this.inpHeight = 416;
+    this->scale = 0.00392;
+    this->swapRB = true;
+    this->inpWidth = 416;
+    this->inpHeight = 416;
 
-    this.confThreshold = 0.4;
-    this.nmsThreshold = 0.5;
+    this->confThreshold = 0.4;
+    this->nmsThreshold = 0.5;
 
     // Open file with classes names.
     string file = CLASSES_PATH;
@@ -47,7 +47,7 @@ OpenCV_DNN::OpenCV_DNN () {
     }
 
 	// 모델 로드
-    this.net = readNet (MODEL_PATH, CONFIG_PATH);
+    this->net = readNet (MODEL_PATH, CONFIG_PATH);
 
     /*
         선호하는 백엔드를 지정. 목록은 다음과 같다.
@@ -60,7 +60,7 @@ OpenCV_DNN::OpenCV_DNN () {
                     cv::dnn::DNN_BACKEND_CUDA
         }
     */
-    this.net.setPreferableBackend(DNN_BACKEND_OPENCV);
+    this->net.setPreferableBackend(DNN_BACKEND_OPENCV);
 
     /*
         선호하는 타겟 디바이스를 지정. 목록은 다음과 같다.
@@ -75,8 +75,8 @@ OpenCV_DNN::OpenCV_DNN () {
                     cv::dnn::DNN_TARGET_CUDA_FP16
     }
     */
-    this.net.setPreferableTarget(DNN_TARGET_CPU);
-    this.outNames = net.getUnconnectedOutLayersNames();
+    this->net.setPreferableTarget(DNN_TARGET_CPU);
+    this->outNames = net.getUnconnectedOutLayersNames();
 }
 
 void 
@@ -172,7 +172,7 @@ OpenCV_DNN::decoding (struct protocol* dataPtr) {
 inline void
 OpenCV_DNN::preprocess (const Mat& frame) {
     static Mat blob;
-    Size inpSize = Size(this.inpWidth, this.inpHeight);
+    Size inpSize = Size(this->inpWidth, this->inpHeight);
     // Create a 4D blob from a frame.
     if (inpSize.inpWidth <= 0)
         inpSize.inpWidth = frame.cols;
@@ -197,22 +197,22 @@ OpenCV_DNN::preprocess (const Mat& frame) {
 			int		ddepth			출력blob의 깊이. CV_32F 또는 CV_8U.
 			)
 	*/
-    blob = blobFromImage(frame, 1.0, inpSize, Scalar(), this.swapRB, false, CV_8U);
+    blob = blobFromImage(frame, 1.0, inpSize, Scalar(), this->swapRB, false, CV_8U);
 
     // Run a model.
-    this.net.setInput(blob, "", this.scale, this.mean);
+    this->net.setInput(blob, "", this->scale, this->mean);
     if (net.getLayer(0)->outputNameToIndex("im_info") != -1)  // Faster-RCNN or R-FCN
     {
         resize(frame, frame, inpSize);
         Mat imInfo = (Mat_<float>(1, 3) << inpSize.height, inpSize.width, 1.6f);
-        this.net.setInput(imInfo, "im_info");
+        this->net.setInput(imInfo, "im_info");
     }
 }
 
 void
 OpenCV_DNN::postprocess (Mat& frame, const vector<Mat>& outs, Net& net) {
-    static vector<int> outLayers = this.net.getUnconnectedOutLayers();
-    static string outLayerType = this.net.getLayer(outLayers[0])->type;
+    static vector<int> outLayers = this->net.getUnconnectedOutLayers();
+    static string outLayerType = this->net.getLayer(outLayers[0])->type;
 
     vector<int> classIds;
     vector<float> confidences;
@@ -287,7 +287,7 @@ OpenCV_DNN::postprocess (Mat& frame, const vector<Mat>& outs, Net& net) {
         CV_Error(Error::StsNotImplemented, "Unknown output layer type: " + outLayerType);
 
     vector<int> indices;
-    NMSBoxes(boxes, confidences, this.confThreshold, this.nmsThreshold, indices);
+    NMSBoxes(boxes, confidences, this->confThreshold, this->nmsThreshold, indices);
     for (size_t i = 0; i < indices.size(); ++i)
     {
         int idx = indices[i];
@@ -303,7 +303,7 @@ OpenCV_DNN::drawPred (int classId, float conf, int left, int top, int right, int
     rectangle(frame, Point(left, top), Point(right, bottom), Scalar(0, 255, 0));
 
     string label = format("%.2f", conf);
-    if (!this.classes.empty())
+    if (!this->classes.empty())
     {
         CV_Assert(classId < (int)classes.size());
         label = classes[classId] + ": " + label;

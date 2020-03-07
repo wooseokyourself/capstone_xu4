@@ -82,7 +82,7 @@ private:
     float nmsThreshold;
 
     vector<string> classes;
-    vector<String> outNames
+    vector<String> outNames;
 };
 
 
