@@ -6,9 +6,9 @@ string TEST_IMAGE_PATH = "1.jpeg";
 
 OpenCV_DNN::OpenCV_DNN () {
     /* 외부 경로 설정 */
-    this->MODEL_PATH = "../model/yolov3.weights";
-    this->CONFIG_PATH = "../model/yolov3.cfg";
-    this->CLASSES_PATH = "../model/coco.names";
+    this->MODEL_PATH = "model/yolov3.weights";
+    this->CONFIG_PATH = "model/yolov3.cfg";
+    this->CLASSES_PATH = "model/coco.names";
     this->INPUT_IMAGE_PATH = "/home/html/ws/uploads/";
     this->OUTPUT_IMAGE_PATH = "/home/html/ws/uploads/";
 
