@@ -4,12 +4,16 @@
 string TEST_IMAGE_PATH = "1.jpeg";
 #endif
 
-string MODEL_PATH = "../model/yolov3.weights";
-string CONFIG_PATH = "../model/yolov3.cfg";
- 
+static string MODEL_PATH = "../model/yolov3.weights";
+static string CONFIG_PATH = "../model/yolov3.cfg";
+static string CLASSES_PATH = "../model/coco.names";
+static string INPUT_IMAGE_PATH = "/home/html/ws/uploads/";
+static string OUTPUT_IMAGE_PATH = "/home/html/ws/uploads/";
 
-float confThreshold, nmsThreshold;
-vector<string> classes;
+static float confThreshold = 0.4;
+static float nmsThreshold = 0.5;
+
+static vector<string> classes;
 
 /*
 	struct protocol --> struct decoded 변환
@@ -276,8 +280,8 @@ MachineLearning (struct protocol* data) {
     if (temp.length() == 1) temp = "0" + temp;
 	currTime += temp;
 
-    string INPUT_IMAGE_PATH = "../uploads/" + currTime + ".jpeg";
-    string OUTPUT_IMAGE_PATH = "../uploads/" + currTime + "_out.jpeg";
+    INPUT_IMAGE_PATH += currTime + ".jpeg";
+    OUTPUT_IMAGE_PATH += currTime + "_out.jpeg";
 	Mat img;
 
 #ifdef DEBUG_ML
@@ -311,9 +315,7 @@ MachineLearning (struct protocol* data) {
         --rgb
     */
    	
-	/* 이 셋은 원본예제의 경우 파서에서 값이 결정되는데 실행예에서는 아예 컴파일옵션에 넣지않음. */
-    confThreshold = 0.4;
-    nmsThreshold = 0.5;
+	/* 이는 원본예제의 경우 파서에서 값이 결정되는데 실행예에서는 아예 컴파일옵션에 넣지않음. */
 	Scalar mean = Scalar();
 
     float scale = 0.00392;
@@ -324,7 +326,7 @@ MachineLearning (struct protocol* data) {
 
 
     // Open file with classes names.
-    string file = "../model/coco.names";
+    string file = CLASSES_PATH;
     ifstream ifs(file.c_str());
     if (!ifs.is_open())
         CV_Error(Error::StsError, "File " + file + " not found");
