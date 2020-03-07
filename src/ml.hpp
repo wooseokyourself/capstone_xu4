@@ -25,6 +25,11 @@ using namespace std;
 using namespace cv;
 using namespace dnn;
 
+struct Decoded {
+    Mat prev;
+    Mat curr;
+    uint32_t diffValue;
+};
 
 class OpenCV_DNN {
 public:
@@ -52,12 +57,6 @@ protected:
     getCurrTime ();
 
 private:
-
-    struct Decoded {
-        Mat prev;
-        Mat curr;
-        uint32_t diffValue;
-    };
 
     string MODEL_PATH;
     string CONFIG_PATH;
