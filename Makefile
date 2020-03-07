@@ -5,6 +5,9 @@ all: $(TARGET)
 
 dnn: $(DLMODULE)
 
+delete:
+	rm -f /home/html/ws/uploads/*.jpeg
+
 clean:
 	rm -f *.o
 	rm -f $(TARGET) $(DLMODULE)
