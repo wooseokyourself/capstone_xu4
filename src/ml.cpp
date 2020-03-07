@@ -97,7 +97,7 @@ OpenCV_DNN::MachineLearning (struct protocol* dataPtr) {
     img = imread (input_file, IMREAD_COLOR); // BGR channel
 
 #else
-    Decoded* decImgPtr = decoding (data);
+    struct Decoded* decImgPtr = decoding (data);
 	/* 이후 decImgPtr.curr 을 딥러닝의 input으로 넣고, 나머지 멤버는 웹출력에서 활용 */
 
 	img = decImgPtr->curr.clone(); // 이건 아마 BGR channel.
@@ -127,8 +127,8 @@ OpenCV_DNN::MachineLearning (struct protocol* dataPtr) {
 	imwrite (output_file, img);
 }
 
-/* struct protocol --> struct decoded 변환 */
-Decoded*
+/* struct protocol --> struct Decoded 변환 */
+struct Decoded*
 OpenCV_DNN::decoding (struct protocol* dataPtr) {
 #ifdef DEBUG
 	printf ("decoding() called..\n");
@@ -139,10 +139,10 @@ OpenCV_DNN::decoding (struct protocol* dataPtr) {
 	printf (" >> data.diffVal = %d\n", dataPtr->diffValue);
 #endif
 
-    struct decoded* decImgPtr = (struct decoded*) malloc (sizeof(struct decoded));
+    struct Decoded* decImgPtr = (struct Decoded*) malloc (sizeof(struct Decoded));
 
 #ifdef DEBUG
-	printf ("sizeof(struct decoded) = %d\n", sizeof(struct decoded));
+	printf ("sizeof(struct Decoded) = %d\n", sizeof(struct Decoded));
 	printf ("sizeof(decImgPtr) in decoding() = %d\n", sizeof(decImgPtr));
 #endif
 

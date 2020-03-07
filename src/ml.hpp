@@ -37,7 +37,7 @@ public:
 
 protected:
 
-    Decoded*
+    struct Decoded*
     decoding (struct protocol* dataPtr);
 
     inline void
