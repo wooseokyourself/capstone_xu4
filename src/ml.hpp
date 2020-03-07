@@ -57,7 +57,7 @@ private:
         Mat prev;
         Mat curr;
         uint32_t diffValue;
-    }
+    };
 
     string MODEL_PATH;
     string CONFIG_PATH;
