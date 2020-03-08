@@ -128,11 +128,12 @@ OpenCV_DNN::MachineLearning (string TEST_IMAGE_PATH) {
 void 
 OpenCV_DNN::MachineLearning (struct protocol* dataPtr) {
     Mat img = decoding (dataPtr);
-    
+
     #ifdef DEBUG
     printf ("call MachineLearning!\n");
     #endif
-    string currTime = getCurrTime();
+    // string currTime = getCurrTime();
+    string currTime = "test";
     string input_file = INPUT_IMAGE_PATH + currTime + ".jpeg";
     string output_file = OUTPUT_IMAGE_PATH + currTime + "_out.jpeg";
 
