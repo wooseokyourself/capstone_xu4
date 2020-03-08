@@ -82,7 +82,7 @@ RecvBuffer () {
 	/*	data.buf 받기 */
 	#ifdef DEBUG
 	printf ("data.buf 받는중..\n");
-	printf (" 받아야 할 사이즈: %d\n", dataPtr->buf.size() * sizeof(unsigned char));
+	printf (" 받아야 할 사이즈: %d\n", bufSize * sizeof(unsigned char));
 	printf (" unit 사이즈: %d\n", sizeof(unsigned char));
 	#endif
 	
