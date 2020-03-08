@@ -15,7 +15,7 @@ debug_ml: $(TARGET_DEBUG_ML)
 delete:
 	rm -f /home/html/ws/uploads/*.jpeg
 
-$(TARGET_DEBUG):
+$(TARGET):
 	g++ -std=c++11 -w src/main.cpp src/ml.cpp src/socket.cpp `pkg-config --cflags --libs opencv4` -o $(TARGET)
 
 $(TARGET_DEBUG):

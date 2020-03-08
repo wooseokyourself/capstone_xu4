@@ -48,8 +48,13 @@ public:
 
 protected:
 
+#ifdef DIFF_BASE
     struct Decoded*
     decoding (struct protocol* dataPtr);
+#else
+    Mat
+    decoding (struct protocol* dataPtr);
+#endif
 
     inline void
     preprocess (const Mat& frame);
