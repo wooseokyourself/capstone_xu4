@@ -71,26 +71,6 @@ RecvBuffer () {
 	int yet;
 	struct protocol* dataPtr = (struct protocol*) malloc (sizeof(struct protocol));
 	
-#ifdef DIFF_BASE
-	/*	Recv data.prevBuf.size() */
-	ssize_t prevBufSize;
-	Recv (clntSock, &prevBufSize, sizeof(prevBufSize), sizeof(size_t *));
-	dataPtr->prevBuf.resize(prevBufSize);
-
-	/*	Recv data.prevBuf */
-	Recv (clntSock, &(*dataPtr->prevBuf.begin()), prevBufSize, sizeof(unsigned char));
-
-	/*	Recv data.currBuf.size() */
-	ssize_t currBufSize;
-	Recv (clntSock, &currBufSize, sizeof(currBufSize), sizeof(size_t *));
-	dataPtr->currBuf.resize(currBufSize);
-
-	/*	Recv data.currBuf */
-	Recv (clntSock, &(*dataPtr->currBuf.begin()), currBufSize, sizeof(unsigned char));
-
-	/*	Recv data.diffValue */
-	Recv (clntSock, &dataPtr->diffValue, sizeof(dataPtr->diffValue), sizeof(uint32_t *));
-#else
 	/*	data.buf.size() 받기 */
 	ssize_t bufSize;
 	Recv (clntSock, &bufSize, sizeof(bufSize), sizeof(size_t *));
@@ -99,7 +79,6 @@ RecvBuffer () {
 
 	/*	data.buf 받기 */
 	Recv (clntSock, &(*dataPtr->buf.begin()), bufSize, sizeof(unsigned char));
-#endif
 
 	close (servSock);
     close (clntSock);

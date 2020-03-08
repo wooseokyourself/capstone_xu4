@@ -25,14 +25,6 @@ using namespace std;
 using namespace cv;
 using namespace dnn;
 
-#ifdef DIFF_BASE
-struct Decoded {
-    Mat prev;
-    Mat curr;
-    uint32_t diffValue;
-};
-#endif
-
 class OpenCV_DNN {
 public:
 
@@ -48,13 +40,8 @@ public:
 
 protected:
 
-#ifdef DIFF_BASE
-    struct Decoded*
-    decoding (struct protocol* dataPtr);
-#else
     Mat
     decoding (struct protocol* dataPtr);
-#endif
 
     inline void
     preprocess (const Mat& frame);

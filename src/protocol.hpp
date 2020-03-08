@@ -8,23 +8,9 @@
 #include <cstdint>
 #include <vector>
 
-//#define PROTO_BUFSIZE sizeof(uint64_t)
-#define PROTO_BUFSIZE sizeof(size_t)
-
-using namespace std;
-
-#ifdef DIFF_BASE
 struct protocol {
     size_t bufSize;
-    vector<unsigned char> prevBuf;
-    vector<unsigned char> currBuf;
-    uint32_t diffValue; // abs(prevImg - currImg)
+    std::vector<unsigned char> buf;
 };
-#else
-struct protocol {
-    size_t bufSize;
-    vector<unsigned char> buf;
-};
-#endif
 
 #endif

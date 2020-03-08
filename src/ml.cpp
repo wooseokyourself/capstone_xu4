@@ -1,9 +1,5 @@
 #include "ml.hpp"
 
-#ifdef DEBUG_ML
-string TEST_IMAGE_PATH = "1.jpeg";
-#endif
-
 OpenCV_DNN::OpenCV_DNN () {
     /* 외부 경로 설정 */
     this->MODEL_PATH = "model/yolov3.weights";
@@ -128,85 +124,6 @@ OpenCV_DNN::MachineLearning (string TEST_IMAGE_PATH) {
 }
 #endif
 
-#ifdef DIFF_BASE
-void 
-OpenCV_DNN::MachineLearning (struct protocol* dataPtr) {
-    string currTime = getCurrTime();
-    string input_file = INPUT_IMAGE_PATH + currTime + ".jpeg";
-    string output_file = OUTPUT_IMAGE_PATH + currTime + "_out.jpeg";
-	Mat img;
-
-    struct Decoded* decImgPtr = decoding (dataPtr);
-	/* 이후 decImgPtr.curr 을 딥러닝의 input으로 넣고, 나머지 멤버는 웹출력에서 활용 */
-
-	img = decImgPtr->curr.clone(); // 이건 아마 BGR channel.
-    imwrite (input_file, img);
-
-
-
-    /* Image Process */
-    Mat blob;
-	preprocess(img);
-
-	vector<Mat> outs;
-	net.forward(outs, outNames);
-
-	postprocess(img, outs);
-
-
-	/* 박스와 추론시간 기입 */
-	vector<double> layersTimes;
-	double freq = getTickFrequency() / 1000;
-	double t = net.getPerfProfile(layersTimes) / freq;
-	string label_inferTime = format ("Inference time: %.2f ms", t);
-    string label_confThreshold = format ("confThreshold: %.1f", confThreshold);
-	putText (img, label_inferTime, Point(0, 35), FONT_HERSHEY_SIMPLEX, 1.0, Scalar(0, 0, 255), 2);
-    putText (img, label_confThreshold, Point(0, 70), FONT_HERSHEY_SIMPLEX, 1.0, Scalar(0, 0, 255), 2);
-
-	imwrite (output_file, img);
-}
-
-/* struct protocol --> struct Decoded 변환 */
-struct Decoded*
-OpenCV_DNN::decoding (struct protocol* dataPtr) {
-#ifdef DEBUG
-	printf ("decoding() called..\n");
-	printf ("ml.cpp/decoding() before decoding..  \n");
-	printf (" >> data.prevBufSize = %d\n", dataPtr->prevBuf.size());
-	printf (" >> data.currBufSize = %d\n", dataPtr->currBuf.size());
-	printf (" >> data.diffValSize = %d\n", sizeof(dataPtr->diffValue));
-	printf (" >> data.diffVal = %d\n", dataPtr->diffValue);
-#endif
-
-    struct Decoded* decImgPtr = (struct Decoded*) malloc (sizeof(struct Decoded));
-
-#ifdef DEBUG
-	printf ("sizeof(struct Decoded) = %d\n", sizeof(struct Decoded));
-	printf ("sizeof(decImgPtr) in decoding() = %d\n", sizeof(decImgPtr));
-#endif
-
-    /*
-        Mat cv::imdecode	(	InputArray 	buf,
-                                int 	flags 
-                            )
-        Parameters
-            buf	    Input array or vector of bytes.
-            flags	The same flags as in cv::imread, see cv::ImreadModes.
-    */
-	decImgPtr->prev = imdecode (dataPtr->prevBuf, 1);
-    decImgPtr->curr = imdecode (dataPtr->currBuf, 1);
-    decImgPtr->diffValue = dataPtr->diffValue;
-#ifdef DEBUG
-	std::string currTime = getCurrTime();
-	std::string prevName = currTime + "_prev.jpeg";
-	string currName = currTime + "_curr.jpeg";
-	imwrite (prevName, decImgPtr->prev);
-	imwrite (currName, decImgPtr->curr);
-#endif
-	free (dataPtr);
-    return decImgPtr;
-}
-#else
 /* struct protocol --> struct Decoded 변환 */
 void 
 OpenCV_DNN::MachineLearning (struct protocol* dataPtr) {
@@ -245,7 +162,6 @@ OpenCV_DNN::decoding (struct protocol* dataPtr) {
     free (dataPtr);
     return img;
 }
-#endif
 
 
 inline void
