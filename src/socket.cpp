@@ -53,6 +53,7 @@ RecvBuffer () {
     setsockopt (clntSock, SOL_SOCKET, SO_LINGER, (char *) &ling, sizeof(ling));
 
     /*  클라이언트의 연결을 기다림 */
+	printf ("이제 연결을 기다립니다!\n");
     clntSock = accept (servSock, (struct sockaddr *) &clntAddr, &clntAddrLen);
 
 
