@@ -69,7 +69,20 @@ RecvBuffer () {
 	    puts ("Unable to get client address");
 
 	struct protocol* dataPtr = (struct protocol*) malloc (sizeof(struct protocol));
-	
+	int recvd;
+
+	/*	dataSize 받기 */
+	size_t dataSize;
+	#ifdef DEBUG
+	printf ("dataSize 받는중..\n");
+	printf (" 받아야 할 사이즈: %d\n", sizeof(size_t));
+	printf (" 받을 때 사용될 unit 사이즈: %d\n", sizeof(size_t *));
+	#endif
+	recvd = Recv (clntSock, &dataSize, sizeof(dataSize), 0);
+	#ifdef DEBUG
+	printf ("dataSize 받기 완료. 받은 사이즈: %d, dataSize의 값: %d\n", sizeof(dataSize), dataSize);
+	#endif
+
 	/*	data.buf.size() 받기 */
 	ssize_t bufSize;
 	#ifdef DEBUG
@@ -77,7 +90,7 @@ RecvBuffer () {
 	printf (" 받아야 할 사이즈: %d\n", sizeof(bufSize));
 	printf (" 받을 때 사용될 unit 사이즈: %d\n", sizeof(size_t *));
 	#endif
-	int recvd = Recv (clntSock, &bufSize, sizeof(bufSize), sizeof(size_t *));
+	recvd = Recv (clntSock, &bufSize, sizeof(bufSize), sizeof(size_t *));
 	dataPtr->bufSize = bufSize;
 	dataPtr->buf.resize(bufSize);
 	#ifdef DEBUG
