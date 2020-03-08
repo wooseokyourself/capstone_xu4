@@ -67,23 +67,27 @@ RecvBuffer () {
     else
 	    puts ("Unable to get client address");
 
-	int recvd;
-	int yet;
 	struct protocol* dataPtr = (struct protocol*) malloc (sizeof(struct protocol));
 	
 	/*	data.buf.size() 받기 */
+	#ifdef DEBUG
+	printf ("data.buf.size() 받는중..\n");
+	#endif
 	ssize_t bufSize;
 	Recv (clntSock, &bufSize, sizeof(bufSize), sizeof(size_t *));
 	dataPtr->bufSize = bufSize;
 	dataPtr->buf.resize(bufSize);
 
 	/*	data.buf 받기 */
+	#ifdef DEBUG
+	printf ("data.buf 받는중..\n");
+	#endif
 	Recv (clntSock, &(*dataPtr->buf.begin()), bufSize, sizeof(unsigned char));
 
 	close (servSock);
     close (clntSock);
 	
-#ifdef DEBUG
+	#ifdef DEBUG
 	printf ("\nData is like..\n\n");
 	printf ("@@currImg begin\n");
 	for (int i=0; i<20; i++) 
@@ -92,7 +96,7 @@ RecvBuffer () {
 	for (int i=dataPtr->buf.size()-1; i>dataPtr->buf.size()-21; i--)
 		printf (" %d", dataPtr->buf[i]);
 	printf ("\n\n");
-#endif
+	#endif
 
     return dataPtr;
 }
