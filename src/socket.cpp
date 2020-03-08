@@ -100,7 +100,7 @@ RecvBuffer () {
 	/*	data.buf 받기 */
 	#ifdef DEBUG
 	printf ("data.buf 받는중..\n");
-	printf (" 받아야 할 사이즈: %d\n", dataPtr->buf.size());
+	printf (" 받아야 할 사이즈: %d\n", bufSize);
 	printf (" 받을 때 사용될 unit 사이즈: %d\n", sizeof(unsigned char));
 	#endif
 	recvd = Recv (clntSock, &(*dataPtr->buf.begin()), bufSize, sizeof(unsigned char));
