@@ -85,19 +85,12 @@ RecvBuffer () {
 	
 #ifdef DEBUG
 	printf ("\nData is like..\n\n");
-	printf ("@@prevImg begin\n");
-	for (int i=0; i<20; i++) 
-		printf (" %d", dataPtr->prevBuf[i]);
-	printf ("\n@@ ... and end\n");
-	for (int i=dataPtr->prevBuf.size()-1; i>dataPtr->prevBuf.size()-21; i--)
-		printf (" %d", dataPtr->prevBuf[i]);
-	printf ("\n\n");
 	printf ("@@currImg begin\n");
 	for (int i=0; i<20; i++) 
-		printf (" %d", dataPtr->currBuf[i]);
+		printf (" %d", dataPtr->buf[i]);
 	printf ("\n@@ ... and end\n");
-	for (int i=dataPtr->currBuf.size()-1; i>dataPtr->currBuf.size()-21; i--)
-		printf (" %d", dataPtr->currBuf[i]);
+	for (int i=dataPtr->buf.size()-1; i>dataPtr->buf.size()-21; i--)
+		printf (" %d", dataPtr->buf[i]);
 	printf ("\n\n");
 #endif
 
