@@ -78,7 +78,6 @@ RecvBuffer () {
 	printf (" 받아야 할 버퍼사이즈: %d\n", sizeof(bufSize));
 	#endif
 	recvd = Recv (clntSock, &bufSize, sizeof(bufSize), sizeof(size_t *));
-	dataPtr->buf.resize (bufSize);
 
 	/*	data.buf 받기 */
 	#ifdef DEBUG
