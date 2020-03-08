@@ -5,7 +5,7 @@
 #ifndef PROTOCOL
 #define PROTOCOL
 
-#include <stdint.h>
+#include <cstdint>
 #include <vector>
 
 //#define PROTO_BUFSIZE sizeof(uint64_t)
