@@ -6,15 +6,14 @@ printf ("Size: %d\n", size);
 	ssize_t recvd = 0;
 	ssize_t yet = size;
 	while (recvd < size) {
+		#ifdef DEBUG
 		printf (" recvd: %d\n", recvd);
-		if ( 0 < yet && yet < MAXBUFSIZE) {
+		#endif 
+		if ( 0 < yet && yet < MAXBUFSIZE)  /* 아직 받지않은 데이터가 MAXBUFSIZE보다 작은 경우 */
 			recvd += recv (sock, (void *) (buf + recvd/unit), yet, 0);
-			yet = size - recvd;
-		}
-		else {
+		else /* 받아야 할 데이터가 MAXBUFSIZE보다 큰 경우 */
 			recvd += recv (sock, (void *) (buf + recvd/unit), MAXBUFSIZE, 0);
-			yet = size - recvd;
-		}
+		yet = size - recvd;
 	}
 	return recvd;
 }
@@ -71,6 +70,10 @@ RecvBuffer () {
 
 	struct protocol* dataPtr = (struct protocol*) malloc (sizeof(struct protocol));
 	
+	/*	클라이언트가 보낼 사이즈를 먼저 받기 */
+	size_t dataSize;
+	Recv (clntSock, &dataSize, sizeof(dataSize), sizeof(size_t *));
+
 	/*	data.buf.size() 받기 */
 	#ifdef DEBUG
 	printf ("data.buf.size() 받는중..\n");
