@@ -77,12 +77,18 @@ RecvBuffer () {
 	Recv (clntSock, &bufSize, sizeof(bufSize), sizeof(size_t *));
 	dataPtr->bufSize = bufSize;
 	dataPtr->buf.resize(bufSize);
+	#ifdef DEBUG
+	printf ("data.buf.size() 받기 완료. %d\n", bufSize);
+	#endif
 
 	/*	data.buf 받기 */
 	#ifdef DEBUG
 	printf ("data.buf 받는중..\n");
 	#endif
 	Recv (clntSock, &(*dataPtr->buf.begin()), bufSize, sizeof(unsigned char));
+	#ifdef DEBUG
+	printf ("data.buf 받기 완료.\n");
+	#endif
 
 	close (servSock);
     close (clntSock);
