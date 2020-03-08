@@ -327,6 +327,9 @@ OpenCV_DNN::drawPred (int classId, float conf, int left, int top, int right, int
 
 inline string
 OpenCV_DNN::getCurrTime () {
+    #ifdef DEBUG
+    printf ("call getCurrTime!\n");
+    #endif
     time_t timeObj = time(NULL);
 	struct  tm tm = *localtime(&timeObj);
     string currTime, temp;
@@ -346,5 +349,8 @@ OpenCV_DNN::getCurrTime () {
 	temp = to_string (tm.tm_sec);
     if (temp.length() == 1) temp = "0" + temp;
 	currTime += temp;
+    #ifdef DEBUG
+    printf ("return getCurrTime!\n");
+    #endif
     return currTime;
 }
