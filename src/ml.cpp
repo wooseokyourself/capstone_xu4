@@ -161,8 +161,17 @@ OpenCV_DNN::MachineLearning (struct protocol* dataPtr) {
 
 Mat
 OpenCV_DNN::decoding (struct protocol* dataPtr) {
+    #ifdef DEBUG
+    printf ("call decoding!\n");
+    #endif
     Mat img = imdecode (dataPtr->buf, 1);
+    #ifdef DEBUG
+    printf (" imdecode done!\n");
+    #endif
     free (dataPtr);
+    #ifdef DEBUG
+    printf (" free (dataPtr) done!\n");
+    #endif
     return img;
 }
 
