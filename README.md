@@ -1,13 +1,13 @@
-##### make clean
+#### make clean
 모든 실행파일 제거
 
-##### make all
+#### make all
 릴리즈버전, server.out
 
-##### make debug
+#### make debug
 디버깅버전, server_debug.out
 
-##### make debug_ml
+#### make debug_ml
 딥러닝테스트버전, server_debug_ml.out
 ml.hpp 및 ml.cpp의 코드를 통해 딥러닝 수행여부만을 테스트하기 위함.
 ###### 사용방법
