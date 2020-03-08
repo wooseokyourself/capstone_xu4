@@ -2,9 +2,11 @@
 
 ssize_t
 Recv (int sock, const void *buf, ssize_t size, ssize_t unit) {
+printf ("Size: %d\n", size);
 	ssize_t recvd = 0;
 	ssize_t yet = size;
 	while (recvd < size) {
+		printf (" recvd: %d\n", recvd);
 		if ( 0 < yet && yet < MAXBUFSIZE) {
 			recvd += recv (sock, (void *) (buf + recvd/unit), yet, 0);
 			yet = size - recvd;
