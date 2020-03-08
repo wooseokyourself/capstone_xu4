@@ -71,7 +71,7 @@ RecvBuffer () {
 	struct protocol* dataPtr = (struct protocol*) malloc (sizeof(struct protocol));
 	int recvd;
 
-	/*	dataSize 받기 */
+	/*	dataSize 받기 
 	size_t dataSize;
 	#ifdef DEBUG
 	printf ("dataSize 받는중..\n");
@@ -81,7 +81,7 @@ RecvBuffer () {
 	recvd = Recv (clntSock, &dataSize, sizeof(dataSize), sizeof(size_t *));
 	#ifdef DEBUG
 	printf ("dataSize 받기 완료. 받은 사이즈: %d, dataSize의 값: %d\n", sizeof(dataSize), dataSize);
-	#endif
+	#endif*/
 
 	/*	data.buf.size() 받기 */
 	ssize_t bufSize;
