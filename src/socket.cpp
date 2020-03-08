@@ -78,9 +78,7 @@ RecvBuffer () {
 	printf (" 받아야 할 버퍼사이즈: %d\n", sizeof(bufSize));
 	#endif
 	recvd = Recv (clntSock, &bufSize, sizeof(bufSize), sizeof(size_t *));
-	#ifdef DEBUG
-	printf ("data.buf.size() 받기 완료. 받은 bufSize 값: %d\n", bufSize);
-	#endif
+	dataPtr->buf.resize (bufSize);
 
 	/*	data.buf 받기 */
 	#ifdef DEBUG
@@ -89,12 +87,15 @@ RecvBuffer () {
 	printf (" unit 사이즈: %d\n", sizeof(unsigned char));
 	#endif
 	// recvd = Recv (clntSock, &(*dataPtr->buf.begin()), dataPtr->buf.size(), sizeof(unsigned char));
+	recvd = Recv (clntSock, dataPtr->buf.data(), dataPtr->buf.size(), sizeof(unsigned char));
+	/*
 	unsigned char memValue;
 	for (int i=0; i<bufSize; i++){
 		recv (clntSock, (unsigned char*) &memValue, sizeof(unsigned char), 0);
 		dataPtr->buf.push_back(memValue);
 		printf ("[%d] set memValue: %d\n", i, memValue);
 	}
+	*/
 	#ifdef DEBUG
 	printf ("data.buf 받기 완료. 받은 사이즈: %d\n", recvd);
 	#endif
