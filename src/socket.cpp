@@ -70,15 +70,13 @@ RecvBuffer () {
 
 	struct protocol* dataPtr = (struct protocol*) malloc (sizeof(struct protocol));
 	
-	/*	클라이언트가 보낼 사이즈를 먼저 받기 */
-	size_t dataSize;
-	Recv (clntSock, &dataSize, sizeof(dataSize), sizeof(size_t *));
-
 	/*	data.buf.size() 받기 */
+	ssize_t bufSize;
 	#ifdef DEBUG
 	printf ("data.buf.size() 받는중..\n");
+	printf (" 받아야 할 사이즈: %d\n", sizeof(bufSize));
+	printf (" 받을 때 사용될 unit 사이즈: %d\n", sizeof(size_t *));
 	#endif
-	ssize_t bufSize;
 	Recv (clntSock, &bufSize, sizeof(bufSize), sizeof(size_t *));
 	dataPtr->bufSize = bufSize;
 	dataPtr->buf.resize(bufSize);
