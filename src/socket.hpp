@@ -20,7 +20,7 @@
 
 #define ASSERT assert
 
-#define MAXBUFSIZE 16
+#define MAXBUFSIZE 512
 #define PORT    10051
 
 static const int MAXPENDING = 5;    // 연결 요청을 대기할 수 있는 최대 수
