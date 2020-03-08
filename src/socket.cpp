@@ -91,7 +91,7 @@ RecvBuffer () {
 	for (int i=0; i<bufSize; i++){
 		recvd += recv (clntSock, (unsigned char*) &memValue, sizeof(unsigned char), 0);
 		dataPtr->buf.push_back(memValue);
-		// printf ("[%d] set memValue: %d\n", i, memValue);
+		printf ("[%d] set memValue: %d\n", i, dataPtr->buf[i]);
 	}
 	
 	#ifdef DEBUG
