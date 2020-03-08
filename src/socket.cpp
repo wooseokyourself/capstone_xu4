@@ -91,13 +91,13 @@ RecvBuffer () {
 	for (int i=0; i<bufSize; i++){
 		recvd += recv (clntSock, (unsigned char*) &memValue, sizeof(unsigned char), 0);
 		dataPtr->buf.push_back(memValue);
-		printf ("[%d] set memValue: %d\n", i, memValue);
+		// printf ("[%d] set memValue: %d\n", i, memValue);
 	}
 	
 	#ifdef DEBUG
 	printf ("data.buf 받기 완료. 받은 사이즈: %d\n", recvd);
 	#endif
-	ASSERT (recvd == dataPtr->buf.size() * sizeof(unsigned char));
+	// ASSERT (recvd == dataPtr->buf.size() * sizeof(unsigned char));
 
 	close (servSock);
     close (clntSock);
