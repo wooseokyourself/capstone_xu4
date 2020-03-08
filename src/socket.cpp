@@ -101,17 +101,6 @@ RecvBuffer () {
 
 	close (servSock);
     close (clntSock);
-	
-	#ifdef DEBUG
-	printf ("\nData is like..\n\n");
-	printf ("@@currImg begin\n");
-	for (int i=0; i<20; i++) 
-		printf (" %d", dataPtr->buf[i]);
-	printf ("\n@@ ... and end\n");
-	for (int i=dataPtr->buf.size()-1; i>dataPtr->buf.size()-21; i--)
-		printf (" %d", dataPtr->buf[i]);
-	printf ("\n\n");
-	#endif
 
     return dataPtr;
 }
