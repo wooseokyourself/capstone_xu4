@@ -75,10 +75,10 @@ RecvBuffer () {
 	size_t dataSize;
 	#ifdef DEBUG
 	printf ("dataSize 받는중..\n");
-	printf (" 받아야 할 사이즈: %d\n", sizeof(size_t));
+	printf (" 받아야 할 사이즈: %d\n", sizeof(dataSize));
 	printf (" 받을 때 사용될 unit 사이즈: %d\n", sizeof(size_t *));
 	#endif
-	recvd = Recv (clntSock, &dataSize, sizeof(dataSize), 0);
+	recvd = Recv (clntSock, &dataSize, sizeof(dataSize), sizeof(size_t *));
 	#ifdef DEBUG
 	printf ("dataSize 받기 완료. 받은 사이즈: %d, dataSize의 값: %d\n", sizeof(dataSize), dataSize);
 	#endif
