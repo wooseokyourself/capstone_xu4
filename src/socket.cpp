@@ -9,10 +9,16 @@ printf ("Size: %d\n", size);
 		#ifdef DEBUG
 		printf (" recvd: %d\n", recvd);
 		#endif 
-		if ( 0 < yet && yet < MAXBUFSIZE)  /* 아직 받지않은 데이터가 MAXBUFSIZE보다 작은 경우 */
+		if ( 0 < yet && yet < MAXBUFSIZE ){  /* 아직 받지않은 데이터가 MAXBUFSIZE보다 작은 경우 */
+			printf ("걸려들었어! yet: %d\n", yet);
+			printf ("recvd: %d", recvd);
 			recvd += recv (sock, (void *) (buf + recvd/unit), yet, 0);
-		else /* 받아야 할 데이터가 MAXBUFSIZE보다 큰 경우 */
+		}
+		else if ( MAXBUFSIZE < yet )/* 받아야 할 데이터가 MAXBUFSIZE보다 큰 경우 */
 			recvd += recv (sock, (void *) (buf + recvd/unit), MAXBUFSIZE, 0);
+		else
+			break;
+			
 		yet = size - recvd;
 	}
 	return recvd;
