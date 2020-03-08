@@ -2,6 +2,11 @@ TARGET = server.out
 TARGET_DEBUG = server_debug.out
 TARGET_DEBUG_ML = server_debug_ml.out
 
+update:
+	git add .
+	git commit -m "update"
+	git push -u mac master
+
 clean:
 	rm -f *.o
 	rm -f *.out
