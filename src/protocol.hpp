@@ -9,7 +9,6 @@
 #include <vector>
 
 struct protocol {
-    size_t bufSize;
     std::vector<unsigned char> buf;
 };
 

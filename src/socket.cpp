@@ -71,42 +71,29 @@ RecvBuffer () {
 	struct protocol* dataPtr = (struct protocol*) malloc (sizeof(struct protocol));
 	int recvd;
 
-	/*	dataSize 받기 
-	size_t dataSize;
-	#ifdef DEBUG
-	printf ("dataSize 받는중..\n");
-	printf (" 받아야 할 사이즈: %d\n", sizeof(dataSize));
-	printf (" 받을 때 사용될 unit 사이즈: %d\n", sizeof(size_t *));
-	#endif
-	recvd = Recv (clntSock, &dataSize, sizeof(dataSize), sizeof(size_t *));
-	#ifdef DEBUG
-	printf ("dataSize 받기 완료. 받은 사이즈: %d, dataSize의 값: %d\n", sizeof(dataSize), dataSize);
-	#endif*/
-
 	/*	data.buf.size() 받기 */
 	ssize_t bufSize;
 	#ifdef DEBUG
 	printf ("data.buf.size() 받는중..\n");
-	printf (" 받아야 할 사이즈: %d\n", sizeof(bufSize));
-	printf (" 받을 때 사용될 unit 사이즈: %d\n", sizeof(size_t *));
+	printf (" 받아야 할 버퍼사이즈: %d\n", sizeof(bufSize));
 	#endif
 	recvd = Recv (clntSock, &bufSize, sizeof(bufSize), sizeof(size_t *));
-	dataPtr->bufSize = bufSize;
-	dataPtr->buf.resize(bufSize);
 	#ifdef DEBUG
-	printf ("data.buf.size() 받기 완료. 받은 사이즈: %d\n", recvd);
+	printf ("data.buf.size() 받기 완료. 받은 bufSize 값: %d\n", bufSize);
 	#endif
+
+	dataPtr->buf.resize(bufSize);
 
 	/*	data.buf 받기 */
 	#ifdef DEBUG
 	printf ("data.buf 받는중..\n");
-	printf (" 받아야 할 사이즈: %d\n", bufSize);
-	printf (" 받을 때 사용될 unit 사이즈: %d\n", sizeof(unsigned char));
+	printf (" 받아야 할 사이즈: %d\n", dataPtr->buf.size() * sizeof(unsigned char));
 	#endif
 	recvd = Recv (clntSock, &(*dataPtr->buf.begin()), bufSize, sizeof(unsigned char));
 	#ifdef DEBUG
 	printf ("data.buf 받기 완료. 받은 사이즈: %d\n", recvd);
 	#endif
+	ASSERT (recvd == dataPtr->buf.size() * sizeof(unsigned char));
 
 	close (servSock);
     close (clntSock);
