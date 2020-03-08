@@ -127,13 +127,14 @@ OpenCV_DNN::MachineLearning (string TEST_IMAGE_PATH) {
 /* struct protocol --> struct Decoded 변환 */
 void 
 OpenCV_DNN::MachineLearning (struct protocol* dataPtr) {
+    Mat img = decoding (dataPtr);
+    
     #ifdef DEBUG
     printf ("call MachineLearning!\n");
     #endif
     string currTime = getCurrTime();
     string input_file = INPUT_IMAGE_PATH + currTime + ".jpeg";
     string output_file = OUTPUT_IMAGE_PATH + currTime + "_out.jpeg";
-	Mat img = decoding (dataPtr);
 
     imwrite (input_file, img);
 
