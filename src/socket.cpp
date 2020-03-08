@@ -82,11 +82,6 @@ RecvBuffer () {
 	printf ("data.buf.size() 받기 완료. 받은 bufSize 값: %d\n", bufSize);
 	#endif
 
-	dataPtr->buf.resize(bufSize);
-	#ifdef DEBUG
-	printf (" 새로 할당된 벡터의 사이즈: %d\n", dataPtr->buf.size());
-	#endif
-
 	/*	data.buf 받기 */
 	#ifdef DEBUG
 	printf ("data.buf 받는중..\n");
@@ -97,7 +92,7 @@ RecvBuffer () {
 	unsigned char memValue;
 	for (int i=0; i<bufSize; i++){
 		recv (clntSock, (unsigned char*) &memValue, sizeof(unsigned char), 0);
-		dataPtr->buf[i] = memValue;
+		dataPtr->buf.push_back(memValue);
 		printf ("[%d] set memValue: %d\n", i, memValue);
 	}
 	#ifdef DEBUG
