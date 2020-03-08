@@ -331,15 +331,25 @@ OpenCV_DNN::getCurrTime () {
     printf ("call getCurrTime!\n");
     #endif
     time_t timeObj = time(NULL);
+    printf ("1\n");
 	struct  tm tm = *localtime(&timeObj);
+    printf ("2\n");
     string currTime, temp;
+    printf ("3\n");
 	currTime += to_string (tm.tm_year+1900);
+    printf ("4\n");
     temp = to_string (tm.tm_mon+1);
+    printf ("5\n");
     if (temp.length() == 1) temp = "0" + temp;
+    printf ("6\n");
 	currTime += temp;
+    printf ("7\n");
     temp = to_string (tm.tm_mday);
+    printf ("8\n");
     if (temp.length() == 1) temp = "0" + temp;
+    printf ("9\n");
     currTime += temp;
+    printf ("10\n");
 	temp = to_string (tm.tm_hour);
     if (temp.length() == 1) temp = "0" + temp;
 	currTime += temp;
@@ -348,7 +358,9 @@ OpenCV_DNN::getCurrTime () {
 	currTime += temp;
 	temp = to_string (tm.tm_sec);
     if (temp.length() == 1) temp = "0" + temp;
+    printf ("11\n");
 	currTime += temp;
+    printf ("12\n");
     #ifdef DEBUG
     printf ("return getCurrTime!\n");
     #endif
