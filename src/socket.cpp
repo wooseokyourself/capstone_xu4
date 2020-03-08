@@ -18,7 +18,7 @@ printf ("Size: %d\n", size);
 			recvd += recv (sock, (void *) (buf + recvd/unit), MAXBUFSIZE, 0);
 		else
 			break;
-			
+
 		yet = size - recvd;
 	}
 	return recvd;
@@ -93,6 +93,7 @@ RecvBuffer () {
 	#endif
 	
 	std::vector<unsigned char> vec (bufSize);
+	printf (" 할당된 vector 사이즈: %d\n", vec.size() * sizeof(unsigned char));
 	recvd = Recv (clntSock, &vec[0], bufSize, sizeof(unsigned char));
 	dataPtr->buf.assign (vec.begin(), vec.end());
 
