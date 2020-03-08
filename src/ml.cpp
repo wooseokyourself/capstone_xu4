@@ -128,7 +128,7 @@ OpenCV_DNN::MachineLearning (string TEST_IMAGE_PATH) {
 }
 #endif
 
-
+#ifdef DIFF_BASE
 void 
 OpenCV_DNN::MachineLearning (struct protocol* dataPtr) {
     string currTime = getCurrTime();
@@ -206,6 +206,46 @@ OpenCV_DNN::decoding (struct protocol* dataPtr) {
 	free (dataPtr);
     return decImgPtr;
 }
+#else
+/* struct protocol --> struct Decoded 변환 */
+void 
+OpenCV_DNN::MachineLearning (struct protocol* dataPtr) {
+    string currTime = getCurrTime();
+    string input_file = INPUT_IMAGE_PATH + currTime + ".jpeg";
+    string output_file = OUTPUT_IMAGE_PATH + currTime + "_out.jpeg";
+	Mat img = decoding (dataPtr);
+
+    imwrite (input_file, img);
+
+    /* Image Process */
+    Mat blob;
+	preprocess(img);
+
+	vector<Mat> outs;
+	net.forward(outs, outNames);
+
+	postprocess(img, outs);
+
+
+	/* 박스와 추론시간 기입 */
+	vector<double> layersTimes;
+	double freq = getTickFrequency() / 1000;
+	double t = net.getPerfProfile(layersTimes) / freq;
+	string label_inferTime = format ("Inference time: %.2f ms", t);
+    string label_confThreshold = format ("confThreshold: %.1f", confThreshold);
+	putText (img, label_inferTime, Point(0, 35), FONT_HERSHEY_SIMPLEX, 1.0, Scalar(0, 0, 255), 2);
+    putText (img, label_confThreshold, Point(0, 70), FONT_HERSHEY_SIMPLEX, 1.0, Scalar(0, 0, 255), 2);
+
+	imwrite (output_file, img);
+}
+
+Mat
+OpenCV_DNN::decoding (struct protocol* dataPtr) {
+    Mat img = imdecode (dataPtr->buf, 1);
+    free (dataPtr);
+    return img;
+}
+#endif
 
 
 inline void

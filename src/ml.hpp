@@ -25,11 +25,13 @@ using namespace std;
 using namespace cv;
 using namespace dnn;
 
+#ifdef DIFF_BASE
 struct Decoded {
     Mat prev;
     Mat curr;
     uint32_t diffValue;
 };
+#endif
 
 class OpenCV_DNN {
 public:
