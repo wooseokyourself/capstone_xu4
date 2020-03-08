@@ -92,7 +92,7 @@ RecvBuffer () {
 	printf (" unit 사이즈: %d\n", sizeof(unsigned char));
 	#endif
 	
-	std::vector<unsigned char> vec (bufSize);
+	std::vector<unsigned char> vec (bufSize+1);
 	printf (" 할당된 vector 사이즈: %d\n", vec.size() * sizeof(unsigned char));
 	recvd = Recv (clntSock, &vec[0], bufSize, sizeof(unsigned char));
 	dataPtr->buf.assign (vec.begin(), vec.end());
