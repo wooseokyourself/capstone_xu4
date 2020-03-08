@@ -86,8 +86,9 @@ RecvBuffer () {
 	printf (" unit 사이즈: %d\n", sizeof(unsigned char));
 	#endif
 	
-	dataPtr->buf.resize (bufSize);
-	recvd = Recv (clntSock, &(dataPtr->buf[0]), bufSize, sizeof(unsigned char));
+	std::vector<unsigned char> vec (bufSize);
+	recvd = Recv (clntSock, &vec[0], bufSize, sizeof(unsigned char));
+	dataPtr->buf.assign (vec.begin(), vec.end());
 
 	/*
 	recvd = 0;
