@@ -127,12 +127,10 @@ OpenCV_DNN::MachineLearning (string TEST_IMAGE_PATH) {
 /* struct protocol --> struct Decoded 변환 */
 void 
 OpenCV_DNN::MachineLearning (std::vector<unsigned char> vec) {
-    Mat img = decoding (vec);
-
-    #ifdef DEBUG
-    printf ("call MachineLearning!\n");
-    #endif
-    // string currTime = getCurrTime();
+    Mat img = imdecode (vec, 1);
+    vec.clear();
+    
+    string currTime = getCurrTime();
     string currTime = "test";
     string input_file = INPUT_IMAGE_PATH + currTime + ".jpeg";
     string output_file = OUTPUT_IMAGE_PATH + currTime + "_out.jpeg";
@@ -159,22 +157,6 @@ OpenCV_DNN::MachineLearning (std::vector<unsigned char> vec) {
     putText (img, label_confThreshold, Point(0, 70), FONT_HERSHEY_SIMPLEX, 1.0, Scalar(0, 0, 255), 2);
 
 	imwrite (output_file, img);
-}
-
-Mat
-OpenCV_DNN::decoding (std::vector<unsigned char> vec) {
-    #ifdef DEBUG
-    printf ("call decoding!\n");
-    #endif
-    Mat img = imdecode (vec, 1);
-    #ifdef DEBUG
-    printf (" imdecode done!\n");
-    #endif
-    // free (dataPtr);
-    #ifdef DEBUG
-    printf (" free (dataPtr) done!\n");
-    #endif
-    return img;
 }
 
 
@@ -329,29 +311,16 @@ OpenCV_DNN::drawPred (int classId, float conf, int left, int top, int right, int
 
 inline string
 OpenCV_DNN::getCurrTime () {
-    #ifdef DEBUG
-    printf ("call getCurrTime!\n");
-    #endif
     time_t timeObj = time(NULL);
-    printf ("1\n");
 	struct  tm* tm = localtime(&timeObj);
-    printf ("2\n");
     string currTime, temp;
-    printf ("3\n");
 	currTime += to_string (tm->tm_year+1900);
-    printf ("4\n");
     temp = to_string (tm->tm_mon+1);
-    printf ("5\n");
     if (temp.length() == 1) temp = "0" + temp;
-    printf ("6\n");
 	currTime += temp;
-    printf ("7\n");
     temp = to_string (tm->tm_mday);
-    printf ("8\n");
     if (temp.length() == 1) temp = "0" + temp;
-    printf ("9\n");
     currTime += temp;
-    printf ("10\n");
 	temp = to_string (tm->tm_hour);
     if (temp.length() == 1) temp = "0" + temp;
 	currTime += temp;
@@ -360,11 +329,6 @@ OpenCV_DNN::getCurrTime () {
 	currTime += temp;
 	temp = to_string (tm->tm_sec);
     if (temp.length() == 1) temp = "0" + temp;
-    printf ("11\n");
 	currTime += temp;
-    printf ("12\n");
-    #ifdef DEBUG
-    printf ("return getCurrTime!\n");
-    #endif
     return currTime;
 }

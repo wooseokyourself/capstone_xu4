@@ -2,22 +2,13 @@
 
 ssize_t
 Recv (int sock, const void *buf, ssize_t size, ssize_t unit) {
-printf ("Size: %d\n", size);
 	ssize_t recvd = 0;
 	ssize_t yet = size;
 	while (recvd < size) {
-		#ifdef DEBUG
-		printf (" recvd: %d\n", recvd);
-		#endif 
-		if ( 0 < yet && yet < MAXBUFSIZE ){  /* 아직 받지않은 데이터가 MAXBUFSIZE보다 작은 경우 */
-			printf ("걸려들었어! yet: %d\n", yet);
-			printf ("recvd: %d", recvd);
+		if ( 0 < yet && yet < MAXBUFSIZE )  /* 아직 받지않은 데이터가 MAXBUFSIZE보다 작은 경우 */
 			recvd += recv (sock, (void *) (buf + recvd/unit), yet, 0);
-		}
-		else if ( MAXBUFSIZE < yet )/* 받아야 할 데이터가 MAXBUFSIZE보다 큰 경우 */
+		else /* 받아야 할 데이터가 MAXBUFSIZE보다 큰 경우 */
 			recvd += recv (sock, (void *) (buf + recvd/unit), MAXBUFSIZE, 0);
-		else
-			break;
 
 		yet = size - recvd;
 	}
@@ -60,7 +51,9 @@ RecvBuffer () {
     setsockopt (clntSock, SOL_SOCKET, SO_LINGER, (char *) &ling, sizeof(ling));
 
     /*  클라이언트의 연결을 기다림 */
-	printf ("이제 연결을 기다립니다!\n");
+	#ifdef DEBUG
+	printf ("wait client...\n");
+	#endif
     clntSock = accept (servSock, (struct sockaddr *) &clntAddr, &clntAddrLen);
 
 
@@ -79,37 +72,13 @@ RecvBuffer () {
 
 	/*	data.buf.size() 받기 */
 	ssize_t bufSize;
-	#ifdef DEBUG
-	printf ("data.buf.size() 받는중..\n");
-	printf (" 받아야 할 버퍼사이즈: %d\n", sizeof(bufSize));
-	#endif
 	recvd = Recv (clntSock, &bufSize, sizeof(bufSize), sizeof(size_t *));
 
 	/*	data.buf 받기 */
-	#ifdef DEBUG
-	printf ("data.buf 받는중..\n");
-	printf (" 받아야 할 사이즈: %d\n", bufSize * sizeof(unsigned char));
-	printf (" unit 사이즈: %d\n", sizeof(unsigned char));
-	#endif
-	
 	std::vector<unsigned char> vec(bufSize);
-	printf (" 할당된 vector 사이즈: %d\n", vec.size() * sizeof(unsigned char));
 	recvd = Recv (clntSock, &vec[0], bufSize, sizeof(unsigned char));
 
-	/*
-	recvd = 0;
-	unsigned char memValue;
-	for (int i=0; i<bufSize; i++){
-		recvd += recv (clntSock, (unsigned char*) &memValue, sizeof(unsigned char), 0);
-		dataPtr->buf.push_back(memValue);
-		printf ("[%d] set memValue: %d\n", i, dataPtr->buf[i]);
-	}
-	*/
-	
-	#ifdef DEBUG
-	printf ("data.buf 받기 완료. 받은 사이즈: %d\n", recvd);
-	#endif
-	// ASSERT (recvd == dataPtr->buf.size() * sizeof(unsigned char));
+	ASSERT (recvd == dataPtr->buf.size() * sizeof(unsigned char));
 
 	close (servSock);
     close (clntSock);

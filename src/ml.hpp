@@ -40,9 +40,6 @@ public:
 
 protected:
 
-    Mat
-    decoding (std::vector<unsigned char> vec);
-
     inline void
     preprocess (const Mat& frame);
     
