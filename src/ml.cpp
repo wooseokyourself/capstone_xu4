@@ -7,8 +7,8 @@ OpenCV_DNN::OpenCV_DNN () {
     this->CLASSES_PATH = "model/coco.names";
 
 #ifdef DEBUG_ML
-    this->INPUT_IMAGE_PATH = "/home/html/ws/uploads/";
-    this->OUTPUT_IMAGE_PATH = "/home/html/ws/uploads/";
+    this->INPUT_IMAGE_PATH = "/home/html/ws/tests/";
+    this->OUTPUT_IMAGE_PATH = "/home/html/ws/tests/";
 #else
     this->INPUT_IMAGE_PATH = "/home/html/ws/cam/";
     this->OUTPUT_IMAGE_PATH = "/home/html/ws/cam/";
@@ -85,7 +85,7 @@ OpenCV_DNN::OpenCV_DNN () {
 void
 OpenCV_DNN::MachineLearning (string TEST_IMAGE_PATH) {
     Mat img;
-    
+
     string currTime = getCurrTime();
     string input_file = INPUT_IMAGE_PATH + currTime + ".jpeg";
     string output_file = OUTPUT_IMAGE_PATH + currTime + "_out.jpeg";
