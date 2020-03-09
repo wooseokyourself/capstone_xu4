@@ -170,7 +170,7 @@ OpenCV_DNN::decoding (std::vector<unsigned char> vec) {
     #ifdef DEBUG
     printf (" imdecode done!\n");
     #endif
-    free (dataPtr);
+    // free (dataPtr);
     #ifdef DEBUG
     printf (" free (dataPtr) done!\n");
     #endif
