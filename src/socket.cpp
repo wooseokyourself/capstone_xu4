@@ -70,15 +70,15 @@ RecvBuffer () {
 	// struct protocol* dataPtr = (struct protocol*) malloc (sizeof(struct protocol));
 	int recvd;
 
-	/*	data.buf.size() 받기 */
+	/*	vec.size() 받기 */
 	ssize_t bufSize;
 	recvd = Recv (clntSock, &bufSize, sizeof(bufSize), sizeof(size_t *));
 
-	/*	data.buf 받기 */
+	/*	vec 받기 */
 	std::vector<unsigned char> vec(bufSize);
 	recvd = Recv (clntSock, &vec[0], bufSize, sizeof(unsigned char));
 
-	ASSERT (recvd == dataPtr->buf.size() * sizeof(unsigned char));
+	ASSERT (recvd == vec.size() * sizeof(unsigned char));
 
 	close (servSock);
     close (clntSock);

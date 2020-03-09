@@ -124,7 +124,6 @@ OpenCV_DNN::MachineLearning (string TEST_IMAGE_PATH) {
 }
 #endif
 
-/* struct protocol --> struct Decoded 변환 */
 void 
 OpenCV_DNN::MachineLearning (std::vector<unsigned char> vec) {
     Mat img = imdecode (vec, 1);
