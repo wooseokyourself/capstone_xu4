@@ -7,7 +7,7 @@
 int main (void) {
     OpenCV_DNN dnn;
     while (true) {
-        struct protocol* dataPtr = RecvBuffer ();
+        std::vector<unsigned char> dataPtr = RecvBuffer ();
 		dnn.MachineLearning (dataPtr);
     }
     return 0;

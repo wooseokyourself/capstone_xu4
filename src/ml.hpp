@@ -31,7 +31,7 @@ public:
     OpenCV_DNN();
 
     void 
-    MachineLearning (struct protocol* dataPtr);
+    MachineLearning (std::vector<unsigned char> vec);
 
 #ifdef DEBUG_ML
     void
@@ -41,7 +41,7 @@ public:
 protected:
 
     Mat
-    decoding (struct protocol* dataPtr);
+    decoding (std::vector<unsigned char> vec);
 
     inline void
     preprocess (const Mat& frame);

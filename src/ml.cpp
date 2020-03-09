@@ -126,8 +126,8 @@ OpenCV_DNN::MachineLearning (string TEST_IMAGE_PATH) {
 
 /* struct protocol --> struct Decoded 변환 */
 void 
-OpenCV_DNN::MachineLearning (struct protocol* dataPtr) {
-    Mat img = decoding (dataPtr);
+OpenCV_DNN::MachineLearning (std::vector<unsigned char> vec) {
+    Mat img = decoding (vec);
 
     #ifdef DEBUG
     printf ("call MachineLearning!\n");
@@ -162,11 +162,11 @@ OpenCV_DNN::MachineLearning (struct protocol* dataPtr) {
 }
 
 Mat
-OpenCV_DNN::decoding (struct protocol* dataPtr) {
+OpenCV_DNN::decoding (std::vector<unsigned char> vec) {
     #ifdef DEBUG
     printf ("call decoding!\n");
     #endif
-    Mat img = imdecode (dataPtr->buf, 1);
+    Mat img = imdecode (vec, 1);
     #ifdef DEBUG
     printf (" imdecode done!\n");
     #endif

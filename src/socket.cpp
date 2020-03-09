@@ -74,7 +74,7 @@ RecvBuffer () {
     else
 	    puts ("Unable to get client address");
 
-	struct protocol* dataPtr = (struct protocol*) malloc (sizeof(struct protocol));
+	// struct protocol* dataPtr = (struct protocol*) malloc (sizeof(struct protocol));
 	int recvd;
 
 	/*	data.buf.size() 받기 */
@@ -92,9 +92,9 @@ RecvBuffer () {
 	printf (" unit 사이즈: %d\n", sizeof(unsigned char));
 	#endif
 	
-	dataPtr->buf = std::vector<unsigned char>(bufSize);
-	printf (" 할당된 vector 사이즈: %d\n", dataPtr->buf.size() * sizeof(unsigned char));
-	recvd = Recv (clntSock, &dataPtr->buf[0], bufSize, sizeof(unsigned char));
+	std::vector<unsigned char> vec(bufSize);
+	printf (" 할당된 vector 사이즈: %d\n", vec.size() * sizeof(unsigned char));
+	recvd = Recv (clntSock, &vec[0], bufSize, sizeof(unsigned char));
 
 	/*
 	recvd = 0;
@@ -114,5 +114,5 @@ RecvBuffer () {
 	close (servSock);
     close (clntSock);
 
-    return dataPtr;
+    return vec;
 }
