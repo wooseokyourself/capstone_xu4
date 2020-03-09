@@ -152,8 +152,10 @@ OpenCV_DNN::MachineLearning (std::vector<unsigned char> vec) {
 	double t = net.getPerfProfile(layersTimes) / freq;
 	string label_inferTime = format ("Inference time: %.2f ms", t);
     string label_confThreshold = format ("confThreshold: %.1f", confThreshold);
+    string label_resolution = format ("Resolution: %d X %d", img.cols, img.rows);
 	putText (img, label_inferTime, Point(0, 35), FONT_HERSHEY_SIMPLEX, 1.0, Scalar(0, 0, 255), 2);
     putText (img, label_confThreshold, Point(0, 70), FONT_HERSHEY_SIMPLEX, 1.0, Scalar(0, 0, 255), 2);
+    putText (img, label_resolution, Point(0, 105), FONT_HERSHEY_SIMPLEX, 1.0, Scalar(0, 0, 255), 2);
 
 	imwrite (output_file, img);
 }
