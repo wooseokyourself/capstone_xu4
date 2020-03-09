@@ -17,8 +17,6 @@
 #include <opencv2/highgui.hpp>
 #include <opencv2/imgcodecs.hpp>
 
-#include "protocol.hpp"
-
 #define ASSERT assert
 
 using namespace std;
