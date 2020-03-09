@@ -290,11 +290,13 @@ OpenCV_DNN::postprocess (Mat& frame, const vector<Mat>& outs) {
     vector<int> indices;
     NMSBoxes(boxes, confidences, this->confThreshold, this->nmsThreshold, indices);
     for (size_t i = 0; i < indices.size(); ++i)
-    {
-        int idx = indices[i];
-        Rect box = boxes[idx];
-        drawPred(classIds[idx], confidences[idx], box.x, box.y,
-                 box.x + box.width, box.y + box.height, frame);
+    {   if (classIds[idx] == 0) { /* 사람인 경우에만 박스 그리기 */
+            people++;
+            int idx = indices[i];
+            Rect box = boxes[idx];
+            drawPred(classIds[idx], confidences[idx], box.x, box.y,
+                    box.x + box.width, box.y + box.height, frame);
+        }
     }
 }
 
@@ -307,8 +309,6 @@ OpenCV_DNN::drawPred (int classId, float conf, int left, int top, int right, int
     if (!this->classes.empty())
     {
         CV_Assert(classId < (int)this->classes.size());
-        if (this->classes[classId] == "person")
-            people++;
         label = this->classes[classId] + ": " + label;
     }
 
