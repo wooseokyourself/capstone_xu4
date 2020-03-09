@@ -84,10 +84,11 @@ OpenCV_DNN::OpenCV_DNN () {
 #ifdef DEBUG_ML
 void
 OpenCV_DNN::MachineLearning (string TEST_IMAGE_PATH) {
+    Mat img;
+    
     string currTime = getCurrTime();
     string input_file = INPUT_IMAGE_PATH + currTime + ".jpeg";
     string output_file = OUTPUT_IMAGE_PATH + currTime + "_out.jpeg";
-	Mat img;
 
     /*
 	    test_ml_main.cpp 와 함께 컴파일되었다면,
