@@ -47,7 +47,7 @@ OpenCV_DNN::OpenCV_DNN () {
         CV_Error(Error::StsError, "File " + file + " not found");
     string line;
     while (getline(ifs, line)) {
-        classes.push_back(line);
+        this->classes.push_back(line);
     }
 
 	// 모델 로드
@@ -291,8 +291,6 @@ OpenCV_DNN::postprocess (Mat& frame, const vector<Mat>& outs) {
     for (size_t i = 0; i < indices.size(); ++i)
     {
         int idx = indices[i];
-        if (idx == 0)
-            people++;
         Rect box = boxes[idx];
         drawPred(classIds[idx], confidences[idx], box.x, box.y,
                  box.x + box.width, box.y + box.height, frame);
@@ -307,8 +305,10 @@ OpenCV_DNN::drawPred (int classId, float conf, int left, int top, int right, int
     string label = format("%.2f", conf);
     if (!this->classes.empty())
     {
-        CV_Assert(classId < (int)classes.size());
-        label = classes[classId] + ": " + label;
+        CV_Assert(classId < (int)this->classes.size());
+        if (this->classes[classId] == "person")
+            people++;
+        label = this->classes[classId] + ": " + label;
     }
 
     int baseLine;
