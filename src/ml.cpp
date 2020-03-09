@@ -85,23 +85,26 @@ OpenCV_DNN::OpenCV_DNN () {
 
 #ifdef DEBUG_ML
 void
-OpenCV_DNN::MachineLearning (string TEST_IMAGE_PATH) {
-    people = 0;
-    Mat img;
-
-    string currTime = getCurrTime();
-    string input_file = INPUT_IMAGE_PATH + currTime + ".jpeg";
-    string output_file = OUTPUT_IMAGE_PATH + currTime + "_out.jpeg";
-
+OpenCV_DNN::MachineLearning (string TEST_IMAGE_FILE) {
     /*
 	    test_ml_main.cpp 와 함께 컴파일되었다면,
 	    Mat을 struct protocol 이 아닌 .jpeg 이미지파일로부터 생성함.
-        기존의 MachineLearning과 밑 4줄만 다르다.
     */
-	img = imread (TEST_IMAGE_PATH, IMREAD_COLOR);
+    people = 0;
+    Mat img;
+    if (TEST_IMAGE_FILE.length() == 6) {
+        TEST_IMAGE_FILE = "0" + TEST_IMAGE_FILE;
+    }
+    TEST_IMAGE_FILE = "debug/test_images/" + TEST_IMAGE_FILE;
+    string input_file = INPUT_IMAGE_PATH +  ".jpeg";
+    string output_file = OUTPUT_IMAGE_PATH +  "_out.jpeg";
+
+	img = imread (TEST_IMAGE_FILE, IMREAD_COLOR);
     imwrite (input_file, img);
     img.release();
     img = imread (input_file, IMREAD_COLOR); // BGR channel
+
+    /*  여기까지만 기존의 MachineLearning과 다르다. */
 
     /* Image Process */
     Mat blob;

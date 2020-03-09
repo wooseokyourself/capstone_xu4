@@ -33,7 +33,7 @@ public:
 
 #ifdef DEBUG_ML
     void
-    MachineLearning (string TEST_IMAGE_PATH);
+    MachineLearning (string);
 #endif
 
 protected:

@@ -9,8 +9,8 @@ int main (int argc, char* argv[]) {
     int imgEnd = atoi(argv[2]);
     OpenCV_DNN dnn;
     for (int i=imgStart; i<=imgEnd; i++) {
-        string TEST_IMAGE_PATH = "debug/test_images/" + to_string(i) + ".jpeg";
-        dnn.MachineLearning (TEST_IMAGE_PATH);
+        string TEST_IMAGE_FILE =  to_string(i) + ".jpeg";
+        dnn.MachineLearning (TEST_IMAGE_FILE);
     }
     return 0;
 }
