@@ -290,9 +290,10 @@ OpenCV_DNN::postprocess (Mat& frame, const vector<Mat>& outs) {
     vector<int> indices;
     NMSBoxes(boxes, confidences, this->confThreshold, this->nmsThreshold, indices);
     for (size_t i = 0; i < indices.size(); ++i)
-    {   if (classIds[idx] == 0) { /* 사람인 경우에만 박스 그리기 */
-            people++;
+    {   
             int idx = indices[i];
+        if (classIds[idx] == 0) { /* 사람인 경우에만 박스 그리기 */
+            people++;
             Rect box = boxes[idx];
             drawPred(classIds[idx], confidences[idx], box.x, box.y,
                     box.x + box.width, box.y + box.height, frame);
