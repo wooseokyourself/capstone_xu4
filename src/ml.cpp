@@ -131,7 +131,6 @@ OpenCV_DNN::MachineLearning (std::vector<unsigned char> vec) {
     vec.clear();
     
     string currTime = getCurrTime();
-    string currTime = "test";
     string input_file = INPUT_IMAGE_PATH + currTime + ".jpeg";
     string output_file = OUTPUT_IMAGE_PATH + currTime + "_out.jpeg";
 
