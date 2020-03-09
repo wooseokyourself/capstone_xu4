@@ -52,6 +52,8 @@ protected:
 
 private:
 
+    int people;
+
     string MODEL_PATH;
     string CONFIG_PATH;
     string CLASSES_PATH;

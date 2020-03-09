@@ -27,6 +27,8 @@ OpenCV_DNN::OpenCV_DNN () {
         --rgb
     */
    	
+    people = 0;
+
 	/* DNN 설정 */
 	this->mean = Scalar();
 
@@ -84,6 +86,7 @@ OpenCV_DNN::OpenCV_DNN () {
 #ifdef DEBUG_ML
 void
 OpenCV_DNN::MachineLearning (string TEST_IMAGE_PATH) {
+    people = 0;
     Mat img;
 
     string currTime = getCurrTime();
@@ -117,9 +120,11 @@ OpenCV_DNN::MachineLearning (string TEST_IMAGE_PATH) {
 	string label_inferTime = format ("Inference time: %.2f ms", t);
     string label_confThreshold = format ("confThreshold: %.1f", confThreshold);
     string label_resolution = format ("Resolution: %d X %d", img.cols, img.rows);
+    string label_people = format ("People: %d", this->people);
 	putText (img, label_inferTime, Point(0, 35), FONT_HERSHEY_SIMPLEX, 1.0, Scalar(0, 0, 255), 2);
     putText (img, label_confThreshold, Point(0, 70), FONT_HERSHEY_SIMPLEX, 1.0, Scalar(0, 0, 255), 2);
     putText (img, label_resolution, Point(0, 105), FONT_HERSHEY_SIMPLEX, 1.0, Scalar(0, 0, 255), 2);
+    putText (img, label_people, Point(0, 140), FONT_HERSHEY_SIMPLEX, 1.0, Scalar(0, 0, 255), 2);
 
 	imwrite (output_file, img);
 }
@@ -127,6 +132,7 @@ OpenCV_DNN::MachineLearning (string TEST_IMAGE_PATH) {
 
 void 
 OpenCV_DNN::MachineLearning (std::vector<unsigned char> vec) {
+    people = 0;
     Mat img = imdecode (vec, 1);
     vec.clear();
     
@@ -153,9 +159,11 @@ OpenCV_DNN::MachineLearning (std::vector<unsigned char> vec) {
 	string label_inferTime = format ("Inference time: %.2f ms", t);
     string label_confThreshold = format ("confThreshold: %.1f", confThreshold);
     string label_resolution = format ("Resolution: %d X %d", img.cols, img.rows);
+    string label_people = format ("People: %d", this->people);
 	putText (img, label_inferTime, Point(0, 35), FONT_HERSHEY_SIMPLEX, 1.0, Scalar(0, 0, 255), 2);
     putText (img, label_confThreshold, Point(0, 70), FONT_HERSHEY_SIMPLEX, 1.0, Scalar(0, 0, 255), 2);
     putText (img, label_resolution, Point(0, 105), FONT_HERSHEY_SIMPLEX, 1.0, Scalar(0, 0, 255), 2);
+    putText (img, label_people, Point(0, 140), FONT_HERSHEY_SIMPLEX, 1.0, Scalar(0, 0, 255), 2);
 
 	imwrite (output_file, img);
 }
@@ -283,6 +291,8 @@ OpenCV_DNN::postprocess (Mat& frame, const vector<Mat>& outs) {
     for (size_t i = 0; i < indices.size(); ++i)
     {
         int idx = indices[i];
+        if (idx == 0)
+            people++;
         Rect box = boxes[idx];
         drawPred(classIds[idx], confidences[idx], box.x, box.y,
                  box.x + box.width, box.y + box.height, frame);
