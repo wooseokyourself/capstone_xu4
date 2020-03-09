@@ -92,17 +92,15 @@ OpenCV_DNN::MachineLearning (string TEST_IMAGE_FILE) {
     */
     people = 0;
     Mat img;
-    if (TEST_IMAGE_FILE.length() == 6) {
-        TEST_IMAGE_FILE = "0" + TEST_IMAGE_FILE;
+    string SAVING_FILE = TEST_IMAGE_FILE;
+    if (SAVING_FILE.length() == 6) {
+        SAVING_FILE = "0" + TEST_IMAGE_FILE;
     }
     TEST_IMAGE_FILE = "debug/test_images/" + TEST_IMAGE_FILE;
-    string input_file = INPUT_IMAGE_PATH +  ".jpeg";
-    string output_file = OUTPUT_IMAGE_PATH +  "_out.jpeg";
+    img = imread (TEST_IMAGE_FILE, IMREAD_COLOR);
 
-	img = imread (TEST_IMAGE_FILE, IMREAD_COLOR);
-    imwrite (input_file, img);
-    img.release();
-    img = imread (input_file, IMREAD_COLOR); // BGR channel
+    string output_file = OUTPUT_IMAGE_PATH + SAVING_FILE;
+
 
     /*  여기까지만 기존의 MachineLearning과 다르다. */
 
