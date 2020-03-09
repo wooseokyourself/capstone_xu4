@@ -28,7 +28,7 @@ static const int MAXPENDING = 5;    // 연결 요청을 대기할 수 있는 최
 ssize_t
 Recv (int sock, const void *buf, ssize_t size, ssize_t unit);
 
-struct protocol*
+std::vector<unsigned char>
 RecvBuffer ();
 
 #endif

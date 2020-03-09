@@ -24,7 +24,7 @@ printf ("Size: %d\n", size);
 	return recvd;
 }
 
-struct protocol*
+std::vector<unsigned char>
 RecvBuffer () {
     /*  LINGER 생성 */
     struct linger ling = {0, };
