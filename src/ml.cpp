@@ -306,6 +306,7 @@ void
 OpenCV_DNN::drawPred (int classId, float conf, int left, int top, int right, int bottom, Mat& frame) {
     rectangle(frame, Point(left, top), Point(right, bottom), Scalar(0, 255, 0));
 
+    /*  // 클래스 이름 및 추론결과(확률) 표기 
     string label = format("%.2f", conf);
     if (!this->classes.empty())
     {
@@ -317,9 +318,10 @@ OpenCV_DNN::drawPred (int classId, float conf, int left, int top, int right, int
     Size labelSize = getTextSize(label, FONT_HERSHEY_SIMPLEX, 0.5, 1, &baseLine);
 
     top = max(top, labelSize.height);
-    rectangle(frame, Point(left, top - labelSize.height),
-              Point(left + labelSize.width, top + baseLine), Scalar::all(255), FILLED);
-    // putText(frame, label, Point(left, top), FONT_HERSHEY_SIMPLEX, 0.5, Scalar());
+
+    rectangle(frame, Point(left, top - labelSize.height), Point(left + labelSize.width, top + baseLine), Scalar::all(255), FILLED);
+    putText(frame, label, Point(left, top), FONT_HERSHEY_SIMPLEX, 0.5, Scalar());
+    */
 }
 
 inline string
