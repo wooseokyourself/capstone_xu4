@@ -27,6 +27,8 @@ OpenCV_DNN::OpenCV_DNN () {
         --rgb
     */
    	
+    people = 0;
+
 	/* DNN 설정 */
 	this->mean = Scalar();
 
@@ -45,7 +47,7 @@ OpenCV_DNN::OpenCV_DNN () {
         CV_Error(Error::StsError, "File " + file + " not found");
     string line;
     while (getline(ifs, line)) {
-        classes.push_back(line);
+        this->classes.push_back(line);
     }
 
 	// 모델 로드
@@ -83,22 +85,24 @@ OpenCV_DNN::OpenCV_DNN () {
 
 #ifdef DEBUG_ML
 void
-OpenCV_DNN::MachineLearning (string TEST_IMAGE_PATH) {
-    Mat img;
-
-    string currTime = getCurrTime();
-    string input_file = INPUT_IMAGE_PATH + currTime + ".jpeg";
-    string output_file = OUTPUT_IMAGE_PATH + currTime + "_out.jpeg";
-
+OpenCV_DNN::MachineLearning (string TEST_IMAGE_FILE) {
     /*
 	    test_ml_main.cpp 와 함께 컴파일되었다면,
 	    Mat을 struct protocol 이 아닌 .jpeg 이미지파일로부터 생성함.
-        기존의 MachineLearning과 밑 4줄만 다르다.
     */
-	img = imread (TEST_IMAGE_PATH, IMREAD_COLOR);
-    imwrite (input_file, img);
-    img.release();
-    img = imread (input_file, IMREAD_COLOR); // BGR channel
+    people = 0;
+    Mat img;
+    string SAVING_FILE = TEST_IMAGE_FILE;
+    if (SAVING_FILE.length() == 6) {
+        SAVING_FILE = "0" + TEST_IMAGE_FILE;
+    }
+    TEST_IMAGE_FILE = "debug/test_images/" + TEST_IMAGE_FILE;
+    img = imread (TEST_IMAGE_FILE, IMREAD_COLOR);
+
+    string output_file = OUTPUT_IMAGE_PATH + SAVING_FILE;
+
+
+    /*  여기까지만 기존의 MachineLearning과 다르다. */
 
     /* Image Process */
     Mat blob;
@@ -117,9 +121,11 @@ OpenCV_DNN::MachineLearning (string TEST_IMAGE_PATH) {
 	string label_inferTime = format ("Inference time: %.2f ms", t);
     string label_confThreshold = format ("confThreshold: %.1f", confThreshold);
     string label_resolution = format ("Resolution: %d X %d", img.cols, img.rows);
+    string label_people = format ("People: %d", this->people);
 	putText (img, label_inferTime, Point(0, 35), FONT_HERSHEY_SIMPLEX, 1.0, Scalar(0, 0, 255), 2);
     putText (img, label_confThreshold, Point(0, 70), FONT_HERSHEY_SIMPLEX, 1.0, Scalar(0, 0, 255), 2);
     putText (img, label_resolution, Point(0, 105), FONT_HERSHEY_SIMPLEX, 1.0, Scalar(0, 0, 255), 2);
+    putText (img, label_people, Point(0, 140), FONT_HERSHEY_SIMPLEX, 1.0, Scalar(0, 0, 255), 2);
 
 	imwrite (output_file, img);
 }
@@ -127,6 +133,7 @@ OpenCV_DNN::MachineLearning (string TEST_IMAGE_PATH) {
 
 void 
 OpenCV_DNN::MachineLearning (std::vector<unsigned char> vec) {
+    people = 0;
     Mat img = imdecode (vec, 1);
     vec.clear();
     
@@ -153,9 +160,11 @@ OpenCV_DNN::MachineLearning (std::vector<unsigned char> vec) {
 	string label_inferTime = format ("Inference time: %.2f ms", t);
     string label_confThreshold = format ("confThreshold: %.1f", confThreshold);
     string label_resolution = format ("Resolution: %d X %d", img.cols, img.rows);
+    string label_people = format ("People: %d", this->people);
 	putText (img, label_inferTime, Point(0, 35), FONT_HERSHEY_SIMPLEX, 1.0, Scalar(0, 0, 255), 2);
     putText (img, label_confThreshold, Point(0, 70), FONT_HERSHEY_SIMPLEX, 1.0, Scalar(0, 0, 255), 2);
     putText (img, label_resolution, Point(0, 105), FONT_HERSHEY_SIMPLEX, 1.0, Scalar(0, 0, 255), 2);
+    putText (img, label_people, Point(0, 140), FONT_HERSHEY_SIMPLEX, 1.0, Scalar(0, 0, 255), 2);
 
 	imwrite (output_file, img);
 }
@@ -281,11 +290,14 @@ OpenCV_DNN::postprocess (Mat& frame, const vector<Mat>& outs) {
     vector<int> indices;
     NMSBoxes(boxes, confidences, this->confThreshold, this->nmsThreshold, indices);
     for (size_t i = 0; i < indices.size(); ++i)
-    {
-        int idx = indices[i];
-        Rect box = boxes[idx];
-        drawPred(classIds[idx], confidences[idx], box.x, box.y,
-                 box.x + box.width, box.y + box.height, frame);
+    {   
+            int idx = indices[i];
+        if (classIds[idx] == 0) { /* 사람인 경우에만 박스 그리기 */
+            people++;
+            Rect box = boxes[idx];
+            drawPred(classIds[idx], confidences[idx], box.x, box.y,
+                    box.x + box.width, box.y + box.height, frame);
+        }
     }
 }
 
@@ -294,20 +306,22 @@ void
 OpenCV_DNN::drawPred (int classId, float conf, int left, int top, int right, int bottom, Mat& frame) {
     rectangle(frame, Point(left, top), Point(right, bottom), Scalar(0, 255, 0));
 
+    /*  // 클래스 이름 및 추론결과(확률) 표기 
     string label = format("%.2f", conf);
     if (!this->classes.empty())
     {
-        CV_Assert(classId < (int)classes.size());
-        label = classes[classId] + ": " + label;
+        CV_Assert(classId < (int)this->classes.size());
+        label = this->classes[classId] + ": " + label;
     }
 
     int baseLine;
     Size labelSize = getTextSize(label, FONT_HERSHEY_SIMPLEX, 0.5, 1, &baseLine);
 
     top = max(top, labelSize.height);
-    rectangle(frame, Point(left, top - labelSize.height),
-              Point(left + labelSize.width, top + baseLine), Scalar::all(255), FILLED);
+
+    rectangle(frame, Point(left, top - labelSize.height), Point(left + labelSize.width, top + baseLine), Scalar::all(255), FILLED);
     putText(frame, label, Point(left, top), FONT_HERSHEY_SIMPLEX, 0.5, Scalar());
+    */
 }
 
 inline string

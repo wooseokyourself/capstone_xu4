@@ -33,7 +33,7 @@ public:
 
 #ifdef DEBUG_ML
     void
-    MachineLearning (string TEST_IMAGE_PATH);
+    MachineLearning (string);
 #endif
 
 protected:
@@ -51,6 +51,8 @@ protected:
     getCurrTime ();
 
 private:
+
+    int people;
 
     string MODEL_PATH;
     string CONFIG_PATH;

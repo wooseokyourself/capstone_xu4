@@ -18,7 +18,7 @@ debug: $(TARGET_DEBUG)
 debug_ml: $(TARGET_DEBUG_ML)
 
 delete:
-	rm -f /home/html/ws/uploads/*.jpeg
+	rm -f /home/html/ws/tests/*.jpeg
 	rm -f /home/html/ws/cam/*.jpeg
 
 $(TARGET):
