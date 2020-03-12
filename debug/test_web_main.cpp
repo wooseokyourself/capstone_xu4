@@ -1,4 +1,5 @@
 #include "src/ml.hpp"
+#include "src/web.hpp"
 
 int main (int argc, char* argv[]) {
     if (argc != 3) {
@@ -11,6 +12,7 @@ int main (int argc, char* argv[]) {
     for (int i=imgStart; i<=imgEnd; i++) {
         string TEST_IMAGE_FILE =  to_string(i) + ".jpeg";
         dnn.MachineLearning (TEST_IMAGE_FILE);
+        uploadDB (dnn.getResultImg(), dnn.getPeopleNumber());
     }
     return 0;
 }

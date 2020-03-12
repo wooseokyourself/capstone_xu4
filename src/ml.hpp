@@ -31,9 +31,17 @@ public:
     void 
     MachineLearning (std::vector<unsigned char> vec);
 
-#ifdef DEBUG_ML
+#ifdef DEBUG_ML || DEBUG_WEB
     void
     MachineLearning (string);
+#endif
+
+#ifdef DEBUG_WEB
+    inline Mat
+    getResultImg () { return resultImg; }
+
+    inline int
+    getPeopleNumber () { return people; }
 #endif
 
 protected:
@@ -53,6 +61,8 @@ protected:
 private:
 
     int people;
+
+    Mat resultImg;
 
     string MODEL_PATH;
     string CONFIG_PATH;
