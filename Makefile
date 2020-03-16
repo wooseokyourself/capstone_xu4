@@ -1,3 +1,5 @@
+# 모든 소스파일 인코딩: UTF-8 Unicode
+
 TARGET = server.out
 TARGET_DEBUG = server_debug.out
 
