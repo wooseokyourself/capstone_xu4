@@ -34,6 +34,7 @@ private:
     string PHP_PATH;
     string WEBSERVER_PATH;
     string UPLOAD_PATH;
+    char* results_PATH;
 
     FILE *results;
 };

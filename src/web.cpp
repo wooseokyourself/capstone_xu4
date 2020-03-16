@@ -24,5 +24,6 @@ Uploader::upload (Mat resultImg, int peopleNumber, string fileName) {
     imwrite (UPLOAD_PATH + fileName, resultImg);
     
     /* UPLOAD_PATH + "results.txt" 의 제일 밑줄에 "resultImg peopleNumber" 작성 */
-    fputs (fileName + " " + peopleNumber + "\n", results);
+    const char* info = (fileName + " " + peopleNumber + "\n").c_str();
+    fputs (info, results);
 }
