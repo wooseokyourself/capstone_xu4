@@ -4,7 +4,7 @@
 #include <cstdlib>
 #include <cstdio>
 
-#include <opencv2/core/mat.hpp>
+#include <opencv2/opencv.hpp>
 #include <string>
 
 using namespace cv;
