@@ -131,6 +131,7 @@ OpenCV_DNN::MachineLearning (string TEST_IMAGE_FILE) {
     this->resultImg = img;
 #else
 	imwrite (output_file, img);
+#endif
 }
 
 void 
