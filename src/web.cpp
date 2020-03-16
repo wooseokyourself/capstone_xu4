@@ -4,7 +4,7 @@ Uploader::Uploader () {
     this->PHP_PATH = "src/web.php";
     this->WEBSERVER_PATH = "/home/html/ws/www/";
     this->UPLOAD_PATH = this->WEBSERVER_PATH + "uploads/";
-    string results_PATH = UPLOAD_PATH + "results.txt";
+    const char* results_PATH = (UPLOAD_PATH + "results.txt").c_str();
     this->results = fopen (results_PATH, "w");
 
     /* 웹서버의 디렉토리가 바뀌었다면 system 함수에 들어가는 경로 역시 바뀌어야함! */
