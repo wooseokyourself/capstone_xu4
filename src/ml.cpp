@@ -127,12 +127,11 @@ OpenCV_DNN::MachineLearning (string TEST_IMAGE_FILE) {
     putText (img, label_resolution, Point(0, 105), FONT_HERSHEY_SIMPLEX, 1.0, Scalar(0, 0, 255), 2);
     putText (img, label_people, Point(0, 140), FONT_HERSHEY_SIMPLEX, 1.0, Scalar(0, 0, 255), 2);
 
-#ifdef DEBUG
     this->resultImg = img;
 	imwrite (output_file, img);
-#endif
 }
-#endif
+
+#else
 
 void 
 OpenCV_DNN::MachineLearning (std::vector<unsigned char> vec) {
@@ -171,6 +170,7 @@ OpenCV_DNN::MachineLearning (std::vector<unsigned char> vec) {
 
 	imwrite (output_file, img);
 }
+#endif
 
 inline void
 OpenCV_DNN::preprocess (const Mat& frame) {

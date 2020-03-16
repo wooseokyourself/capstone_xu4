@@ -28,18 +28,18 @@ public:
 
     OpenCV_DNN();
 
-    void 
-    MachineLearning (std::vector<unsigned char> vec);
-
-#ifdef DEBUG_WEB
+#ifdef DEBUG
     void
     MachineLearning (string);
-    
+
     inline Mat
     getResultImg () { return resultImg; }
 
     inline int
     getPeopleNumber () { return people; }
+#else
+    void 
+    MachineLearning (std::vector<unsigned char> vec);
 #endif
 
 protected:
