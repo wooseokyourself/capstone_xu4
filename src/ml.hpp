@@ -31,7 +31,7 @@ public:
     void 
     MachineLearning (std::vector<unsigned char> vec);
 
-#ifdef DEBUG_ML || DEBUG_WEB
+#ifdef DEBUG_WEB
     void
     MachineLearning (string);
 #endif
