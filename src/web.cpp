@@ -1,6 +1,6 @@
 #include web.hpp
 
-Uploder::Uploder () {
+Uploder::Uploader () {
     this->PHP_PATH = "src/web.php";
     this->WEBSERVER_PATH = "/home/html/ws/www/";
     this->UPLOAD_PATH = this->WEBSERVER_PATH + "uploads/";
@@ -17,6 +17,7 @@ Uploader::~Uploader () {
     fclose (results);
 }
 
+/* resultMat 이미지를 UPLOAD_PATH/fileName 에 쓰고, UPLOAD_PATH/results.txt 작성 */
 Uploder::void
 upload (Mat resultImg, int peopleNumber, string fileName) {
     /* UPLOAD_PATH/fileName 으로 이미지파일 저장 */
