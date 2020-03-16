@@ -133,6 +133,7 @@ OpenCV_DNN::MachineLearning (string TEST_IMAGE_FILE) {
 	imwrite (output_file, img);
 #endif
 }
+#endif
 
 void 
 OpenCV_DNN::MachineLearning (std::vector<unsigned char> vec) {
