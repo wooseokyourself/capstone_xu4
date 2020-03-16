@@ -4,8 +4,10 @@
 #include <cstdlib>
 #include <cstdio>
 
-#include <opencv2/opencv.hpp>
 #include <string>
+
+#include <opencv2/imgcodecs.hpp>
+#include <opencv2/core/mat.hpp>
 
 using namespace cv;
 using namespace std;
@@ -25,8 +27,6 @@ class Uploader {
 public:
     Uploader();
 
-    ~Uploader();
-
     void
     upload (Mat resultImg, int peopleNumber, string fileName);
 
@@ -35,8 +35,6 @@ private:
     string WEBSERVER_PATH;
     string UPLOAD_PATH;
     char* results_PATH;
-
-    FILE *results;
 };
 
 #endif

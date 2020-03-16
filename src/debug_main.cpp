@@ -1,5 +1,5 @@
-#include "src/ml.hpp"
-#include "src/web.hpp"
+#include "ml.hpp"
+#include "web.hpp"
 
 int main (int argc, char* argv[]) {
     if (argc != 3) {
