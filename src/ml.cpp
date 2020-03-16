@@ -6,7 +6,7 @@ OpenCV_DNN::OpenCV_DNN () {
     this->CONFIG_PATH = "model/yolov3.cfg";
     this->CLASSES_PATH = "model/coco.names";
 
-#ifdef DEBUG_WEB
+#ifdef DEBUG
     this->INPUT_IMAGE_PATH = "/home/html/ws/tests/";
     this->OUTPUT_IMAGE_PATH = "/home/html/ws/tests/";
 #else
@@ -83,7 +83,7 @@ OpenCV_DNN::OpenCV_DNN () {
     this->outNames = net.getUnconnectedOutLayersNames();
 }
 
-#ifdef DEBUG_WEB
+#ifdef DEBUG
 void
 OpenCV_DNN::MachineLearning (string TEST_IMAGE_FILE) {
     /*
@@ -127,9 +127,8 @@ OpenCV_DNN::MachineLearning (string TEST_IMAGE_FILE) {
     putText (img, label_resolution, Point(0, 105), FONT_HERSHEY_SIMPLEX, 1.0, Scalar(0, 0, 255), 2);
     putText (img, label_people, Point(0, 140), FONT_HERSHEY_SIMPLEX, 1.0, Scalar(0, 0, 255), 2);
 
-#ifdef DEBUG_WEB
+#ifdef DEBUG
     this->resultImg = img;
-#else
 	imwrite (output_file, img);
 #endif
 }

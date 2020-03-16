@@ -34,9 +34,7 @@ public:
 #ifdef DEBUG_WEB
     void
     MachineLearning (string);
-#endif
-
-#ifdef DEBUG_WEB
+    
     inline Mat
     getResultImg () { return resultImg; }
 
@@ -85,7 +83,5 @@ private:
     vector<string> classes;
     vector<String> outNames;
 };
-
-
 
 #endif
