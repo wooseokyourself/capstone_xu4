@@ -18,8 +18,8 @@ Uploader::~Uploader () {
 }
 
 /* resultMat 이미지를 UPLOAD_PATH/fileName 에 쓰고, UPLOAD_PATH/results.txt 작성 */
-Uploader::void
-upload (Mat resultImg, int peopleNumber, string fileName) {
+void
+Uploader::upload (Mat resultImg, int peopleNumber, string fileName) {
     /* UPLOAD_PATH/fileName 으로 이미지파일 저장 */
     imwrite (UPLOAD_PATH + fileName, resultImg);
     
