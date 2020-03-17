@@ -44,17 +44,19 @@ protected:
     drawPred (int classId, float conf, int left, int top, int right, int bottom, Mat& frame);
     
 
-private:
-
-    int people;
+private: // 파일 및 출력정보
 
     Mat resultImg;
+    int people;
+    string fileName; // YYYYMMDD.jpeg
+
+
+private: // 딥러닝 변수
 
     string MODEL_PATH;
     string CONFIG_PATH;
     string CLASSES_PATH;
     string INPUT_IMAGE_PATH;
-    string OUTPUT_IMAGE_PATH;
 
     Net net;
 

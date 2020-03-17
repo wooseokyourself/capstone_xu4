@@ -13,6 +13,9 @@ int main (int argc, char* argv[]) {
     for (int i=imgStart; i<=imgEnd; i++) {
         string TEST_IMAGE_FILE =  to_string(i) + ".jpeg";
         dnn.MachineLearning (TEST_IMAGE_FILE);
+        if (TEST_IMAGE_FILE.length() == 6) {
+            TEST_IMAGE_FILE = "0" + TEST_IMAGE_FILE;
+        }   
         web.upload (dnn.getResultImg(), dnn.getPeopleNumber(), TEST_IMAGE_FILE);
     }
     return 0;

@@ -1,18 +1,12 @@
 #include "ml.hpp"
 
+static string INPUT_IMAGE_PATH = "/home/html/ws/captures/";
+
 OpenCV_DNN::OpenCV_DNN () {
     /* 외부 경로 설정 */
     this->MODEL_PATH = "model/yolov3.weights";
     this->CONFIG_PATH = "model/yolov3.cfg";
     this->CLASSES_PATH = "model/coco.names";
-
-#ifdef DEBUG
-    this->INPUT_IMAGE_PATH = "/home/html/ws/tests/";
-    this->OUTPUT_IMAGE_PATH = "/home/html/ws/tests/";
-#else
-    this->INPUT_IMAGE_PATH = "/home/html/ws/cam/";
-    this->OUTPUT_IMAGE_PATH = "/home/html/ws/cam/";
-#endif
 
     /*
         원본 예제 실행 예 (frome image or video file)
@@ -87,22 +81,19 @@ OpenCV_DNN::OpenCV_DNN () {
 void
 OpenCV_DNN::MachineLearning (string TEST_IMAGE_FILE) {
     /*
-	    test_ml_main.cpp 와 함께 컴파일되었다면,
-	    Mat을 struct protocol 이 아닌 .jpeg 이미지파일로부터 생성함.
+	    debug_main.cpp 과 함께 컴파일되었다면,
+	    Mat을 vec 이 아닌 .jpeg 이미지파일로부터 생성함.
     */
-    people = 0;
     Mat img;
-    string SAVING_FILE = TEST_IMAGE_FILE;
-    if (SAVING_FILE.length() == 6) {
-        SAVING_FILE = "0" + TEST_IMAGE_FILE;
-    }
-    TEST_IMAGE_FILE = "debug/test_images/" + TEST_IMAGE_FILE;
-    img = imread (TEST_IMAGE_FILE, IMREAD_COLOR);
+    img = imread ("debug/test_images" + TEST_IMAGE_FILE, IMREAD_COLOR);
 
-    string output_file = OUTPUT_IMAGE_PATH + SAVING_FILE;
-
-
+    this->fileName = TEST_IMAGE_FILE;
+    this->people = 0;
+    
     /*  여기까지만 기존의 MachineLearning과 다르다. */
+
+    /* 디버깅용으로 입력이미지 저장 */
+    imwrite (INPUT_IMAGE_PATH + this->fileName, img);
 
     /* Image Process */
     Mat blob;
@@ -128,22 +119,19 @@ OpenCV_DNN::MachineLearning (string TEST_IMAGE_FILE) {
     putText (img, label_people, Point(0, 140), FONT_HERSHEY_SIMPLEX, 1.0, Scalar(0, 0, 255), 2);
 
     this->resultImg = img;
-	imwrite (output_file, img);
 }
 
 #else
 
 void 
 OpenCV_DNN::MachineLearning (vector<unsigned char> vec) {
-    people = 0;
+    this->fileName = getCurrTime() + ".jpeg";
+    this->people = 0;
     Mat img = imdecode (vec, 1);
     vec.clear();
     
-    string currTime = getCurrTime();
-    string input_file = INPUT_IMAGE_PATH + currTime + ".jpeg";
-    string output_file = OUTPUT_IMAGE_PATH + currTime + "_out.jpeg";
-
-    imwrite (input_file, img);
+    /* 디버깅용으로 입력이미지 저장 */
+    imwrite (INPUT_IMAGE_PATH + this->fileName, img);
 
     /* Image Process */
     Mat blob;
@@ -153,7 +141,6 @@ OpenCV_DNN::MachineLearning (vector<unsigned char> vec) {
 	net.forward(outs, outNames);
 
 	postprocess(img, outs);
-
 
 	/* 박스와 추론시간 기입 */
 	vector<double> layersTimes;
@@ -168,7 +155,7 @@ OpenCV_DNN::MachineLearning (vector<unsigned char> vec) {
     putText (img, label_resolution, Point(0, 105), FONT_HERSHEY_SIMPLEX, 1.0, Scalar(0, 0, 255), 2);
     putText (img, label_people, Point(0, 140), FONT_HERSHEY_SIMPLEX, 1.0, Scalar(0, 0, 255), 2);
 
-	imwrite (output_file, img);
+    this->resultImg = img;
 }
 #endif
 
