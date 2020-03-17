@@ -8,13 +8,14 @@ $images = glob($dir . "*.{jpg,jpeg,gif,png}", GLOB_BRACE);
 <html>
   <head>
     <title>Very Simple PHP gallery</title>
-    <link href="1-basic.css" rel="stylesheet">
+    <link href="index.css" rel="stylesheet">
   </head>
   <body>
     <!-- [THE GALLERY] -->
     <div id="outputs"><?php
     foreach ($images as $i) {
-      printf("<img src='outputs/%s'/>", basename($i));
+      printf ("<img src='outputs/%s'/>", basename($i));
+      printf ("<br />");
     }
     ?></div>
   </body>
