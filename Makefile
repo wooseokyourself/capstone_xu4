@@ -21,7 +21,7 @@ delete:
 	rm -f /home/html/ws/cam/*.jpeg
 
 $(TARGET):
-	g++ -std=c++11 -w src/ml.cpp src/socket.cpp src/main.cpp `pkg-config --cflags --libs opencv4` -o $(TARGET)
+	g++ -std=c++11 -w src/common.cpp src/ml.cpp src/socket.cpp src/main.cpp `pkg-config --cflags --libs opencv4` -o $(TARGET)
 
 $(TARGET_DEBUG):
-	g++ -DDEBUG -std=c++11 -w src/ml.cpp src/web.cpp src/debug_main.cpp `pkg-config --cflags --libs opencv4` -o $(TARGET_DEBUG)
+	g++ -DDEBUG -std=c++11 -w src/common.cpp src/ml.cpp src/web.cpp src/debug_main.cpp `pkg-config --cflags --libs opencv4` -o $(TARGET_DEBUG)
