@@ -1,12 +1,7 @@
 #ifndef SOCKET
 #define SOCKET
 
-#include <cassert>
-#include <cstdio>
-#include <cstdlib>
-#include <cstring>
-
-#include <vector>
+#include "common.hpp"
 
 #include <sys/stat.h>
 #include <sys/socket.h>
@@ -17,7 +12,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 
-#define ASSERT assert
+using namespace std;
 
 #define MAXBUFSIZE 512
 #define PORT    10051
@@ -27,7 +22,7 @@ static const int MAXPENDING = 1;    // 연결 요청을 대기할 수 있는 최
 ssize_t
 Recv (int sock, const void *buf, ssize_t size, ssize_t unit);
 
-std::vector<unsigned char>
+vector<unsigned char>
 RecvBuffer ();
 
 #endif

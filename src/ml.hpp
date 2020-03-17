@@ -1,15 +1,7 @@
 #ifndef ML
 #define ML
 
-#include <cstdio>
-#include <cstdlib>
-#include <cassert>
-#include <ctime>
-
-#include <iostream>
-#include <fstream>
-#include <sstream>
-#include <string>
+#include "common.hpp"
 
 #include <opencv2/core/mat.hpp>
 #include <opencv2/dnn.hpp>
@@ -17,14 +9,9 @@
 #include <opencv2/highgui.hpp>
 #include <opencv2/imgcodecs.hpp>
 
-#define ASSERT assert
-
 using namespace std;
 using namespace cv;
 using namespace dnn;
-
-inline string
-getCurrTime ();
 
 class OpenCV_DNN {
 public:
@@ -42,7 +29,7 @@ public:
     getPeopleNumber () { return people; }
 #else
     void 
-    MachineLearning (std::vector<unsigned char> vec);
+    MachineLearning (vector<unsigned char> vec);
 #endif
 
 protected:
@@ -82,7 +69,7 @@ private:
     float nmsThreshold;
 
     vector<string> classes;
-    vector<String> outNames;
+    vector<cv::String> outNames;
 };
 
 #endif

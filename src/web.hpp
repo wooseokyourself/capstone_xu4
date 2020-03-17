@@ -1,10 +1,7 @@
 #ifndef WEB
 #define WEB
 
-#include <cstdlib>
-#include <cstdio>
-
-#include <string>
+#include "common.hpp"
 
 #include <opencv2/imgcodecs.hpp>
 #include <opencv2/core/mat.hpp>

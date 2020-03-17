@@ -22,9 +22,16 @@ Uploader::upload (Mat resultImg, int peopleNumber, string fileName) {
 	const char* results_PATH = (UPLOAD_PATH + "results.txt").c_str();
 	FILE* results = fopen (results_PATH, "a");	
 
+#ifdef DEBUG
     /* UPLOAD_PATH/fileName 으로 이미지파일 저장 */
+    if (fileName.length() == 6) {
+        fileName = "0" + fileName;
+    }
     imwrite (UPLOAD_PATH + fileName, resultImg);
-    
+#else
+
+#endif    
+
     /* UPLOAD_PATH + "results.txt" 의 제일 밑줄에 "resultImg peopleNumber" 작성 */
     const char* info = (fileName + " " + to_string(peopleNumber) + "\n").c_str();
     fputs (info, results);

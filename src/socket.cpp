@@ -15,7 +15,7 @@ Recv (int sock, const void *buf, ssize_t size, ssize_t unit) {
 	return recvd;
 }
 
-std::vector<unsigned char>
+vector<unsigned char>
 RecvBuffer () {
     /*  LINGER 생성 */
     struct linger ling = {0, };
@@ -75,7 +75,7 @@ RecvBuffer () {
 	recvd = Recv (clntSock, &bufSize, sizeof(bufSize), sizeof(size_t *));
 
 	/*	vec 받기 */
-	std::vector<unsigned char> vec(bufSize);
+	vector<unsigned char> vec(bufSize);
 	recvd = Recv (clntSock, &vec[0], bufSize, sizeof(unsigned char));
 
 	ASSERT (recvd == vec.size() * sizeof(unsigned char));
