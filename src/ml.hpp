@@ -25,7 +25,7 @@ public:
     getPeopleNumber () { return people; }
 
     void 
-    MachineLearning (vector<unsigned char> vec);
+    MachineLearning (Mat inputImg);
 
 protected:
 
@@ -43,7 +43,6 @@ private: // 파일 및 출력정보
 
     Mat outputImg;
     int people;
-    string fileName; // YYYYMMDD.jpeg
 
 
 private: // 딥러닝 변수

@@ -75,21 +75,18 @@ OpenCV_DNN::OpenCV_DNN () {
 }
 
 void 
-OpenCV_DNN::MachineLearning (vector<unsigned char> vec) {
-    Mat img = imdecode (vec, 1);
-    vec.clear();
-
-    this->fileName = getCurrTime() + ".jpeg";
+OpenCV_DNN::MachineLearning (Mat inputImg) {
+    this->outputImg = inputImg.clone();
     this->people = 0;
     
     /* Image Process */
     Mat blob;
-	preprocess(img);
+	preprocess(outputImg);
 
 	vector<Mat> outs;
 	net.forward(outs, outNames);
 
-	postprocess(img, outs);
+	postprocess(outputImg, outs);
 
 	/* 박스와 추론시간 기입 */
 	vector<double> layersTimes;
@@ -97,14 +94,12 @@ OpenCV_DNN::MachineLearning (vector<unsigned char> vec) {
 	double t = net.getPerfProfile(layersTimes) / freq;
 	string label_inferTime = format ("Inference time: %.2f ms", t);
     string label_confThreshold = format ("confThreshold: %.1f", confThreshold);
-    string label_resolution = format ("Resolution: %d X %d", img.cols, img.rows);
+    string label_resolution = format ("Resolution: %d X %d", outputImg.cols, outputImg.rows);
     string label_people = format ("People: %d", this->people);
-	putText (img, label_inferTime, Point(0, 35), FONT_HERSHEY_SIMPLEX, 1.0, Scalar(0, 0, 255), 2);
-    putText (img, label_confThreshold, Point(0, 70), FONT_HERSHEY_SIMPLEX, 1.0, Scalar(0, 0, 255), 2);
-    putText (img, label_resolution, Point(0, 105), FONT_HERSHEY_SIMPLEX, 1.0, Scalar(0, 0, 255), 2);
-    putText (img, label_people, Point(0, 140), FONT_HERSHEY_SIMPLEX, 1.0, Scalar(0, 0, 255), 2);
-
-    this->outputImg = img;
+	putText (outputImg, label_inferTime, Point(0, 35), FONT_HERSHEY_SIMPLEX, 1.0, Scalar(0, 0, 255), 2);
+    putText (outputImg, label_confThreshold, Point(0, 70), FONT_HERSHEY_SIMPLEX, 1.0, Scalar(0, 0, 255), 2);
+    putText (outputImg, label_resolution, Point(0, 105), FONT_HERSHEY_SIMPLEX, 1.0, Scalar(0, 0, 255), 2);
+    putText (outputImg, label_people, Point(0, 140), FONT_HERSHEY_SIMPLEX, 1.0, Scalar(0, 0, 255), 2);
 }
 
 inline void
