@@ -13,7 +13,7 @@
 
 #define ASSERT assert
 
-inline std::string
+std::string
 getCurrTime ();
 
 #endif

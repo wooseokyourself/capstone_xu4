@@ -1,6 +1,6 @@
 #include "common.hpp"
 
-inline std::string
+std::string
 getCurrTime () {
     time_t timeObj = time(NULL);
 	struct  tm* tm = localtime(&timeObj);
