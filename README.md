@@ -1,10 +1,16 @@
 #### 웹서버 구조
 /home/html/ws/captures
+
  --> 입력이미지 저장
+
 /home/html/ws/www
+
  --> web.php
+ 
 /home/html/ws/www/uploads
+
  --> 출력이미지 저장, results.txt
+ 
 
 #### 프로토콜 (인코딩된 이미지)
     std::vector<unsigned char>
