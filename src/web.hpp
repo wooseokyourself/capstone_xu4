@@ -31,7 +31,7 @@ public:
     upload_output (Mat resultImg, int peopleNumber, string fileName);
 
 private:
-    string PHP_READING_PATH;
+    string INDEX_PATH;
     string WEBSERVER_PATH;
     string INPUT_IMG_SAVE_PATH;
     string OUTPUT_IMG_SAVE_PATH;
