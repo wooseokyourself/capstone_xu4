@@ -4,8 +4,7 @@ $dir = __DIR__ . DIRECTORY_SEPARATOR . "outputs" . DIRECTORY_SEPARATOR;
 $images = glob ($dir . "*.{jpg,jpeg,gif,png}", GLOB_BRACE);
 $images = array_reverse ($images);
 
-/* outputs/results.txt 의 내용을 역순으로 한 줄씩 배열에 저장 */
-/* $txtfp = fopen ("outputs/results.txt", "r"); */
+/* outputs/results.txt 을 역순으로 한 줄씩 배열에 저장 */
 $info = file("outputs/results.txt");
 $info = array_reverse ($info);
 
@@ -19,10 +18,6 @@ $info = array_reverse ($info);
   <body>
     <!-- [THE GALLERY] -->
     <div id="outputs"><?php
-    /*
-    for ($i = 1; $i <= count($dir); $i++) {
-      printf ("<img src='outputs/%s'/>", )
-    */
     $j = 0;
     foreach ($images as $i) {
       printf ("%s", $info[$j++]);
