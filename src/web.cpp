@@ -9,6 +9,7 @@ Uploader::Uploader () {
     /* 웹서버의 디렉토리가 바뀌었다면 system 함수에 들어가는 경로 역시 바뀌어야함! */
 
 	/* 웹서버 초기화 */
+    system ("rm -r /home/html/ws/www/*");
     system ("cp -r -f src/web/* /home/html/ws/www/");
     system ("mkdir /home/html/ws/www/inputs");
     system ("mkdir /home/html/ws/www/outputs");
