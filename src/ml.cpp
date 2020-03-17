@@ -37,8 +37,7 @@ OpenCV_DNN::OpenCV_DNN () {
     // Open file with classes names.
     string file = CLASSES_PATH;
     ifstream ifs(file.c_str());
-    if (!ifs.is_open())
-        CV_Error(Error::StsError, "File " + file + " not found");
+    ASSERT (ifs.is_open() == true);
     string line;
     while (getline(ifs, line)) {
         this->classes.push_back(line);
