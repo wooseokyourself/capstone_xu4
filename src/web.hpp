@@ -25,7 +25,7 @@ public:
     Uploader();
 
     void
-    upload_input (Mat inputImg, string fileName;
+    upload_input (Mat inputImg, string fileName);
 
     void
     upload_output (Mat resultImg, int peopleNumber, string fileName);
