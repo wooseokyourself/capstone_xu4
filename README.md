@@ -3,11 +3,12 @@
 >> 입력이미지 저장
 
 > /home/html/ws/www
->> web.php
+>> web.php 저장
 
 > /home/html/ws/www/uploads
 >> 출력이미지 저장, results.txt
- 
+
+!!! 프로그램 실행 시 위 세 디렉토리 모두 초기화.
 
 #### 프로토콜 (인코딩된 이미지)
     std::vector<unsigned char>
