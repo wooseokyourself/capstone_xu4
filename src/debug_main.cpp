@@ -18,7 +18,7 @@ int main (int argc, char* argv[]) {
         }
         web.upload_input (inputImg, TEST_IMAGE_NAME);
         dnn.MachineLearning (inputImg);
-        web.upload_output (dnn.getResultImg(), dnn.getPeopleNumber(), TEST_IMAGE_NAME);
+        web.upload_output (dnn.getOutputImg(), dnn.getPeopleNumber(), TEST_IMAGE_NAME);
     }
     return 0;
 }

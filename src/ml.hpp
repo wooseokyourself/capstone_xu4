@@ -19,7 +19,7 @@ public:
     OpenCV_DNN();
 
     inline Mat
-    getResultImg () { return outputImg; }
+    getOutputImg () { return outputImg; }
 
     inline int
     getPeopleNumber () { return people; }
