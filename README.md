@@ -18,9 +18,6 @@
 #### make clean
 > 모든 실행파일 제거
 
-#### make delete
-> 웹서버의 모든 실행파일 제거
-
 #### make all
 > 릴리즈버전, server.out
 
