@@ -84,7 +84,7 @@ OpenCV_DNN::MachineLearning (string TEST_IMAGE_FILE) {
 	    Mat을 vec 이 아닌 .jpeg 이미지파일로부터 생성함.
     */
     Mat img;
-    img = imread ("debug/test_images" + TEST_IMAGE_FILE, IMREAD_COLOR);
+    img = imread ("debug/test_images/" + TEST_IMAGE_FILE, IMREAD_COLOR);
 
     this->fileName = TEST_IMAGE_FILE;
     this->people = 0;
