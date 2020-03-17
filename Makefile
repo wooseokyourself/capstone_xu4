@@ -16,10 +16,6 @@ all: $(TARGET)
 
 debug: $(TARGET_DEBUG)
 
-delete:
-	rm -f /home/html/ws/tests/*.jpeg
-	rm -f /home/html/ws/cam/*.jpeg
-
 $(TARGET):
 	g++ -std=c++11 -w src/common.cpp src/ml.cpp src/socket.cpp src/main.cpp `pkg-config --cflags --libs opencv4` -o $(TARGET)
 
