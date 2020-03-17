@@ -24,10 +24,10 @@
 > 모든 실행파일 제거
 
 * make all
-> 릴리즈버전
+> 릴리즈버전, src/main.cpp
 
 * make debug
-> + 디버깅버전, 소스코드에서 DEBUG 매크로 사용   
+> + 디버깅버전, src/debug_main.cpp, 소스코드에서 DEBUG 매크로 사용가능
 > + 소켓통신 없이 **"로컬 이미지 입력 --> 딥러닝 출력 --> 입력 및 출력이미지 웹서버 업로드"** 만 진행   
 > + 로컬 이미지 경로: debug/test_images/*.jpeg   
 > + ./server_debug.out <처음: 테스트할 이미지 파일> <끝: 테스트할 이미지 파일>   
