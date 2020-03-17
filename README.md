@@ -9,7 +9,7 @@
     /outputs
 > 출력된 이미지(.jpeg) 및 results.txt를 저장하는 디렉토리
 
-**프로그램 실행 시 /home/html/ws/www/* 초기화**
+**프로그램 실행 시 루트 (/*) 초기화**
 
 #### 프로토콜 (인코딩된 이미지)
     std::vector<unsigned char>
