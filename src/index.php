@@ -1,3 +1,6 @@
+<!DOCTYPE html>
+<html>
+<head>
 <?php
 /* 이 파일은 /home/html/ws/www 에 위치한다. */
 
@@ -30,7 +33,10 @@ sort($files);
  
 // 파일명을 출력한다.
 foreach ($files as $f) {
+    echo "<img src=>"
     echo $f;
     echo "<br />";
 } 
 ?>
+</body>
+</html>

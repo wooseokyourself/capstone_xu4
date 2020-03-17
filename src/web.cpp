@@ -1,7 +1,7 @@
 #include "web.hpp"
 
 Uploader::Uploader () {
-    this->PHP_READING_PATH = "src/web.php";
+    this->INDEX_PATH = "src/web/1-basic.php";
     this->WEBSERVER_PATH = "/home/html/ws/www/";
     this->INPUT_IMG_SAVE_PATH = this->WEBSERVER_PATH + "inputs/";
     this->OUTPUT_IMG_SAVE_PATH = this->WEBSERVER_PATH + "outputs/";
@@ -9,9 +9,9 @@ Uploader::Uploader () {
     /* 웹서버의 디렉토리가 바뀌었다면 system 함수에 들어가는 경로 역시 바뀌어야함! */
 
 	/* 웹서버 초기화 */
-    system ("cp src/web.php /home/html/ws/www/web.php");
-    system ("rm -rf /home/html/ws/www/inputs/*");
-	system ("rm -rf /home/html/ws/www/outputs/*");
+    system ("cp src/web/* /home/html/ws/www/");
+    // system ("rm -rf /home/html/ws/www/inputs/*");
+	// system ("rm -rf /home/html/ws/www/outputs/*");
 	system ("touch /home/html/ws/www/outputs/results.txt");
 }
 
