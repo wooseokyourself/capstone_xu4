@@ -1,12 +1,12 @@
 ## 웹서버 구조
-    /home/html/ws/www/
+    / (현재 테스트머신에서 루트는 /home/html/ws/www/)
 > 출력된 이미지 및 사람 계수값을 시간 역순으로 출력 (index.php)
 
-    /home/html/ws/www/inputs/
-> 입력된 이미지를 저장하는 디렉토리
+    /inputs
+> 입력된 이미지(.jpeg)를 저장하는 디렉토리
 
-    /home/html/ws/www/outputs/$(OUTPUT_IMAGES)
-> 출력된 이미지 및 results.txt를 저장하는 디렉토리
+    /outputs
+> 출력된 이미지(.jpeg) 및 results.txt를 저장하는 디렉토리
 
 **프로그램 실행 시 /home/html/ws/www/* 초기화**
 
