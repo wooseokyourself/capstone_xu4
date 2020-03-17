@@ -25,10 +25,10 @@ public:
     Uploader();
 
     void
-    upload_input (Mat inputImg, string fileName = getCurrTime());
+    upload_input (Mat inputImg, string fileName;
 
     void
-    upload_output (Mat resultImg, int peopleNumber, string fileName = getCurrTime());
+    upload_output (Mat resultImg, int peopleNumber, string fileName);
 
 private:
     string PHP_READING_PATH;
