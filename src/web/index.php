@@ -15,8 +15,10 @@ $txtfp = fopen ("outputs/results.txt", "r");
     <!-- [THE GALLERY] -->
     <div id="outputs"><?php
     foreach ($images as $i) {
+      $peopleNumber = fgets ($txtfp);
+      echo $peopleNumber;
+      printf ("<br />");
       printf ("<img src='outputs/%s'/>", basename($i));
-      printf ("<fgets($txtfp)>");
       printf ("<br />");
     }
     ?></div>
