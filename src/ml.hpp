@@ -23,6 +23,9 @@ using namespace std;
 using namespace cv;
 using namespace dnn;
 
+inline string
+getCurrTime ();
+
 class OpenCV_DNN {
 public:
 
@@ -53,8 +56,6 @@ protected:
     void
     drawPred (int classId, float conf, int left, int top, int right, int bottom, Mat& frame);
     
-    inline string
-    getCurrTime ();
 
 private:
 
