@@ -1,7 +1,5 @@
 #include "ml.hpp"
 
-static string INPUT_IMAGE_PATH = "/home/html/ws/captures/";
-
 OpenCV_DNN::OpenCV_DNN () {
     /* 외부 경로 설정 */
     this->MODEL_PATH = "model/yolov3.weights";
@@ -76,62 +74,14 @@ OpenCV_DNN::OpenCV_DNN () {
     this->outNames = net.getUnconnectedOutLayersNames();
 }
 
-#ifdef DEBUG
-void
-OpenCV_DNN::MachineLearning (string TEST_IMAGE_FILE) {
-    /*
-	    debug_main.cpp 과 함께 컴파일되었다면,
-	    Mat을 vec 이 아닌 .jpeg 이미지파일로부터 생성함.
-    */
-    Mat img;
-    img = imread ("debug/test_images/" + TEST_IMAGE_FILE, IMREAD_COLOR);
-
-    this->fileName = TEST_IMAGE_FILE;
-    this->people = 0;
-    
-    /*  여기까지만 기존의 MachineLearning과 다르다. */
-
-    /* 디버깅용으로 입력이미지 저장 */
-    imwrite (INPUT_IMAGE_PATH + this->fileName, img);
-
-    /* Image Process */
-    Mat blob;
-	preprocess(img);
-
-	vector<Mat> outs;
-	net.forward(outs, outNames);
-
-	postprocess(img, outs);
-
-
-	/* 박스와 추론시간 기입 */
-	vector<double> layersTimes;
-	double freq = getTickFrequency() / 1000;
-	double t = net.getPerfProfile(layersTimes) / freq;
-	string label_inferTime = format ("Inference time: %.2f ms", t);
-    string label_confThreshold = format ("confThreshold: %.1f", confThreshold);
-    string label_resolution = format ("Resolution: %d X %d", img.cols, img.rows);
-    string label_people = format ("People: %d", this->people);
-	putText (img, label_inferTime, Point(0, 35), FONT_HERSHEY_SIMPLEX, 1.0, Scalar(0, 0, 255), 2);
-    putText (img, label_confThreshold, Point(0, 70), FONT_HERSHEY_SIMPLEX, 1.0, Scalar(0, 0, 255), 2);
-    putText (img, label_resolution, Point(0, 105), FONT_HERSHEY_SIMPLEX, 1.0, Scalar(0, 0, 255), 2);
-    putText (img, label_people, Point(0, 140), FONT_HERSHEY_SIMPLEX, 1.0, Scalar(0, 0, 255), 2);
-
-    this->resultImg = img;
-}
-
-#else
-
 void 
 OpenCV_DNN::MachineLearning (vector<unsigned char> vec) {
-    this->fileName = getCurrTime() + ".jpeg";
-    this->people = 0;
     Mat img = imdecode (vec, 1);
     vec.clear();
-    
-    /* 디버깅용으로 입력이미지 저장 */
-    imwrite (INPUT_IMAGE_PATH + this->fileName, img);
 
+    this->fileName = getCurrTime() + ".jpeg";
+    this->people = 0;
+    
     /* Image Process */
     Mat blob;
 	preprocess(img);
@@ -154,9 +104,8 @@ OpenCV_DNN::MachineLearning (vector<unsigned char> vec) {
     putText (img, label_resolution, Point(0, 105), FONT_HERSHEY_SIMPLEX, 1.0, Scalar(0, 0, 255), 2);
     putText (img, label_people, Point(0, 140), FONT_HERSHEY_SIMPLEX, 1.0, Scalar(0, 0, 255), 2);
 
-    this->resultImg = img;
+    this->outputImg = img;
 }
-#endif
 
 inline void
 OpenCV_DNN::preprocess (const Mat& frame) {

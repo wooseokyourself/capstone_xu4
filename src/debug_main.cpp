@@ -11,12 +11,14 @@ int main (int argc, char* argv[]) {
     OpenCV_DNN dnn;
     Uploader web;
     for (int i=imgStart; i<=imgEnd; i++) {
-        string TEST_IMAGE_FILE =  to_string(i) + ".jpeg";
-        dnn.MachineLearning (TEST_IMAGE_FILE);
-        if (TEST_IMAGE_FILE.length() == 6) {
-            TEST_IMAGE_FILE = "0" + TEST_IMAGE_FILE;
-        }   
-        web.upload (dnn.getResultImg(), dnn.getPeopleNumber(), TEST_IMAGE_FILE);
+        string TEST_IMAGE_NAME = to_string(i) + ".jpeg";
+        Mat inputImg = imread("debug/test_images" + TEST_IMAGE_NAME, IMREAD_COLOR);
+        if (TEST_IMAGE_NAME.length() == 6) {
+            TEST_IMAGE_NAME = "0" + TEST_IMAGE_NAME;
+        }
+        web.upload_input (inputImg, TEST_IMAGE_NAME);
+        dnn.MachineLearning (inputImg);
+        web.upload_output (dnn.getResultImg(), dnn.getPeopleNumber(), TEST_IMAGE_NAME);
     }
     return 0;
 }

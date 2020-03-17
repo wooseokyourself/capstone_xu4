@@ -18,19 +18,14 @@ public:
 
     OpenCV_DNN();
 
-#ifdef DEBUG
-    void
-    MachineLearning (string);
-
     inline Mat
-    getResultImg () { return resultImg; }
+    getResultImg () { return outputImg; }
 
     inline int
     getPeopleNumber () { return people; }
-#else
+
     void 
     MachineLearning (vector<unsigned char> vec);
-#endif
 
 protected:
 
@@ -46,7 +41,7 @@ protected:
 
 private: // 파일 및 출력정보
 
-    Mat resultImg;
+    Mat outputImg;
     int people;
     string fileName; // YYYYMMDD.jpeg
 

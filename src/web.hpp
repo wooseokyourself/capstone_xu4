@@ -25,12 +25,16 @@ public:
     Uploader();
 
     void
-    upload (Mat resultImg, int peopleNumber, string fileName);
+    upload_input (Mat inputImg, string fileName = getCurrTime());
+
+    void
+    upload_output (Mat resultImg, int peopleNumber, string fileName = getCurrTime());
 
 private:
-    string PHP_PATH;
+    string PHP_READING_PATH;
     string WEBSERVER_PATH;
-    string UPLOAD_PATH;
+    string INPUT_IMG_SAVE_PATH;
+    string OUTPUT_IMG_SAVE_PATH;
     char* results_PATH;
 };
 
