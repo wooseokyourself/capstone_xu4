@@ -8,7 +8,7 @@
     /home/html/ws/www/outputs/$(OUTPUT_IMAGES)
 > 출력된 이미지 및 results.txt를 저장하는 디렉토리
 
-!!! 프로그램 실행 시 /home/html/ws/www/* 초기화 !!!
+**프로그램 실행 시 /home/html/ws/www/* 초기화**
 
 #### 프로토콜 (인코딩된 이미지)
     std::vector<unsigned char>
@@ -16,15 +16,15 @@
 ---------------------------------------------------------------
 ## 사용법
 
-### make clean
+* make clean
 > 모든 실행파일 제거
 
-### make all
+* make all
 > 릴리즈버전
 
-### make debug
+* make debug
 > 디버깅버전, 소스코드에서 DEBUG 매크로 사용   
-> 소켓통신 없이 *"로컬 이미지 입력 --> 딥러닝 출력 --> 입력 및 출력이미지 웹서버 업로드"* 만 진행   
+> 소켓통신 없이 **"로컬 이미지 입력 --> 딥러닝 출력 --> 입력 및 출력이미지 웹서버 업로드"** 만 진행   
 > 로컬 이미지 경로: debug/test_images/*.jpeg   
 > ./server_debug.out <처음: 테스트할 이미지 파일> <끝: 테스트할 이미지 파일>   
 
