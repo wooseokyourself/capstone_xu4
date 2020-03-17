@@ -6,14 +6,14 @@ body, html {
 
 /* [GALLERY] */
 #gallery {
-  max-width: 1200px;
+  max-width: 600px;
   margin: 0 auto;
 }
 
 #gallery img {
   box-sizing: border-box;
-  width: 25%;
-  max-height: 150px;
+  width: 100%;
+  /* max-height: 150px; */
   padding: 5px;
   /* fill, contain, cover, scale-down : use whichever you like */
   object-fit: cover;
