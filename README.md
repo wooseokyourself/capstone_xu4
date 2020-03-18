@@ -1,5 +1,5 @@
 ## 빌드환경
-* Odroid XU4 (armv7l with no GPU)
+* Odroid XU4 (armv7l, there is also GPU, but not used)
 * Ubuntu 16.04.6 LTS (Mate)
 * OpenCV 4.1.2 with contrib (actually contrib is unnecessary)
 * Apache 2.4.18
