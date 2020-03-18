@@ -1,4 +1,4 @@
-## 빌드환경
+## Build Environment
 * Odroid XU4 (armv7l, there is also GPU, but not used)
 * Ubuntu 16.04.6 LTS (Mate)
 * OpenCV 4.1.2 with contrib (actually contrib is unnecessary)
@@ -10,7 +10,7 @@
 ---------------------------------------------------------------
    
    
-## 웹서버 구조
+## Web Structures
     /
 > 출력된 이미지 및 사람 계수값을 시간 역순으로 출력 (index.php)   
 
@@ -19,14 +19,12 @@
 
     /outputs
 > 출력된 이미지(.jpeg) 및 results.txt를 저장하는 디렉토리
-
-**프로그램 실행 시 루트 (/*) 초기화**
    
    
 ---------------------------------------------------------------
    
    
-## 소켓통신 프로토콜
+## Socket Protocol
     std::vector<unsigned char>
 > cv::Mat 이 인코딩된 자료형으로, 본 프로그램에서 다시 cv::Mat 으로 디코딩 진행
    
@@ -34,7 +32,7 @@
 ---------------------------------------------------------------
    
    
-## 사용법
+## Install
 
 ### 1. Get YOLOv3 pre-trained model
     cd model
@@ -50,11 +48,37 @@
    
 ### 3. Compile
 
-#### 3.1. Compile Release ver.
+#### 3.1. Compile Release ver.   
    make all
 
-#### 3.2. Compile Debugging ver.
+#### 3.2. Compile Debugging ver.   
    make debug
+> 소켓통신 없이 **"로컬 이미지 입력 --> 딥러닝 출력 --> 입력 및 출력이미지 웹서버 업로드"** 만 진행
+   
+   
+---------------------------------------------------------------
+   
+   
+## Usage
+
+### 1. Init root dir of your Web   
+   make init
+   
+### 2. Execute
+
+#### 2.1. Run Release ver.   
+   make run
+   
+#### 2.2. Run Debugging ver.   
+   make debug_run
+   + Program reads **.jpeg** files in *debug/images/* sequentially from 1.   
+      (ex. debug/images/1.jpeg, debug/images/2.jpeg, ... debug/images/$(last).jpeg)
+   + 'make debug_run' will ask you the value of $(last)
+
+---------------------------------------------------------------
+   
+   
+## Others
 
 * make clean
 > 모든 실행파일 제거
