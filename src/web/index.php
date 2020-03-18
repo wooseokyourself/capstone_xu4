@@ -19,8 +19,12 @@ $info = array_reverse ($info);
     <!-- [THE GALLERY] -->
     <div id="outputs"><?php
     $j = 0;
+    echo "<font size=12>".$info[$j++];
+    printf ("<img src='outputs/%s'/>", basename($images));
+    printf ("<br />");
+    printf ("<hr>");
+    printf ("<br />");
     foreach ($images as $i) {
-      // printf ("%s", $info[$j++]);
       echo "<font size=12>".$info[$j++];
       printf ("<br />");
       printf ("<img src='outputs/%s'/>", basename($i));
