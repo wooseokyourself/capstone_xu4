@@ -21,8 +21,8 @@ $info = array_reverse ($info);
     
     /* 배열의 첫 번째 원소 출력 */
     echo "<font size=12>".$info[0];
-    printf ("<img src='outputs/%s'/>", basename(key($images)));
-    
+    printf ("<img src='outputs/%s'/>", key($images));
+
     printf ("<br />");
     printf ("<hr>");
     printf ("<br />");
