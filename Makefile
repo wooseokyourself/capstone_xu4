@@ -32,7 +32,7 @@ run:
 # compile and run: debug version
 
 debug: $(TARGET_DEBUG)
-$(TARGET_DEBUG): $(CXX) $(CXXFLAGS) $(OPENCV) $(DEBUG_SRC) -o $(TARGET)
+$(TARGET_DEBUG): $(CXX) $(CXXFLAGS) $(OPENCV) $(DEBUG_SRC) -o $(TARGET_DEBUG)
 
 run_debug:
 	@read -p "Enter the last number of debug/images/*.jpeg: " LAST; \
