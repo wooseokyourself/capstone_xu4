@@ -40,7 +40,8 @@
 ### Get YOLOv3 pre-trained model
     cd model
     ./getModels.sh
-> coco.names 에서 Detect 하고 싶은 클래스만 남겨두고 나머지는 제거
+> coco.names 에서 person 클래스만 남겨두고 나머지는 제거
+
    
    
 ### Compile
