@@ -68,7 +68,7 @@
 
 #### 2.1. Run Release ver.   
     make run   
-> + then the program waits std::vector<unsigned char> in socket.   
+> + then the program stuck in listen() to wait connection request.   
 > + also see https://github.com/wooseokyourself/capstone_pi
    
 #### 2.2. Run Debugging ver.   
