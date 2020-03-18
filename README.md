@@ -40,7 +40,8 @@
 ### Get YOLOv3 pre-trained model
     cd model
     ./getModels.sh
-> coco.names 에서 Detect 하고 싶은 클래스만 남겨두고 나머지는 제거
+> coco.names 에서 person 클래스만 남겨두고 나머지는 제거
+
    
    
 ### Compile
@@ -72,3 +73,7 @@
     3. 결과는 웹서버의 uploads 폴더에서 확인.   
 
 --------------------------------------------------------------
+   
+   
+## Example Result of Web (index.php)
+![시연2](https://user-images.githubusercontent.com/49421142/76927049-53dc3880-6921-11ea-9b9f-eae576d58d72.JPG)
