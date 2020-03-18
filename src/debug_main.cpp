@@ -3,14 +3,14 @@
 
 int main (int argc, char* argv[]) {
     if (argc != 3) {
-        printf ("./server_debug.out <처음: 테스트할 이미지 파일> <끝: 테스트할 이미지 파일>\n");
+        printf ("./server_debug.out $(WEB_ROOT) $(LAST)\n");
         return 0;
     }
-    int imgStart = atoi(argv[1]);
+    string WEB_ROOT = argv[1];
     int imgEnd = atoi(argv[2]);
     OpenCV_DNN dnn;
-    Uploader web;
-    for (int i=imgStart; i<=imgEnd; i++) {
+    Uploader web(WEB_ROOT);
+    for (int i=1 i<=imgEnd; i++) {
         string TEST_IMAGE_NAME = to_string(i) + ".jpeg";
         Mat inputImg = imread("debug/test_images/" + TEST_IMAGE_NAME, IMREAD_COLOR);
         if (TEST_IMAGE_NAME.length() == 6) {

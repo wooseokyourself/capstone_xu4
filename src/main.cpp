@@ -3,9 +3,14 @@
 #include "web.hpp"
 
 
-int main (void) {
+int main (int argc, char* argv[]) {
+    if (argc != 2) {
+        printf ("./server_debug.out $(WEB_ROOT)\n");
+        return 0;
+    }
+    string WEB_ROOT = argv[1];
     OpenCV_DNN dnn;
-    Uploader web;
+    Uploader web(WEB_ROOT);
     while (true) {
         std::vector<unsigned char> dataPtr = RecvBuffer ();
         Mat inputImg = imdecode (dataPtr, 1);

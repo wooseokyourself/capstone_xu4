@@ -22,7 +22,7 @@ using namespace std;
 
 class Uploader {
 public:
-    Uploader();
+    Uploader(string WEB_ROOT);
 
     void
     upload_input (Mat inputImg, string fileName);
