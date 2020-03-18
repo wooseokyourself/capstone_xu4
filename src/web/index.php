@@ -20,7 +20,7 @@ $info = array_reverse ($info);
     <div id="outputs"><?php
 
     echo "<font size=12>".$info[0];
-    printf ("<img src='outputs/%s'/>", array_shift($images));
+    printf ("<img src='outputs/%s'/>", basename(array_shift($images)));
     printf ("<br />");
     printf ("<hr>");
     printf ("<br />");
