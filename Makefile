@@ -49,8 +49,8 @@ debug_run:
 # Make init and Remove target file
 
 clean:
-	rm -f *.o
 	rm -f *.out
+	rm -f .*.out
 
 #-----------------------------------------------#
 
