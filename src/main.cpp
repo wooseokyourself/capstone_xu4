@@ -12,9 +12,10 @@ int main (void) {
         dataPtr.clear();
 
         /* 입력 및 출력이미지는 YYYYMMDDHHMMSS.jpeg 형태로 저장 */
-        web.upload_input (inputImg);
+        string currTime = getCurrTime();
+        web.upload_input (inputImg, currTime);
 		dnn.MachineLearning (inputImg);
-        web.upload_output (dnn.getOutputImg(), dnn.getPeopleNumber());
+        web.upload_output (dnn.getOutputImg(), dnn.getPeopleNumber(), currTime);
     }
     return 0;
 }
