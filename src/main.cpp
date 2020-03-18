@@ -8,7 +8,7 @@ int main (void) {
     Uploader web;
     while (true) {
         std::vector<unsigned char> dataPtr = RecvBuffer ();
-        Mat inputImg = imdecode (dataPtr, IMREAD_UNCHANGED);
+        Mat inputImg = imdecode (dataPtr, 1);
         dataPtr.clear();
 
         /* 입력 및 출력이미지는 YYYYMMDDHHMMSS.jpeg 형태로 저장 */
