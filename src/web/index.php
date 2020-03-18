@@ -18,12 +18,14 @@ $info = array_reverse ($info);
   <body>
     <!-- [THE GALLERY] -->
     <div id="outputs"><?php
-    $j = 0;
-    echo "<font size=12>".$info[$j++];
-    printf ("<img src='outputs/%s'/>", basename($images));
+
+    echo "<font size=12>".$info[0];
+    printf ("<img src='outputs/%s'/>", array_shift($images));
     printf ("<br />");
     printf ("<hr>");
     printf ("<br />");
+
+    $j = 0;
     foreach ($images as $i) {
       echo "<font size=12>".$info[$j++];
       printf ("<br />");
