@@ -41,18 +41,18 @@
 
    
 ### 2. Set root path of your web into $(WEB_ROOT) in Makefile
-> The path MUST be ABSOLUTE path.
-> Also there must be '/' in the end of your path.   
+> The path **MUST be ABSOLUTE path**.
+> Also there must be **'/'** in the end of your path.   
    ex. WEB_ROOT = /home/html/ws/www/
    
    
 ### 3. Compile
 
 #### 3.1. Compile Release ver.   
-   make all
+    make all
 
 #### 3.2. Compile Debugging ver.   
-   make debug
+    make debug
 > 소켓통신 없이 **"로컬 이미지 입력 --> 딥러닝 출력 --> 입력 및 출력이미지 웹서버 업로드"** 만 진행
    
    
@@ -62,15 +62,15 @@
 ## Usage
 
 ### 1. Init root dir of your Web   
-   make init
+    make init
    
-### 2. Execute
+### 2. Run
 
 #### 2.1. Run Release ver.   
-   make run
+    make run
    
 #### 2.2. Run Debugging ver.   
-   make debug_run
+    make debug_run
    + Program reads **.jpeg** files from '*debug/images/*' sequentially from 1.   
       (ex. debug/images/*1.jpeg*, debug/images/*2.jpeg*, ... debug/images/**$(last).jpeg**)
    + 'make debug_run' will ask you the value of $(last)
@@ -80,17 +80,10 @@
    
 ## Others
 
-* make clean
+    make clean
 > 모든 실행파일 제거
 
 
-* make debug
-> + 디버깅버전, src/debug_main.cpp, 소스코드에서 DEBUG 매크로 사용가능
-> + 소켓통신 없이 **"로컬 이미지 입력 --> 딥러닝 출력 --> 입력 및 출력이미지 웹서버 업로드"** 만 진행   
-> + 로컬 이미지 경로: debug/test_images/*.jpeg   
-> + ./server_debug.out <처음: 테스트할 이미지 파일> <끝: 테스트할 이미지 파일>   
-   
-   
 --------------------------------------------------------------
    
    
