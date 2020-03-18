@@ -11,13 +11,13 @@
    
    
 ## Web Structures
-    /
+    $(WEB_ROOT)/
 > 출력된 이미지 및 사람 계수값을 시간 역순으로 출력 (index.php)   
 
-    /inputs
+    $(WEB_ROOT)/inputs
 > 입력된 이미지(.jpeg)를 저장하는 디렉토리
 
-    /outputs
+    $(WEB_ROOT)/outputs
 > 출력된 이미지(.jpeg) 및 results.txt를 저장하는 디렉토리
    
    
@@ -67,13 +67,15 @@
 ### 2. Run
 
 #### 2.1. Run Release ver.   
-    make run
+    make run   
+> + then the program waits std::vector<unsigned char> in socket.   
+> + also see https://github.com/wooseokyourself/capstone_pi
    
 #### 2.2. Run Debugging ver.   
     make debug_run
-   + Program reads **.jpeg** files from '*debug/images/*' sequentially from 1.   
-      (ex. debug/images/*1.jpeg*, debug/images/*2.jpeg*, ... debug/images/**$(last).jpeg**)
-   + 'make debug_run' will ask you the value of $(last)
+> + Program reads **.jpeg** files from '*debug/images/*' sequentially from 1.   
+>     (ex. debug/images/*1.jpeg*, debug/images/*2.jpeg*, ... debug/images/**$(last).jpeg**)
+> + 'make debug_run' will ask you the value of $(last)
 
 ---------------------------------------------------------------
    
