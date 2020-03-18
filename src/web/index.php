@@ -18,9 +18,11 @@ $info = array_reverse ($info);
   <body>
     <!-- [THE GALLERY] -->
     <div id="outputs"><?php
-
+    
+    /* 배열의 첫 번째 원소 출력 */
     echo "<font size=12>".$info[0];
-    printf ("<img src='outputs/%s'/>", basename(array_shift($images)));
+    printf ("<img src='outputs/%s'/>", basename(key($images)));
+    
     printf ("<br />");
     printf ("<hr>");
     printf ("<br />");
