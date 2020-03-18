@@ -31,7 +31,7 @@ Uploader::upload_output (Mat resultImg, int peopleNumber, string fileName = getC
 	FILE* results = fopen (results_PATH, "a");	
 
     /* UPLOAD_PATH + "results.txt" 의 제일 밑줄에 "resultImg peopleNumber" 작성 */
-    const char* info = (fileName + " " + to_string(peopleNumber) + "\n").c_str();
+    const char* info = (fileName + " " + "People: " + to_string(peopleNumber) + "\n").c_str();
     fputs (info, results);
 	fclose (results);
 }
