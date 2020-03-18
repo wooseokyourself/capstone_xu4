@@ -12,7 +12,7 @@ int main (int argc, char* argv[]) {
     Uploader web(WEB_ROOT);
     for (int i=1 i<=imgEnd; i++) {
         string TEST_IMAGE_NAME = to_string(i) + ".jpeg";
-        Mat inputImg = imread("debug/test_images/" + TEST_IMAGE_NAME, IMREAD_COLOR);
+        Mat inputImg = imread("debug/images/" + TEST_IMAGE_NAME, IMREAD_COLOR);
         if (TEST_IMAGE_NAME.length() == 6) {
             TEST_IMAGE_NAME = "0" + TEST_IMAGE_NAME;
         }
