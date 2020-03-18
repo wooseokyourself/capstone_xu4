@@ -22,7 +22,9 @@ DEBUG_SRC = -DDEBUG src/common.cpp src/ml.cpp src/web.cpp src/debug_main.cpp
 # compile and run: release version
 
 all: $(TARGET)
-$(TARGET): $(CXX) $(CXXFLAGS) $(OPENCV) $(RELEASE_SRC) -o $(TARGET)
+
+$(TARGET):
+	$(CXX) $(CXXFLAGS) $(OPENCV) $(RELEASE_SRC) -o $(TARGET)
 
 run:
 	./server.out $(WEB_ROOT)
@@ -32,7 +34,9 @@ run:
 # compile and run: debug version
 
 debug: $(TARGET_DEBUG)
-$(TARGET_DEBUG): $(CXX) $(CXXFLAGS) $(OPENCV) $(DEBUG_SRC) -o $(TARGET_DEBUG)
+
+$(TARGET_DEBUG):
+	$(CXX) $(CXXFLAGS) $(OPENCV) $(DEBUG_SRC) -o $(TARGET_DEBUG)
 
 run_debug:
 	@read -p "Enter the last number of debug/images/*.jpeg: " LAST; \
