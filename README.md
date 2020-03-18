@@ -13,7 +13,6 @@
 ## 웹서버 구조
     /
 > 출력된 이미지 및 사람 계수값을 시간 역순으로 출력 (index.php)   
-> 현재 테스트머신에서 루트는 /home/html/ws/www/
 
     /inputs
 > 입력된 이미지(.jpeg)를 저장하는 디렉토리
@@ -37,20 +36,29 @@
    
 ## 사용법
 
-### Get YOLOv3 pre-trained model
+### 1. Get YOLOv3 pre-trained model
     cd model
     ./getModels.sh
 > coco.names 에서 person 클래스만 남겨두고 나머지는 제거
 
    
+### 2. Set root path of your web into $(WEB_ROOT) in Makefile
+> The path MUST be ABSOLUTE path.
+> Also there must be '/' in the end of your path.   
+   ex. WEB_ROOT = /home/html/ws/www/
    
-### Compile
+   
+### 3. Compile
+
+#### 3.1. Compile Release ver.
+   make all
+
+#### 3.2. Compile Debugging ver.
+   make debug
 
 * make clean
 > 모든 실행파일 제거
 
-* make all
-> 릴리즈버전, src/main.cpp
 
 * make debug
 > + 디버깅버전, src/debug_main.cpp, 소스코드에서 DEBUG 매크로 사용가능
