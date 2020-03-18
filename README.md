@@ -71,7 +71,7 @@
    
 #### 2.2. Run Debugging ver.   
    make debug_run
-   + Program reads **.jpeg** files in *debug/images/* sequentially from 1.   
+   + Program reads **.jpeg** files from '*debug/images/*' sequentially from 1.   
       (ex. debug/images/1.jpeg, debug/images/2.jpeg, ... debug/images/$(last).jpeg)
    + 'make debug_run' will ask you the value of $(last)
 
