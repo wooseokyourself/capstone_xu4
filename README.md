@@ -1,3 +1,13 @@
+## 빌드환경
+* Odroid XU4 (armv7l with no GPU)
+* Ubuntu 16.04.6 LTS (Mate)
+* OpenCV 4.1.2 with contrib (actually contrib is unnecessary)
+* Apache 2.4.18
+* PHP 7.0.33
+* gcc/g++ 4.9.4
+
+---------------------------------------------------------------
+
 ## 웹서버 구조
     /
 > 출력된 이미지 및 사람 계수값을 시간 역순으로 출력 (index.php)   
