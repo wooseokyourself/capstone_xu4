@@ -22,9 +22,11 @@ $info = array_reverse ($info);
     /* 배열의 첫 번째 원소 출력 */
     echo "<font size=12>".$info[0];
     printf ("<br />");
-    printf ("<img src='outputs/%s'/>", $images[0]);
+    printf ("첫 번째 원소: %s", $images[0]);
     printf ("<br />");
-    
+    printf ("<img src='outputs/%s'/>", basename($images[0]));
+    printf ("<br />");
+
     printf ("<hr>");
     printf ("<br />");
 
