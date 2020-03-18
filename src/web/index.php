@@ -1,7 +1,7 @@
 <?php
 /* outputs/ 에 있는 .jpeg 파일을 역순으로 배열에 저장 */
 $dir = __DIR__ . DIRECTORY_SEPARATOR . "outputs" . DIRECTORY_SEPARATOR;
-$images = glob ($dir . "*.{jpg,jpeg,gif,png}", GLOB_BRACE);
+$images = glob ($dir . "*.jpeg", GLOB_BRACE);
 $images = array_reverse ($images);
 
 /* outputs/results.txt 을 역순으로 한 줄씩 배열에 저장 */
@@ -22,7 +22,7 @@ $info = array_reverse ($info);
     /* 배열의 첫 번째 원소 출력 */
     echo "<font size=12>".$info[0];
     printf ("<br />");
-    printf ("첫 번째 원소: %s", $images[0]);
+    printf ("first element: %s", $images[0]);
     printf ("<br />");
     printf ("<img src='outputs/%s'/>", basename($images[0]));
     printf ("<br />");
