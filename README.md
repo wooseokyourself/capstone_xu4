@@ -1,10 +1,11 @@
-## Build Environment
+## Test Environment and Dependencies
 * Odroid XU4 (armv7l, there is also GPU, but not used)
 * Ubuntu 16.04.6 LTS (Mate)
+* gcc/g++ 4.9.4
+* Makefile
 * OpenCV 4.1.2 with contrib (actually contrib is unnecessary)
 * Apache 2.4.18
 * PHP 7.0.33
-* gcc/g++ 4.9.4
    
    
 ---------------------------------------------------------------
