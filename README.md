@@ -74,5 +74,5 @@
 --------------------------------------------------------------
    
    
-## Example Result
+## Example Result of Web (index.php)
 ![시연2](https://user-images.githubusercontent.com/49421142/76927049-53dc3880-6921-11ea-9b9f-eae576d58d72.JPG)
