@@ -13,9 +13,9 @@ int main (void) {
 
         /* 입력 및 출력이미지는 YYYYMMDDHHMMSS.jpeg 형태로 저장 */
         string currTime = getCurrTime();
-        web.upload_input (inputImg, currTime);
+        web.upload_input (inputImg, currTime + ".jpeg");
 		dnn.MachineLearning (inputImg);
-        web.upload_output (dnn.getOutputImg(), dnn.getPeopleNumber(), currTime);
+        web.upload_output (dnn.getOutputImg(), dnn.getPeopleNumber(), currTime + ".jpeg");
     }
     return 0;
 }
