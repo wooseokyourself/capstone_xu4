@@ -72,3 +72,7 @@
     3. 결과는 웹서버의 uploads 폴더에서 확인.   
 
 --------------------------------------------------------------
+   
+   
+### Example Result
+![시연2](https://user-images.githubusercontent.com/49421142/76927049-53dc3880-6921-11ea-9b9f-eae576d58d72.JPG)
