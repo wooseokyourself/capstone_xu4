@@ -10,7 +10,7 @@ TARGET_DEBUG = .server_debug.out
 
 # compiler, flags, libs
 CXX = g++
-CXXFLAGS = -std=c++11 -W
+CXXFLAGS = -std=c++11
 OPENCV = `pkg-config --cflags --libs opencv4`
 
 # Sources
@@ -21,10 +21,7 @@ DEBUG_SRC = -DDEBUG src/common.cpp src/ml.cpp src/web.cpp src/debug_main.cpp
 
 # Compile and Run: release version
 
-all:
-	make init
-	make clean
-	$(TARGET)
+all: $(TARGET)
 	@echo "Compile is done! Run with 'make run'"
 
 $(TARGET):
@@ -37,10 +34,7 @@ run:
 
 # Compile and Run: debug version
 
-debug:
-	make init
-	make clean
-	$(TARGET_DEBUG)
+debug: $(TARGET_DEBUG)
 	@echo "Compile is done! Run with 'make debug_run'"
 
 $(TARGET_DEBUG):
