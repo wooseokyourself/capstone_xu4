@@ -1,32 +1,31 @@
-## 빌드환경
+## Test Environment and Dependencies
 * Odroid XU4 (armv7l, there is also GPU, but not used)
 * Ubuntu 16.04.6 LTS (Mate)
+* gcc/g++ 4.9.4
+* Makefile
 * OpenCV 4.1.2 with contrib (actually contrib is unnecessary)
 * Apache 2.4.18
 * PHP 7.0.33
-* gcc/g++ 4.9.4
    
    
 ---------------------------------------------------------------
    
    
-## 웹서버 구조
-    /
+## Web Structures
+    $(WEB_ROOT)/
 > 출력된 이미지 및 사람 계수값을 시간 역순으로 출력 (index.php)   
 
-    /inputs
+    $(WEB_ROOT)/inputs
 > 입력된 이미지(.jpeg)를 저장하는 디렉토리
 
-    /outputs
+    $(WEB_ROOT)/outputs
 > 출력된 이미지(.jpeg) 및 results.txt를 저장하는 디렉토리
-
-**프로그램 실행 시 루트 (/*) 초기화**
    
    
 ---------------------------------------------------------------
    
    
-## 소켓통신 프로토콜
+## Socket Protocol
     std::vector<unsigned char>
 > cv::Mat 이 인코딩된 자료형으로, 본 프로그램에서 다시 cv::Mat 으로 디코딩 진행
    
@@ -34,7 +33,7 @@
 ---------------------------------------------------------------
    
    
-## 사용법
+## Install
 
 ### 1. Get YOLOv3 pre-trained model
     cd model
@@ -43,42 +42,50 @@
 
    
 ### 2. Set root path of your web into $(WEB_ROOT) in Makefile
-> The path MUST be ABSOLUTE path.
-> Also there must be '/' in the end of your path.   
+> The path **MUST be ABSOLUTE path**.
+> Also there must be **'/'** in the end of your path.   
    ex. WEB_ROOT = /home/html/ws/www/
    
    
 ### 3. Compile
 
-#### 3.1. Compile Release ver.
-   make all
+#### 3.1. Compile Release ver.   
+    make all
 
-#### 3.2. Compile Debugging ver.
-   make debug
-
-* make clean
-> 모든 실행파일 제거
-
-
-* make debug
-> + 디버깅버전, src/debug_main.cpp, 소스코드에서 DEBUG 매크로 사용가능
-> + 소켓통신 없이 **"로컬 이미지 입력 --> 딥러닝 출력 --> 입력 및 출력이미지 웹서버 업로드"** 만 진행   
-> + 로컬 이미지 경로: debug/test_images/*.jpeg   
-> + ./server_debug.out <처음: 테스트할 이미지 파일> <끝: 테스트할 이미지 파일>   
+#### 3.2. Compile Debugging ver.   
+    make debug
+> 소켓통신 없이 **"로컬 이미지 입력 --> 딥러닝 출력 --> 입력 및 출력이미지 웹서버 업로드"** 만 진행
    
    
-### Execution
+---------------------------------------------------------------
+   
+   
+## Usage
 
-* release
-    1. ./debug.out
-    2. 실행하면 std::vector<unsigned char> 자료형 수신대기
+### 1. Init root dir of your Web   
+    make init
+   
+### 2. Run
 
-* debug
-    1. 테스트할 .jpeg 이미지파일을 debug/test_images/ 디렉토리에 순차적인 숫자로 저장.   
-        (ex. 1.jpeg 2.jpeg 3.jpeg 4.jpeg)
-    2. 테스트할 이미지파일의 시작번호와 끝번호를 인자로 server_debug.out 실행.   
-        (ex. ./server_debug.out 1 4  -->  1.jpeg, 2.jpeg, 3.jpeg, 4.jpeg 파일 입력)
-    3. 결과는 웹서버의 uploads 폴더에서 확인.   
+#### 2.1. Run Release ver.   
+    make run   
+> + then the program stuck in listen() to wait connection request.   
+> + also see https://github.com/wooseokyourself/capstone_pi
+   
+#### 2.2. Run Debugging ver.   
+    make debug_run
+> + Program reads **.jpeg** files from '*debug/images/*' sequentially from 1.   
+>     (ex. debug/images/*1.jpeg*, debug/images/*2.jpeg*, ... debug/images/**$(last).jpeg**)
+> + 'make debug_run' will ask you the value of $(last)
+
+---------------------------------------------------------------
+   
+   
+## Others
+
+### Removes *.out
+    make clean
+
 
 --------------------------------------------------------------
    
