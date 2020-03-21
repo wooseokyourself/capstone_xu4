@@ -25,7 +25,7 @@
 ---------------------------------------------------------------
    
    
-## Socket Protocol
+## Application Protocol
     std::vector<unsigned char>
 > cv::Mat 이 인코딩된 자료형으로, 본 프로그램에서 다시 cv::Mat 으로 디코딩 진행
    
