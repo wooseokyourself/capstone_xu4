@@ -186,8 +186,9 @@ General configuration for OpenCV 4.1.2 =====================================
 # Others
 
 + #### Remove *.out
+~~~
     make clean
-
+~~~
 + #### [Web Structures](https://github.com/wooseokyourself/capstone_xu4/wiki/Web-Structures)
    
 # Example Results
