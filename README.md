@@ -1,8 +1,9 @@
 # Introduction
-This program receives an image through C's socket API, detects a person through deep learning, and outputs the detection result and the number of people to a web page.
+This server program receives an image through C's socket API, detects a person through deep learning, and outputs the detection result and the number of people to a web page.   
+You can also see [Client code here]https://github.com/wooseokyourself/capstone_pi.
 
 # Description
-The https://github.com/wooseokyourself/capstone_xu4 repo contains inference code for YOLOv3 in OpenCV DNN. The code works on Linux. Training is done on the COCO dataset by default: https://cocodataset.org/#home. Credit to Joseph Redmon for YOLO: https://pjreddie.com/darknet/yolo/.
+This https://github.com/wooseokyourself/capstone_xu4 repo contains inference code for YOLOv3 in OpenCV DNN. The code works on Linux. Training is done on the COCO dataset by default: https://cocodataset.org/#home. Credit to Joseph Redmon for YOLO: https://pjreddie.com/darknet/yolo/.
 
 # Test Environment and Requirements
 *This program is designed to run only CPU in Odroid XU4 (armv7l). Using GPU has not been tested.*   
@@ -166,10 +167,9 @@ General configuration for OpenCV 4.1.2 =====================================
 
 #### 3.2. Compile Debugging ver.   
     make debug
-> 소켓통신 없이 **"로컬 이미지 입력 --> 딥러닝 출력 --> 입력 및 출력이미지 웹서버 업로드"** 만 진행
+> Only **"Input local images --> Inference --> Print into web page"** is performed **WITHOUT SOCKET COMMUNICATION**.
    
    
----------------------------------------------------------------
    
    
 # Usage
@@ -182,7 +182,7 @@ General configuration for OpenCV 4.1.2 =====================================
 #### 2.1. Run Release ver.   
     make run   
 > + then the program stuck in listen() to wait connection request.   
-> + also see https://github.com/wooseokyourself/capstone_pi
+> + also see [Client code here]https://github.com/wooseokyourself/capstone_pi.
    
 #### 2.2. Run Debugging ver.   
     make debug_run
