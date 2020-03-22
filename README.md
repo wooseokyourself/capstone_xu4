@@ -1,7 +1,11 @@
 # Introduction
+This program receives an image through C's socket API, detects a person through deep learning, and outputs the detection result and the number of people to a web page.
 
-# Test Environment and Dependencies
-* Odroid XU4 (armv7l, there is also GPU, but not used)
+# Description
+The https://github.com/wooseokyourself/capstone_xu4 repo contains inference code for YOLOv3 in OpenCV DNN. The code works on Linux. Training is done on the COCO dataset by default: https://cocodataset.org/#home. Credit to Joseph Redmon for YOLO: https://pjreddie.com/darknet/yolo/.
+
+# Test Environment and Requirements
+*This program is designed to run only CPU in Odroid XU4 (armv7l). Using GPU has not been tested.*   
 * Ubuntu 16.04.6 LTS (Mate)
 * gcc/g++ 4.9.4
 * Makefile
@@ -122,31 +126,23 @@ General configuration for OpenCV 4.1.2 =====================================
   Install to:                    /usr/local
 -----------------------------------------------------------------
 ~~~
-
-   
----------------------------------------------------------------
    
    
 # Web Structures
     $(WEB_ROOT)/
-> 출력된 이미지 및 사람 계수값을 시간 역순으로 출력 (index.php)   
+> Print out the most recent inferenced image and person count values. (index.php)
 
     $(WEB_ROOT)/inputs
-> 입력된 이미지(.jpeg)를 저장하는 디렉토리
+> Directory to save input images.
 
     $(WEB_ROOT)/outputs
-> 출력된 이미지(.jpeg) 및 results.txt를 저장하는 디렉토리
-   
-   
----------------------------------------------------------------
+> Directory to save inferenced images and 'results.txt'.
    
    
 # Application Protocol
     std::vector<unsigned char>
-> cv::Mat 이 인코딩된 자료형으로, 본 프로그램에서 다시 cv::Mat 으로 디코딩 진행
+> Encoded form of cv::Mat. There is a process of decoding back to cv::Mat in this program.
    
-   
----------------------------------------------------------------
    
    
 # Install
@@ -154,7 +150,7 @@ General configuration for OpenCV 4.1.2 =====================================
 ### 1. Get YOLOv3 pre-trained model
     cd model
     ./getModels.sh
-> coco.names 에서 person 클래스만 남겨두고 나머지는 제거
+> You need to remove all classes but 'person' in 'coco.names' to inference only people.
 
    
 ### 2. Set root path of your web into $(WEB_ROOT) in Makefile
