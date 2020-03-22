@@ -6,7 +6,7 @@ You can also see client code here: https://github.com/wooseokyourself/capstone_p
 This https://github.com/wooseokyourself/capstone_xu4 repo contains inference code for YOLOv3 in OpenCV DNN. The code works on Linux. Training is done on the COCO dataset by default: https://cocodataset.org/#home. Credit to Joseph Redmon for YOLO: https://pjreddie.com/darknet/yolo/.
 
 # Test Environment and Requirements
-** *This program is designed to run only CPU in Odroid XU4 (armv7l). Using GPU has not been tested.* **
+#### *This program is designed to run only CPU in Odroid XU4 (armv7l). Using GPU has not been tested.*
 * Ubuntu 16.04.6 LTS (Mate)
 * gcc/g++ 4.9.4
 * Makefile
