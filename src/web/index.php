@@ -1,3 +1,9 @@
+<!--
+  When you change this code, you need to do 'make init' in your project dir
+  to apply the changes to your web page.
+  NOTICE: 'make init' remove all contents in $(WEB_ROOT)
+-->
+
 <?php
 
   // Save 'outputs/*.jpeg' in @images with reverse order.
