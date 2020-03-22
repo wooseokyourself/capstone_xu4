@@ -1,12 +1,13 @@
 <?php
-/* outputs/ 에 있는 .jpeg 파일을 역순으로 배열에 저장 */
-$dir = __DIR__ . DIRECTORY_SEPARATOR . "outputs" . DIRECTORY_SEPARATOR;
-$images = glob ($dir . "*.jpeg", GLOB_BRACE);
-$images = array_reverse ($images);
 
-/* outputs/results.txt 을 역순으로 한 줄씩 배열에 저장 */
-$info = file("outputs/results.txt");
-$info = array_reverse ($info);
+  // Save 'outputs/*.jpeg' in @images with reverse order.
+  $dir = __DIR__ . DIRECTORY_SEPARATOR . "outputs" . DIRECTORY_SEPARATOR;
+  $images = glob ($dir . "*.jpeg", GLOB_BRACE);
+  $images = array_reverse ($images);
+
+  // Save the contents of 'outputs/results.txt' in @info with line by line, reverse order.
+  $info = file("outputs/results.txt");
+  $info = array_reverse ($info);
 
 // DRAW HTML ?>
 <!DOCTYPE html>
@@ -16,13 +17,13 @@ $info = array_reverse ($info);
     <link href="index.css" rel="stylesheet">
   </head>
   <body>
-    <!-- Inputs 버튼 -->
+    <!-- Inputs Button -->
     <button
       onclick="location.href='inputs/'">
       View Previous Inputs here
     </button>
 
-    <!-- Outputs 버튼 -->
+    <!-- Outputs Button -->
     <button
       onclick="location.href='outputs/'">
       View Previous Outputs here
@@ -31,8 +32,7 @@ $info = array_reverse ($info);
 
     <div id="outputs">
       <?php
-        /* 배열의 첫 번째 원소 출력 */
-        printf ("Latest Picture");
+        // Print the first element of the array.
         printf ("<br />");
         echo "<font size=12>".$info[0];
         printf ("<br />");
@@ -43,7 +43,7 @@ $info = array_reverse ($info);
         printf ("<br />");
 
         /*
-        // 배열의 모든 원소 출력
+        // Print the whole element of the array.
         $j = 0;
         foreach ($images as $i) {
           echo "<font size=12>".$info[$j++];

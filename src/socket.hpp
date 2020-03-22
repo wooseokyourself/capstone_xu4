@@ -17,7 +17,8 @@ using namespace std;
 #define MAXBUFSIZE 512
 #define PORT    10051
 
-static const int MAXPENDING = 1;    // 연결 요청을 대기할 수 있는 최대 수
+// Maximum number of requests to wait for a connection.
+static const int MAXPENDING = 1;
 
 ssize_t
 Recv (int sock, const void *buf, ssize_t size, ssize_t unit);

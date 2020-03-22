@@ -39,13 +39,13 @@ protected:
     drawPred (int classId, float conf, int left, int top, int right, int bottom, Mat& frame);
     
 
-private: // 파일 및 출력정보
+private: // Informations for output.
 
     Mat outputImg;
     int people;
 
 
-private: // 딥러닝 변수
+private: // Variables for Machine Learning.
 
     string MODEL_PATH;
     string CONFIG_PATH;

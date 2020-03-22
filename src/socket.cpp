@@ -17,64 +17,64 @@ Recv (int sock, const void *buf, ssize_t size, ssize_t unit) {
 
 vector<unsigned char>
 RecvBuffer () {
-    /*  LINGER 생성 */
+    // Use LINGER.
     struct linger ling = {0, };
     ling.l_onoff = 1;	// linger use
     ling.l_linger = 0;	// linger timeout set
 
-    /*  외부의 연결 요청을 처리하는 서버소켓 생성 */
+    // Creating a server socket that handles external connection requests.
     int servSock = socket (AF_INET, SOCK_STREAM, IPPROTO_TCP);
     ASSERT (servSock != -1);
     
-    /*  지역 주소 구조체 생성 */
+    // Create local address structure.
     struct sockaddr_in servAddr;
-    memset (&servAddr, 0, sizeof(servAddr));	    // 0으로 구조체 초기화
-    servAddr.sin_family = AF_INET;		            // IPv4 주소 패밀리
-    servAddr.sin_addr.s_addr = htonl (INADDR_ANY);  // 호스트의 어떤 IP로도 연결 요청 수락
-    servAddr.sin_port = htons (PORT);	            // 지역포트
+    memset (&servAddr, 0, sizeof(servAddr));	    // init value is 0
+    servAddr.sin_family = AF_INET;		            // IPv4 addr family
+    servAddr.sin_addr.s_addr = htonl (INADDR_ANY);  // accept any IP
+    servAddr.sin_port = htons (PORT);	            // loacl PORT
     
-    /*  LINGER 설정: 서버소켓 */
+    // Set LINGER: server socket
     setsockopt (servSock, SOL_SOCKET, SO_LINGER, (char *) &ling, sizeof(ling));
 
-    /*  지역 주소에 바인드 */
+    // Bind local address.
     ASSERT (bind (servSock, (struct sockaddr *) &servAddr, sizeof(servAddr)) >= 0);
     
-    /*  servSock 이 들어오는 요청을 처리할 수 있도록 설정 */
+    // Set server socket to handle incoming requests.
     ASSERT (listen (servSock, MAXPENDING) >= 0);
 
 
-    /*  클라이언트 소켓 */
+    // Client socket.
     int clntSock;
-    struct sockaddr_in clntAddr; // 클라이언트 주소 구조체 생성
+    struct sockaddr_in clntAddr; // Create client address structure.
     socklen_t clntAddrLen = sizeof(clntAddr);
-    /*  LINGER 설정: 클라이언트소켓 */
+    // Set LINGER: client socket
     setsockopt (clntSock, SOL_SOCKET, SO_LINGER, (char *) &ling, sizeof(ling));
 
-    /*  클라이언트의 연결을 기다림 */
+    // Waiting for external connection.
 	#ifdef DEBUG
 	printf ("wait client...\n");
 	#endif
     clntSock = accept (servSock, (struct sockaddr *) &clntAddr, &clntAddrLen);
 
 
-    // 이 시점에서 clntSock 이 실제 외부에서 연결을 요청한 클라이언트와 연결됨
+    // At this time @clntSock is connected with real external client.
 
 
-    /*  연결된 클라이언트의 정보를 출력하는 기능 */
-    char clntName[INET_ADDRSTRLEN]; // 클라이언트의 주소를 담기 위한 문자열
+    // Print Client's info.
+    char clntName[INET_ADDRSTRLEN];
     if (inet_ntop (AF_INET, &clntAddr.sin_addr.s_addr, clntName, sizeof(clntName)) != NULL)
 	    printf ("Client connected %s%d\n", clntName, ntohs(clntAddr.sin_port));
     else
 	    puts ("Unable to get client address");
 
-	// struct protocol* dataPtr = (struct protocol*) malloc (sizeof(struct protocol));
+
 	int recvd;
 
-	/*	vec.size() 받기 */
+	// Receive @vec.size()
 	ssize_t bufSize;
 	recvd = Recv (clntSock, &bufSize, sizeof(bufSize), sizeof(size_t *));
 
-	/*	vec 받기 */
+	// Receive @vec
 	vector<unsigned char> vec(bufSize);
 	recvd = Recv (clntSock, &vec[0], bufSize, sizeof(unsigned char));
 

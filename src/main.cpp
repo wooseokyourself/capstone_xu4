@@ -16,7 +16,7 @@ int main (int argc, char* argv[]) {
         Mat inputImg = imdecode (dataPtr, 1);
         dataPtr.clear();
 
-        /* 입력 및 출력이미지는 YYYYMMDDHHMMSS.jpeg 형태로 저장 */
+        /* 입력 및 출력이미지는 YYYY_MM_DD_HH:MM:SS.jpeg 형태로 저장 */
         string currTime = getCurrTime();
         web.upload_input (inputImg, currTime + ".jpeg");
 		dnn.MachineLearning (inputImg);

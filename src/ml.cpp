@@ -1,34 +1,19 @@
 #include "ml.hpp"
 
 OpenCV_DNN::OpenCV_DNN () {
-    /* 외부 경로 설정 */
+    // Set path.
     this->MODEL_PATH = "model/yolov3.weights";
     this->CONFIG_PATH = "model/yolov3.cfg";
     this->CLASSES_PATH = "model/coco.names";
-
-    /*
-        원본 예제 실행 예 (frome image or video file)
-        example_dnn_object_detection
-        --config=[PATH-TO-DARKNET]/cfg/yolo.cfg
-        --model=[PATH-TO-DARKNET]/yolo.weights
-        --classes=object_detection_classes_pascal_voc.txt
-        --width=416
-        --height=416
-        --scale=0.00392
-        --input=[PATH-TO-IMAGE-OR-VIDEO-FILE]
-        --rgb
-    */
    	
     people = 0;
 
-	/* DNN 설정 */
+	// Set DNN.
 	this->mean = Scalar();
-
     this->scale = 0.00392;
     this->swapRB = true;
     this->inpWidth = 416;
     this->inpHeight = 416;
-
     this->confThreshold = 0.4;
     this->nmsThreshold = 0.5;
 
@@ -41,11 +26,11 @@ OpenCV_DNN::OpenCV_DNN () {
         this->classes.push_back(line);
     }
 
-	// 모델 로드
+	// Load model.
     this->net = readNet (MODEL_PATH, CONFIG_PATH);
 
     /*
-        선호하는 백엔드를 지정. 목록은 다음과 같다.
+    Set Backend. References here:
         enum  	cv::dnn::Backend {
                     cv::dnn::DNN_BACKEND_DEFAULT = 0,
                     cv::dnn::DNN_BACKEND_HALIDE,
@@ -58,7 +43,7 @@ OpenCV_DNN::OpenCV_DNN () {
     this->net.setPreferableBackend(DNN_BACKEND_OPENCV);
 
     /*
-        선호하는 타겟 디바이스를 지정. 목록은 다음과 같다.
+    Set Target device. References here:
         enum  	cv::dnn::Target {
                     cv::dnn::DNN_TARGET_CPU = 0,
                     cv::dnn::DNN_TARGET_OPENCL,
@@ -79,7 +64,7 @@ OpenCV_DNN::MachineLearning (Mat inputImg) {
     this->outputImg = inputImg.clone();
     this->people = 0;
     
-    /* Image Process */
+    // Image processig.
     Mat blob;
 	preprocess(outputImg);
 
@@ -88,7 +73,7 @@ OpenCV_DNN::MachineLearning (Mat inputImg) {
 
 	postprocess(outputImg, outs);
 
-	/* 박스와 추론시간 기입 */
+	// Draw rect and other info in output image.
 	vector<double> layersTimes;
 	double freq = getTickFrequency() / 1000;
 	double t = net.getPerfProfile(layersTimes) / freq;
@@ -224,7 +209,7 @@ OpenCV_DNN::postprocess (Mat& frame, const vector<Mat>& outs) {
     for (size_t i = 0; i < indices.size(); ++i)
     {   
             int idx = indices[i];
-        if (classIds[idx] == 0) { /* 사람인 경우에만 박스 그리기 */
+        if (classIds[idx] == 0) { // Draw rectangle if class is a person.
             people++;
             Rect box = boxes[idx];
             drawPred(classIds[idx], confidences[idx], box.x, box.y,
@@ -233,12 +218,13 @@ OpenCV_DNN::postprocess (Mat& frame, const vector<Mat>& outs) {
     }
 }
 
-/* 결과이미지에 박스 그리기 */
+/* Draw rectangle in frame. */
 void
 OpenCV_DNN::drawPred (int classId, float conf, int left, int top, int right, int bottom, Mat& frame) {
     rectangle(frame, Point(left, top), Point(right, bottom), Scalar(0, 255, 0));
 
-    /*  // 클래스 이름 및 추론결과(확률) 표기 
+    /* // Write additional info (class name, inference rate) in rectangle.
+
     string label = format("%.2f", conf);
     if (!this->classes.empty())
     {
@@ -253,5 +239,6 @@ OpenCV_DNN::drawPred (int classId, float conf, int left, int top, int right, int
 
     rectangle(frame, Point(left, top - labelSize.height), Point(left + labelSize.width, top + baseLine), Scalar::all(255), FILLED);
     putText(frame, label, Point(left, top), FONT_HERSHEY_SIMPLEX, 0.5, Scalar());
+    
     */
 }
