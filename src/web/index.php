@@ -19,29 +19,30 @@ $info = array_reverse ($info);
     <!-- [THE GALLERY] -->
     <div id="outputs"><?php
     
-    /* 배열의 첫 번째 원소 출력 */
-    printf ("Latest Picture");
-    printf ("<br />");
-    echo "<font size=12>".$info[0];
-    printf ("<br />");
-    printf ("<img src='outputs/%s'/>", basename($images[0]));
-    printf ("<br />");
-
-    printf ("<hr>");
-    printf ("<br />");
-
-    echo "<input type="button" onclick="window.location='http://google.com'" class="Redirect" value="Click Here To Redirect"/>";
-
-    /*
-    // 배열의 모든 원소 출력
-    $j = 0;
-    foreach ($images as $i) {
-      echo "<font size=12>".$info[$j++];
+      /* 배열의 첫 번째 원소 출력 */
+      printf ("Latest Picture");
       printf ("<br />");
-      printf ("<img src='outputs/%s'/>", basename($i));
+      echo "<font size=12>".$info[0];
       printf ("<br />");
-    }
-    */
+      printf ("<img src='outputs/%s'/>", basename($images[0]));
+      printf ("<br />");
+
+      printf ("<hr>");
+      printf ("<br />");
+
+      /*
+      // 배열의 모든 원소 출력
+      $j = 0;
+      foreach ($images as $i) {
+        echo "<font size=12>".$info[$j++];
+        printf ("<br />");
+        printf ("<img src='outputs/%s'/>", basename($i));
+        printf ("<br />");
+      }
+      */
     ?></div>
+    <div id="center_button">
+      <button onclick="location.href='outputs'">Outputs</button>
+    </div>
   </body>
 </html>
