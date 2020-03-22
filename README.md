@@ -1,4 +1,6 @@
-## Test Environment and Dependencies
+# Introduction
+
+# Test Environment and Dependencies
 * Odroid XU4 (armv7l, there is also GPU, but not used)
 * Ubuntu 16.04.6 LTS (Mate)
 * gcc/g++ 4.9.4
@@ -125,7 +127,7 @@ General configuration for OpenCV 4.1.2 =====================================
 ---------------------------------------------------------------
    
    
-## Web Structures
+# Web Structures
     $(WEB_ROOT)/
 > 출력된 이미지 및 사람 계수값을 시간 역순으로 출력 (index.php)   
 
@@ -139,7 +141,7 @@ General configuration for OpenCV 4.1.2 =====================================
 ---------------------------------------------------------------
    
    
-## Application Protocol
+# Application Protocol
     std::vector<unsigned char>
 > cv::Mat 이 인코딩된 자료형으로, 본 프로그램에서 다시 cv::Mat 으로 디코딩 진행
    
@@ -147,7 +149,7 @@ General configuration for OpenCV 4.1.2 =====================================
 ---------------------------------------------------------------
    
    
-## Install
+# Install
 
 ### 1. Get YOLOv3 pre-trained model
     cd model
@@ -174,7 +176,7 @@ General configuration for OpenCV 4.1.2 =====================================
 ---------------------------------------------------------------
    
    
-## Usage
+# Usage
 
 ### 1. Init root dir of your Web   
     make init
@@ -195,7 +197,7 @@ General configuration for OpenCV 4.1.2 =====================================
 ---------------------------------------------------------------
    
    
-## Others
+# Others
 
 ### Removes *.out
     make clean
@@ -204,7 +206,7 @@ General configuration for OpenCV 4.1.2 =====================================
 --------------------------------------------------------------
    
    
-## Example Result of Web (index.php)
+# Example Result of Web (index.php)
 
 ### from Raspi camera (Release ver.)
 ![시연2](https://user-images.githubusercontent.com/49421142/76927049-53dc3880-6921-11ea-9b9f-eae576d58d72.JPG)
