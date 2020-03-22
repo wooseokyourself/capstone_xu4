@@ -16,7 +16,19 @@ $info = array_reverse ($info);
     <link href="index.css" rel="stylesheet">
   </head>
   <body>
-    <!-- [THE GALLERY] -->
+    <!-- Inputs 버튼 -->
+    <button
+      onclick="location.href='inputs/'">
+      View Previous Inputs here
+    </button>
+
+    <!-- Outputs 버튼 -->
+    <button
+      onclick="location.href='outputs/'">
+      View Previous Outputs here
+    </button>
+
+
     <div id="outputs">
       <?php
         /* 배열의 첫 번째 원소 출력 */
@@ -42,6 +54,5 @@ $info = array_reverse ($info);
         */
       ?>
     </div>
-    <button onclick="location.href='outputs/'">Outputs</button>
   </body>
 </html>
