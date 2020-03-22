@@ -7,6 +7,7 @@ This https://github.com/wooseokyourself/capstone_xu4 repo contains inference cod
 
 # Test Environment and Requirements
 #### *This program is designed to run only CPU in Odroid XU4 (armv7l). Using GPU has not been tested.*
+#### *All requirements below have not been tested in other versions.*
 * Ubuntu 16.04.6 LTS (Mate)
 * gcc/g++ 4.9.4
 * Makefile
