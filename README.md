@@ -132,17 +132,6 @@ General configuration for OpenCV 4.1.2 =====================================
 ~~~
    
    
-# Web Structures
-    $(WEB_ROOT)/
-> Print out the most recent inference image and person count values. (index.php)
-
-    $(WEB_ROOT)/inputs
-> Directory to save input images.
-
-    $(WEB_ROOT)/outputs
-> Directory to save inference images and 'results.txt'.
-   
-   
 # Application Protocol
     std::vector<unsigned char>
 > Encoded form of cv::Mat. There is a process of decoding back to cv::Mat in this program.
@@ -199,7 +188,7 @@ General configuration for OpenCV 4.1.2 =====================================
 ### Remove *.out
     make clean
 
-
+### [Web Structures](https://github.com/wooseokyourself/capstone_xu4.wiki.git)
    
 # Example Results
 
