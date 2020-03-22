@@ -175,7 +175,7 @@ General configuration for OpenCV 4.1.2 =====================================
    
    
    
-# Usage
+# Run
 
 ### 1. Init root dir of your Web   
     make init
