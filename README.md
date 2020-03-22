@@ -1,5 +1,5 @@
 # Introduction
-This directory contains OpenCV DNN YOLOv3 server-side software developed by 21500740@handong.edu, and is **freely available under the BEER-WARE license.**
+This directory contains OpenCV DNN YOLOv3 server-side software developed by 21500740@handong.edu, and is **freely available under [the Beerware license](https://github.com/wooseokyourself/capstone_xu4/blob/master/LICENSE).**
 
 # Description
 This https://github.com/wooseokyourself/capstone_xu4 repo contains code for receiveing images through C's socket API, inference for YOLOv3 in OpenCV DNN, and printing inference results in web server. The code works on Linux.   
