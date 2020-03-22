@@ -30,6 +30,10 @@ $info = array_reverse ($info);
     printf ("<hr>");
     printf ("<br />");
 
+    <input type="button" onclick="window.location='http://google.com'" class="Redirect" value="Click Here To Redirect"/>
+
+    /*
+    // 배열의 모든 원소 출력
     $j = 0;
     foreach ($images as $i) {
       echo "<font size=12>".$info[$j++];
@@ -37,6 +41,7 @@ $info = array_reverse ($info);
       printf ("<img src='outputs/%s'/>", basename($i));
       printf ("<br />");
     }
+    */
     ?></div>
   </body>
 </html>
