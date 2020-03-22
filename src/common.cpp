@@ -21,6 +21,6 @@ getCurrTime () {
 	currTime += (":" + temp);
 	temp = std::to_string (tm->tm_sec);
     if (temp.length() == 1) temp = "0" + temp;
-	currTime += temp;
+	currTime += (":" + temp);
     return currTime;
 }
