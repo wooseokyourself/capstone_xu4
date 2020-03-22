@@ -30,7 +30,7 @@ $info = array_reverse ($info);
     printf ("<hr>");
     printf ("<br />");
 
-    <input type="button" onclick="window.location='http://google.com'" class="Redirect" value="Click Here To Redirect"/>
+    echo "<input type="button" onclick="window.location='http://google.com'" class="Redirect" value="Click Here To Redirect"/>";
 
     /*
     // 배열의 모든 원소 출력
