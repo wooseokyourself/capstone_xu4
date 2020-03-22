@@ -1,5 +1,5 @@
 # Introduction
-This server program receives an image through C's socket API, detects a person through deep learning, and outputs the detection result and the number of people to a web page.   
+This server program receives an image through C's socket API, detects a person through deep learning, and outputs the inference result and the number of people to a web page.   
 You can also see client code here: https://github.com/wooseokyourself/capstone_pi.
 
 # Description
@@ -131,13 +131,13 @@ General configuration for OpenCV 4.1.2 =====================================
    
 # Web Structures
     $(WEB_ROOT)/
-> Print out the most recent inferenced image and person count values. (index.php)
+> Print out the most recent inference image and person count values. (index.php)
 
     $(WEB_ROOT)/inputs
 > Directory to save input images.
 
     $(WEB_ROOT)/outputs
-> Directory to save inferenced images and 'results.txt'.
+> Directory to save inference images and 'results.txt'.
    
    
 # Application Protocol
