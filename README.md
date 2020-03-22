@@ -201,7 +201,7 @@ General configuration for OpenCV 4.1.2 =====================================
 
 
    
-# Example Result of Web (index.php)
+# Example Result of the Project
 
 ## from Raspi camera (Release ver.)
 ![result 1](https://user-images.githubusercontent.com/49421142/77255814-91d4b600-6cad-11ea-9ee9-6d7c47b7027b.JPG)
