@@ -190,18 +190,14 @@ General configuration for OpenCV 4.1.2 =====================================
 > + Program reads **.jpeg** files from '*debug/images/*' sequentially from 1.   
 >     (ex. debug/images/*1.jpeg*, debug/images/*2.jpeg*, ... debug/images/**$(last).jpeg**)
 > + 'make debug_run' will ask you the value of $(last)
-
----------------------------------------------------------------
    
    
 # Others
 
-### Removes *.out
+### Remove *.out
     make clean
 
 
---------------------------------------------------------------
-   
    
 # Example Result of Web (index.php)
 
