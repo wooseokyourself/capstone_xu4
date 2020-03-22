@@ -3,7 +3,7 @@ This directory contains server-side of OpenCV DNN YOLOv3 Project developed by 21
 
 # Description
 This https://github.com/wooseokyourself/capstone_xu4 repo contains code for receiveing images through C's socket API, inference for YOLOv3 in OpenCV DNN, and printing inference results in web server. The code works on Linux.   
-Training is done on the COCO dataset by default: https://cocodataset.org/#home.   
+Training is done on the COCO dataset by default: https://cocodataset.org/.   
 **Credit to Joseph Redmon for YOLO:** https://pjreddie.com/darknet/yolo/.   
 You can also see [Client code here](https://github.com/wooseokyourself/capstone_pi).
 
