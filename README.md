@@ -1,6 +1,6 @@
 # Introduction
 This server program receives an image through C's socket API, detects a person through deep learning, and outputs the detection result and the number of people to a web page.   
-You can also see [Client code here]https://github.com/wooseokyourself/capstone_pi.
+You can also see \[Client code here]: https://github.com/wooseokyourself/capstone_pi.
 
 # Description
 This https://github.com/wooseokyourself/capstone_xu4 repo contains inference code for YOLOv3 in OpenCV DNN. The code works on Linux. Training is done on the COCO dataset by default: https://cocodataset.org/#home. Credit to Joseph Redmon for YOLO: https://pjreddie.com/darknet/yolo/.
