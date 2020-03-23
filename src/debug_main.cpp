@@ -8,6 +8,10 @@ int main (int argc, char* argv[]) {
     }
     string WEB_ROOT = argv[1];
     int imgEnd = atoi(argv[2]);
+
+    // Check the last element of @WEB_ROOT is '/'
+    ASSERT (WEB_ROOT[WEB_ROOT.length()] == "/");
+
     OpenCV_DNN dnn;
     Uploader web(WEB_ROOT);
     for (int i=1; i<=imgEnd; i++) {
