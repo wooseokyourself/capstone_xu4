@@ -177,8 +177,8 @@ General configuration for OpenCV 4.1.2 =====================================
 
 #### 2.1. Run Release ver.   
     make run   
-* then the program stuck in listen() to wait connection request.   
-* also see [Client code here](https://github.com/wooseokyourself/capstone_pi).
+* Then the program stuck in listen() to wait connection request.   
+* Also see [Client code here](https://github.com/wooseokyourself/capstone_pi).
    
 #### 2.2. Run Debugging ver.   
     make debug_run
