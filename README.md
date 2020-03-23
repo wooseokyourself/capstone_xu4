@@ -134,7 +134,7 @@ General configuration for OpenCV 4.1.2 =====================================
    
 # Application Protocol
     std::vector<unsigned char>
-> Encoded form of cv::Mat. There is a process of decoding back to cv::Mat in this program.
+* Encoded form of cv::Mat. There is a process of decoding back to cv::Mat in this program.
    
    
    
@@ -143,12 +143,12 @@ General configuration for OpenCV 4.1.2 =====================================
 ### 1. Get YOLOv3 pre-trained model
     cd model
     ./getModels.sh
-+ You need to remove all classes but 'person' in 'coco.names' to inference only people.
+* You need to remove all classes but 'person' in 'coco.names' to inference only people.
 
    
 ### 2. Set root path of your web into $(WEB_ROOT) in Makefile
-+ The path **MUST be ABSOLUTE path**.
-+ Also there must be **'/'** in the end of your path.   
+* The path **MUST be ABSOLUTE path**.
+* Also there must be **'/'** in the end of your path.   
    ex. WEB_ROOT = /home/html/ws/www/
    
    
@@ -159,7 +159,7 @@ General configuration for OpenCV 4.1.2 =====================================
 
 #### 3.2. Compile Debugging ver.   
     make debug
-+ Only **"Input local images --> Inference --> Print into web page"** is performed **WITHOUT SOCKET COMMUNICATION**.
+* Only **"Input local images --> Inference --> Print into web page"** is performed **WITHOUT SOCKET COMMUNICATION**.
    
    
    
@@ -168,8 +168,8 @@ General configuration for OpenCV 4.1.2 =====================================
 
 ### 1. Init root directory of your Web   
     make init
-+ Notice. It **REMOVES ALL CONTENTS OF $(WEB_ROOT)/**.   
-+ You can omit this step but there should be   
+* Notice. It **REMOVES ALL CONTENTS OF $(WEB_ROOT)/**.   
+* You can omit this step but there should be   
   directories: $(WEB_ROOT)inputs, $(WEB_ROOT)outputs   
   file: $(WEB_ROOT)outputs/results.txt   
 
@@ -177,14 +177,14 @@ General configuration for OpenCV 4.1.2 =====================================
 
 #### 2.1. Run Release ver.   
     make run   
-+ then the program stuck in listen() to wait connection request.   
-+ also see [Client code here](https://github.com/wooseokyourself/capstone_pi).
+* then the program stuck in listen() to wait connection request.   
+* also see [Client code here](https://github.com/wooseokyourself/capstone_pi).
    
 #### 2.2. Run Debugging ver.   
     make debug_run
-+ Program reads **.jpeg** files from '*debug/images/*' sequentially from 1.   
+* Program reads **.jpeg** files from '*debug/images/*' sequentially from 1.   
     (ex. debug/images/*1.jpeg*, debug/images/*2.jpeg*, ... debug/images/**$(last).jpeg**)
-+ 'make debug_run' will ask you the value of $(last)
+* 'make debug_run' will ask you the value of $(last)
    
    
 # Others
