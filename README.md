@@ -13,7 +13,7 @@ You can also see [Client code here](https://github.com/wooseokyourself/capstone_
 * Ubuntu 16.04.6 LTS (Mate)
 * gcc/g++ 4.9.4
 * GNU Make 4.1
-* OpenCV 4.1.2 with contrib (Actually contrib is unnecessary.)
+* OpenCV 4.1.2
 * Apache 2.4.18
 * PHP 7.0.33   
 
