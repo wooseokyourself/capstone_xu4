@@ -166,9 +166,11 @@ General configuration for OpenCV 4.1.2 =====================================
    
 # Run
 
-### 1. Init root dir of your Web   
+### 1. Init root directory of your Web   
     make init
-   
+> Notice. It **REMOVES ALL CONTENTS OF $(WEB_ROOT)/**.
+> You can omit this step but there should be $(WEB_ROOT)/inputs, $(WEB_ROOT)/outputs, $(WEB_ROOT)/outputs/results.txt
+
 ### 2. Run
 
 #### 2.1. Run Release ver.   
