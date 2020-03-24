@@ -9,8 +9,12 @@ int main (int argc, char* argv[]) {
         return 0;
     }
     string WEB_ROOT = argv[1];
+    // Check the last element of @WEB_ROOT is '/'
+    ASSERT (WEB_ROOT[WEB_ROOT.length()-1] == '/');
+
     OpenCV_DNN dnn;
     Uploader web(WEB_ROOT);
+    
     while (true) {
         std::vector<unsigned char> dataPtr = RecvBuffer ();
         Mat inputImg = imdecode (dataPtr, 1);
