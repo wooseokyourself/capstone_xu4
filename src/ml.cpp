@@ -106,16 +106,29 @@ OpenCV_DNN::MachineLearning (Mat inputImg) {
         halfHeight = outputImg.rows/2;
     else
         halfHeight = outputImg.rows/2 - 1;
+    
+    // Shallow copy
+    Mat LT = Mat(outputImg, Rect (0, 0, halfWidth, halfHeight));
+    Mat RT = Mat(outputImg, Rect (halfWidth, 0, halfWidth, halfHeight));
+    Mat LD = Mat(outputImg, Rect (0, halfHeight, halfWidth, halfHeight));
+    Mat RD = Mat(outputImg, Rect (halfWidth, halfHeight, halfWidth, halfHeight));
+    vector<Mat> outsLT, outsRT, outsLD, outsRD;
 
-    preprocess (Mat(outputImg, Rect (0, 0, halfWidth, halfHeight)) );
-    preprocess (Mat(outputImg, Rect (halfWidth, 0, halfWidth, halfHeight)) );
-    preprocess (Mat(outputImg, Rect (0, halfHeight, halfWidth, halfHeight)) );
-    preprocess (Mat(outputImg, Rect (halfWidth, halfHeight, halfWidth, halfHeight)) );
+    preprocess (LT);
+    net.forward(outsLT, outNames);
+    postprocess(LT, outsLT);
 
-	vector<Mat> outs;
-	net.forward(outs, outNames);
+    preprocess (RT);
+    net.forward(outsRT, outNames);
+    postprocess(RT, outsRT);
 
-	postprocess(outputImg, outs);
+    preprocess (LD);
+    net.forward(outsLD, outNames);
+    postprocess(LD, outsLD);
+
+    preprocess (RD);
+    net.forward(outsRD, outNames);
+    postprocess(RD, outsRD);
 
 	// Draw rect and other info in output image.
 	vector<double> layersTimes;
