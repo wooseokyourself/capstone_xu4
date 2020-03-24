@@ -59,14 +59,58 @@ OpenCV_DNN::OpenCV_DNN () {
     this->outNames = net.getUnconnectedOutLayersNames();
 }
 
+/* original
 void 
 OpenCV_DNN::MachineLearning (Mat inputImg) {
     this->outputImg = inputImg.clone();
     this->people = 0;
     
     // Image processig.
-    Mat blob;
 	preprocess(outputImg);
+
+	vector<Mat> outs;
+	net.forward(outs, outNames);
+
+	postprocess(outputImg, outs);
+
+	// Draw rect and other info in output image.
+	vector<double> layersTimes;
+	double freq = getTickFrequency() / 1000;
+	double t = net.getPerfProfile(layersTimes) / freq;
+	string label_inferTime = format ("Inference time: %.2f ms", t);
+    string label_confThreshold = format ("confThreshold: %.1f", confThreshold);
+    string label_resolution = format ("Resolution: %d X %d", outputImg.cols, outputImg.rows);
+    string label_people = format ("People: %d", this->people);
+	putText (outputImg, label_inferTime, Point(0, 35), FONT_HERSHEY_SIMPLEX, 1.0, Scalar(0, 0, 255), 2);
+    putText (outputImg, label_confThreshold, Point(0, 70), FONT_HERSHEY_SIMPLEX, 1.0, Scalar(0, 0, 255), 2);
+    putText (outputImg, label_resolution, Point(0, 105), FONT_HERSHEY_SIMPLEX, 1.0, Scalar(0, 0, 255), 2);
+    putText (outputImg, label_people, Point(0, 140), FONT_HERSHEY_SIMPLEX, 1.0, Scalar(0, 0, 255), 2);
+}
+*/
+
+void 
+OpenCV_DNN::MachineLearning (Mat inputImg) {
+    this->outputImg = inputImg.clone();
+    this->people = 0;
+
+    // Image processig.
+	// preprocess(outputImg);
+    int halfWidth, halfHeight;
+
+    if (outputImg.width % 2 == 0)
+        halfWidth = outputImg.width/2;
+    else
+        halfWidth = outputImg.width/2 - 1;
+
+    if (outputImg.height % 2 == 0)
+        halfHeight = outputImg.height/2;
+    else
+        halfHeight = outputImg.height/2 - 1;
+
+    preprocess (Mat(outputImg, Rect (0, 0, halfWidth, halfHeight)) );
+    preprocess (Mat(outputImg, Rect (halfWidth, 0, halfWidth, halfHeight)) );
+    preprocess (Mat(outputImg, Rect (0, halfHeight, halfWidth, halfHeight)) );
+    preprocess (Mat(outputImg, Rect (halfWidth, halfHeight, halfWidth, halfHeight)) );
 
 	vector<Mat> outs;
 	net.forward(outs, outNames);
