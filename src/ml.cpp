@@ -148,8 +148,8 @@ OpenCV_DNN::MachineLearning (Mat inputImg) {
     putText (outputImg, label_confThreshold, Point(0, 70), FONT_HERSHEY_SIMPLEX, 1.0, Scalar(0, 0, 255), 2);
     putText (outputImg, label_resolution, Point(0, 105), FONT_HERSHEY_SIMPLEX, 1.0, Scalar(0, 0, 255), 2);
     putText (outputImg, label_people, Point(0, 140), FONT_HERSHEY_SIMPLEX, 1.0, Scalar(0, 0, 255), 2);
-    line(Mat& outputImg, Point(0, halfHeight), Point(outputImg.cols, halfHeight), Scalar(255, 0, 0), 1, lineType=8, shift=0);
-    line(Mat& outputImg, Point(halfWidth, 0), Point(halfWidth, outputImg.rows), Scalar(255, 0, 0), 1, lineType=8, shift=0);
+    line(outputImg, Point(0, halfHeight), Point(outputImg.cols, halfHeight), Scalar(255, 0, 0), 1, lineType=8, shift=0);
+    line(outputImg, Point(halfWidth, 0), Point(halfWidth, outputImg.rows), Scalar(255, 0, 0), 1, lineType=8, shift=0);
 }
 
 inline void
