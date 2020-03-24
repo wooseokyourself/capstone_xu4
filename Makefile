@@ -17,6 +17,9 @@ OPENCV = `pkg-config --cflags --libs opencv4`
 RELEASE_SRC = src/common.cpp src/ml.cpp src/web.cpp src/socket.cpp src/main.cpp
 DEBUG_SRC = -DDEBUG src/common.cpp src/ml.cpp src/web.cpp src/debug_main.cpp
 
+# Task options
+OPT = -DDIVIDE
+
 #-----------------------------------------------#
 
 # Compile and Run: release version
@@ -25,7 +28,7 @@ all: $(TARGET)
 	@echo "Compile is done! Run with 'make run'"
 
 $(TARGET):
-	$(CXX) $(CXXFLAGS) $(RELEASE_SRC) $(OPENCV) -o $(TARGET)
+	$(CXX) $(CXXFLAGS) $(OPT) $(RELEASE_SRC) $(OPENCV) -o $(TARGET)
 
 run:
 	./.server.out $(WEB_ROOT)
@@ -38,7 +41,7 @@ debug: $(TARGET_DEBUG)
 	@echo "Compile is done! Run with 'make debug_run'"
 
 $(TARGET_DEBUG):
-	$(CXX) $(CXXFLAGS) -DDIVIDE $(DEBUG_SRC) $(OPENCV) -o $(TARGET_DEBUG)
+	$(CXX) $(CXXFLAGS) $(OPT) $(DEBUG_SRC) $(OPENCV) -o $(TARGET_DEBUG)
 
 debug_run:
 	@read -p "Enter the last number of debug/images/*.jpeg: " LAST; \
