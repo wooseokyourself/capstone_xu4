@@ -114,27 +114,33 @@ OpenCV_DNN::MachineLearning (Mat inputImg) {
     Mat RD = Mat(outputImg, Rect (halfWidth, halfHeight, halfWidth, halfHeight));
     vector<Mat> outsLT, outsRT, outsLD, outsRD;
 
+    vector<double> layersTimes;
+    double total_t = 0;
+
     preprocess (LT);
     net.forward(outsLT, outNames);
     postprocess(LT, outsLT);
+    total_t += net.getPerfProfile(layersTimes);
 
     preprocess (RT);
     net.forward(outsRT, outNames);
     postprocess(RT, outsRT);
+    total_t += net.getPerfProfile(layersTimes);
 
     preprocess (LD);
     net.forward(outsLD, outNames);
     postprocess(LD, outsLD);
+    total_t += net.getPerfProfile(layersTimes);
 
     preprocess (RD);
     net.forward(outsRD, outNames);
     postprocess(RD, outsRD);
+    total_t += net.getPerfProfile(layersTimes);
 
 	// Draw rect and other info in output image.
-	vector<double> layersTimes;
 	double freq = getTickFrequency() / 1000;
-	double t = net.getPerfProfile(layersTimes) / freq;
-	string label_inferTime = format ("Inference time of last picture: %.2f ms", t);
+	total_t = total_t / freq;
+	string label_inferTime = format ("Inference time of last picture: %.2f ms", total_t);
     string label_confThreshold = format ("confThreshold: %.1f", confThreshold);
     string label_resolution = format ("Resolution: %d X %d", outputImg.cols, outputImg.rows);
     string label_people = format ("People: %d", this->people);
