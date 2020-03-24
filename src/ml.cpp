@@ -98,14 +98,14 @@ OpenCV_DNN::MachineLearning (Mat inputImg) {
     int halfWidth, halfHeight;
 
     if (outputImg.width % 2 == 0)
-        halfWidth = outputImg.width/2;
+        halfWidth = outputImg.cols/2;
     else
-        halfWidth = outputImg.width/2 - 1;
+        halfWidth = outputImg.cols/2 - 1;
 
     if (outputImg.height % 2 == 0)
-        halfHeight = outputImg.height/2;
+        halfHeight = outputImg.rows/2;
     else
-        halfHeight = outputImg.height/2 - 1;
+        halfHeight = outputImg.rows/2 - 1;
 
     preprocess (Mat(outputImg, Rect (0, 0, halfWidth, halfHeight)) );
     preprocess (Mat(outputImg, Rect (halfWidth, 0, halfWidth, halfHeight)) );
