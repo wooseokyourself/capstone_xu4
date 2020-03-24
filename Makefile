@@ -38,7 +38,7 @@ debug: $(TARGET_DEBUG)
 	@echo "Compile is done! Run with 'make debug_run'"
 
 $(TARGET_DEBUG):
-	$(CXX) $(CXXFLAGS) $(DEBUG_SRC) $(OPENCV) -o $(TARGET_DEBUG)
+	$(CXX) $(CXXFLAGS) -DDIVIDE $(DEBUG_SRC) $(OPENCV) -o $(TARGET_DEBUG)
 
 debug_run:
 	@read -p "Enter the last number of debug/images/*.jpeg: " LAST; \
