@@ -83,9 +83,9 @@ OpenCV_DNN::MachineLearning (Mat inputImg) {
     Mat RT = Mat(outputImg, Rect (halfWidth, 0, halfWidth, halfHeight));
     Mat LD = Mat(outputImg, Rect (0, halfHeight, halfWidth, halfHeight));
     Mat RD = Mat(outputImg, Rect (halfWidth, halfHeight, halfWidth, halfHeight));
-    vector<Mat> outsLT, outsRT, outsLD, outsRD;
 
     // Image processig.
+    vector<Mat> outsLT, outsRT, outsLD, outsRD;
     vector<double> layersTimes;
     double total_t = 0;
 
@@ -130,11 +130,9 @@ OpenCV_DNN::MachineLearning (Mat inputImg) {
     this->people = 0;
 
     // Image processig.
-    preprocess(outputImg);
-
     vector<Mat> outs;
+    preprocess(outputImg);
     net.forward(outs, outNames);
-
     postprocess(outputImg, outs);
 
     // Draw rect and other info in output image.
