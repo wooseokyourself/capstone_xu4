@@ -185,7 +185,7 @@ General configuration for OpenCV 4.1.2 =====================================
     make debug_run
 * Program reads **.jpeg** files from '*debug/images/*' sequentially from 1.   
     (ex. debug/images/*1.jpeg*, debug/images/*2.jpeg*, ... debug/images/**$(last).jpeg**)
-* $(last) should be less than 100
+* $(last) should be less than 100.
 * 'make debug_run' will ask you the value of $(last)
    
    
