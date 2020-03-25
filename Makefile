@@ -18,7 +18,7 @@ RELEASE_SRC = src/common.cpp src/ml.cpp src/web.cpp src/socket.cpp src/main.cpp
 DEBUG_SRC = -DDEBUG src/common.cpp src/ml.cpp src/web.cpp src/debug_main.cpp
 
 # Task options
-OPT = -DDIVIDE
+OPT = #-DDIVIDE
 
 #-----------------------------------------------#
 
