@@ -11,6 +11,7 @@ int main (int argc, char* argv[]) {
     ASSERT (WEB_ROOT[WEB_ROOT.length()-1] == '/');
     
     int imgEnd = atoi(argv[2]);
+    ASSERT (imgEnd <= 99);
 
     OpenCV_DNN dnn;
     Uploader web(WEB_ROOT);
