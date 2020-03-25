@@ -144,7 +144,7 @@ General configuration for OpenCV 4.1.2 =====================================
     cd model
     ./getModels.sh
 * This program infers only 'person' class.
-* Nevertheless, you need to remove all classes but 'person' in 'coco.names' to shorten the elapsed time of inference.
+* Nevertheless, you need to remove all classes but 'person' in 'model/coco.names' to shorten the elapsed time of inference.
 
    
 ### 2. Set root path of your web into $(WEB_ROOT) in Makefile
