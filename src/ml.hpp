@@ -56,7 +56,8 @@ private: // Variables for Machine Learning.
 
     Scalar mean;
 
-    float scale;
+    double scale;
+    double scalarfactor;
     bool swapRB;
     int inpWidth;
     int inpHeight;
