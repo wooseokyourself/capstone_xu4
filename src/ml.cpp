@@ -8,10 +8,11 @@ OpenCV_DNN::OpenCV_DNN () {
    	
     people = 0;
 
-	// Set DNN.
-	this->mean = Scalar();
-    this->scale = 1;
-    this->scalarfactor = 1/255.0;
+    // Set DNN.
+    this->mean = Scalar(); // 0
+    // (each pixel of blob) == (each pixel of input image * @scale * @scalarfactor)
+    this->scale = 1; // parameter of net.setInput()
+    this->scalarfactor = 1/255.0; // parameter of blobFromImage()
     this->swapRB = true;
     this->inpWidth = 416;
     this->inpHeight = 416;
