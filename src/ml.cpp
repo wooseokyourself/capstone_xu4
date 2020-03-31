@@ -11,8 +11,8 @@ OpenCV_DNN::OpenCV_DNN () {
     // Set DNN.
     this->mean = Scalar(); // 0
     // (each pixel of blob) == (each pixel of input image * @scale * @scalarfactor)
-    this->scale = 1; // parameter of net.setInput()
-    this->scalarfactor = 1/255.0; // parameter of blobFromImage()
+    this->scalarfactor = 1; // parameter of blobFromImage()
+    this->scale = 1/255.0; // parameter of net.setInput()
     this->swapRB = true;
     /*
     	320x320 -> faster
