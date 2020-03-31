@@ -14,6 +14,11 @@ OpenCV_DNN::OpenCV_DNN () {
     this->scale = 1; // parameter of net.setInput()
     this->scalarfactor = 1/255.0; // parameter of blobFromImage()
     this->swapRB = true;
+    /*
+    	320x320 -> faster
+    	416x416 -> normal  input size (trained size)
+	608x608 -> more accurate
+    */
     this->inpWidth = 416;
     this->inpHeight = 416;
     this->confThreshold = 0.4;
