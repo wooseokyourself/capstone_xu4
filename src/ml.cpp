@@ -10,7 +10,8 @@ OpenCV_DNN::OpenCV_DNN () {
 
 	// Set DNN.
 	this->mean = Scalar();
-    this->scale = 0.00392;
+    this->scale = 1;
+    this->scalarfactor = 1/255.0;
     this->swapRB = true;
     this->inpWidth = 416;
     this->inpHeight = 416;
@@ -179,10 +180,11 @@ OpenCV_DNN::preprocess (const Mat& frame) {
 			int		ddepth			출력blob의 깊이. CV_32F 또는 CV_8U.
 			)
 	*/
-    blob = blobFromImage(frame, 1.0, inpSize, Scalar(), this->swapRB, false, CV_8U);
+    blob = blobFromImage (frame, this->scalarfactor, inpSize, Scalar(), this->swapRB, false, CV_8U);
 
     // Run a model.
-    this->net.setInput(blob, "", this->scale, this->mean);
+    this->net.setInput (blob, "", this->scale, this->mean);
+    
     if (net.getLayer(0)->outputNameToIndex("im_info") != -1)  // Faster-RCNN or R-FCN
     {
         resize(frame, frame, inpSize);
