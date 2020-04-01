@@ -17,10 +17,11 @@ OpenCV_DNN::OpenCV_DNN () {
     /*
     	320x320 -> faster
     	416x416 -> normal  input size (trained size)
-	608x608 -> more accurate
+    	608x608 -> more accurate
+	    1216x1216 -> more more accurate
     */
-    this->inpWidth = 608;
-    this->inpHeight = 608;
+    this->inpWidth = 1248;
+    this->inpHeight = 1248;
     this->confThreshold = 0.4;
     this->nmsThreshold = 0.5;
 
