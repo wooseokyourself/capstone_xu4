@@ -20,8 +20,8 @@ OpenCV_DNN::OpenCV_DNN () {
     	608x608 -> more accurate
 	    1216x1216 -> more more accurate
     */
-    this->inpWidth = 1248;
-    this->inpHeight = 1248;
+    this->inpWidth = 416;
+    this->inpHeight = 416;
     this->confThreshold = 0.4;
     this->nmsThreshold = 0.5;
 

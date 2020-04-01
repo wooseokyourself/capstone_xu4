@@ -16,6 +16,8 @@ int main (int argc, char* argv[]) {
     OpenCV_DNN dnn;
     Uploader web(WEB_ROOT);
 
+	/* 
+	// only do $(LAST).jpeg
 	string TEST_IMAGE_NAME = to_string(imgEnd) + ".jpeg";
 	Mat inputImg = imread("debug/images/" + TEST_IMAGE_NAME, IMREAD_COLOR);
 	if (TEST_IMAGE_NAME.length() == 6)
@@ -23,7 +25,9 @@ int main (int argc, char* argv[]) {
 	web.upload_input (inputImg, TEST_IMAGE_NAME);
 	dnn.MachineLearning (inputImg);
 	web.upload_output (dnn.getOutputImg(), dnn.getPeopleNumber(), TEST_IMAGE_NAME); 
-    /*
+    */
+	
+	// do 1.jpeg ~ $(LAST)
 	for (int i=1; i<=imgEnd; i++) {
         string TEST_IMAGE_NAME = to_string(i) + ".jpeg";
         Mat inputImg = imread("debug/images/" + TEST_IMAGE_NAME, IMREAD_COLOR);
@@ -33,6 +37,7 @@ int main (int argc, char* argv[]) {
         web.upload_input (inputImg, TEST_IMAGE_NAME);
         dnn.MachineLearning (inputImg);
         web.upload_output (dnn.getOutputImg(), dnn.getPeopleNumber(), TEST_IMAGE_NAME);
-    }*/
+    }
+
     return 0;
 }
