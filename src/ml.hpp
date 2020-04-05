@@ -36,6 +36,9 @@ protected:
     postprocess (Mat& frame, const vector<Mat>& outs);
 
     void
+    imagePadding (Mat& frame);
+
+    void
     drawPred (int classId, float conf, int left, int top, int right, int bottom, Mat& frame);
     
 

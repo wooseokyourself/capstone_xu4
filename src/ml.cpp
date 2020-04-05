@@ -14,14 +14,34 @@ OpenCV_DNN::OpenCV_DNN () {
     this->scalarfactor = 1; // parameter of blobFromImage()
     this->scale = 1/255.0; // parameter of net.setInput()
     this->swapRB = true;
+
     /*
     	320x320 -> faster
     	416x416 -> normal  input size (trained size)
     	608x608 -> more accurate
 	    1216x1216 -> more more accurate
     */
-    this->inpWidth = 416;
-    this->inpHeight = 416;
+    int inpSize = 416;
+    printf ("Input the size of resized image for YOLOv3. ( >= 320, default=416)\n");
+    printf ("Your input will be changed to the nearest multiple of 32.\n");
+    while (true) {
+        printf (" : ");
+        scanf ("%s", &inpSize);
+        if (inpSize < 320)
+            printf ("Input value >= 320.\n");
+        else
+            break;
+    }
+    int m = inpSize%32;
+    if (m < 16)
+        inpSize -= m;
+    else
+        inpSize += (32 - m);
+    printf ("Inpsize is [ %d ].\n", inpSize);
+    printf ("The expected inferencing time per picture is about [ %d ] ms.\n", 39*(inpSize/32)*(inpSize/32));
+
+    this->inpWidth = inpSize;
+    this->inpHeight = inpSize;
     this->confThreshold = 0.4;
     this->nmsThreshold = 0.5;
 
@@ -161,6 +181,7 @@ OpenCV_DNN::MachineLearning (Mat inputImg) {
 
 inline void
 OpenCV_DNN::preprocess (const Mat& frame) {
+    imagePadding (frame);
     static Mat blob;
     Size inpSize = Size(this->inpWidth, this->inpHeight);
     // Create a 4D blob from a frame.
@@ -288,6 +309,23 @@ OpenCV_DNN::postprocess (Mat& frame, const vector<Mat>& outs) {
             drawPred(classIds[idx], confidences[idx], box.x, box.y,
                     box.x + box.width, box.y + box.height, frame);
         }
+    }
+}
+
+/* Make the frame a square with padded space. */
+void
+OpenCV_DNN::imagePadding (Mat& frame) {
+    if (frame.rows == frame.cols)
+        return;
+
+    int length = frame.cols > frame.rows ? frame.cols : frame.rows;
+    if (frame.cols < length) {
+        Mat pad (length, length - frame.cols, frame.type());
+        vconcat (frame, pad, frame);
+    }
+    else (frame.rows < length) {
+        Mat pad (length - frame.rows, length, frame.type());
+        hconcat (frame, pad, frame);
     }
 }
 
