@@ -321,11 +321,11 @@ OpenCV_DNN::imagePadding (Mat& frame) {
     int length = frame.cols > frame.rows ? frame.cols : frame.rows;
     if (frame.cols < length) {
         Mat pad (length, length - frame.cols, frame.type(), Scalar());
-        hconcat (frame, pad, frame);
+        hconcat (pad, frame, frame);
     }
     else {
         Mat pad (length - frame.rows, length, frame.type(), Scalar());
-        vconcat (frame, pad, frame);
+        vconcat (pad, frame, frame);
     }
 }
 
