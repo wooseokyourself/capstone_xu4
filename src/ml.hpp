@@ -30,7 +30,7 @@ public:
 protected:
 
     inline void
-    preprocess (const Mat& frame);
+    preprocess (Mat& frame);
     
     void
     postprocess (Mat& frame, const vector<Mat>& outs);

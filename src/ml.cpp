@@ -26,7 +26,7 @@ OpenCV_DNN::OpenCV_DNN () {
     printf ("Your input will be changed to the nearest multiple of 32.\n");
     while (true) {
         printf (" : ");
-        scanf ("%s", &inpSize);
+        scanf ("%d", &inpSize);
         if (inpSize < 320)
             printf ("Input value >= 320.\n");
         else
@@ -180,7 +180,7 @@ OpenCV_DNN::MachineLearning (Mat inputImg) {
 
 
 inline void
-OpenCV_DNN::preprocess (const Mat& frame) {
+OpenCV_DNN::preprocess (Mat& frame) {
     imagePadding (frame);
     static Mat blob;
     Size inpSize = Size(this->inpWidth, this->inpHeight);
@@ -323,7 +323,7 @@ OpenCV_DNN::imagePadding (Mat& frame) {
         Mat pad (length, length - frame.cols, frame.type());
         vconcat (frame, pad, frame);
     }
-    else (frame.rows < length) {
+    else {
         Mat pad (length - frame.rows, length, frame.type());
         hconcat (frame, pad, frame);
     }
