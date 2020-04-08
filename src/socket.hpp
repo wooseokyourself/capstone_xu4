@@ -41,6 +41,6 @@ void
 handle_cam (const int& clntSock, cv::Mat& imgs, bool& picture_flag, bool& terminate_flag, std::mutex& m);
 
 void
-RecvBuffer (cv::Mat& imgs, const int& totalCam, int& workload, bool& terminate_flag, std::mutex& m);
+RecvBuffer (std::vector& imgs, const int& totalCam, int& workload, bool& terminate_flag, std::mutex& m);
 
 #endif

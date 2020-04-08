@@ -23,8 +23,8 @@ int main (int argc, char* argv[]) {
     std::vector<cv::Mat> outImgs(totalCam);
     std::mutex m;
     int workload = GO_TAKE_PICTURE;
-    bool terminate = false;
-    std::thread tcp_thr (RecvBuffer, std::ref(imgs), std::ref(totalCam), std::ref(workload), std::ref(terminate), std::ref(m)); // 소켓통신 시작
+    bool terminate_flag = false;
+    std::thread tcp_thr (RecvBuffer, std::ref(imgs), std::ref(totalCam), std::ref(workload), std::ref(terminate_flag), std::ref(m)); // 소켓통신 시작
     int dummy = 0;
     while (true) {
         if (workload == DONE_TAKE_PICTURE) { // 사진촬영을 모두 완료하였다면

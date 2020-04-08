@@ -76,7 +76,7 @@ handle_cam (const int& clntSock, cv::Mat& imgs, bool& picture_flag, bool& termin
 }
 
 void
-RecvBuffer (cv::Mat& imgs, const int& totalCam, int& workload, bool& terminate_flag, std::mutex& m) {
+RecvBuffer (std::vector& imgs, const int& totalCam, int& workload, bool& terminate_flag, std::mutex& m) {
     // Use LINGER.
     struct linger ling = {0, };
     ling.l_onoff = 1;	// linger use
