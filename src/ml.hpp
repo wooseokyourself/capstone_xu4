@@ -3,12 +3,6 @@
 
 #include "common.hpp"
 
-#include <opencv2/core/mat.hpp>
-#include <opencv2/dnn.hpp>
-#include <opencv2/imgproc.hpp>
-#include <opencv2/highgui.hpp>
-#include <opencv2/imgcodecs.hpp>
-
 using namespace std;
 using namespace cv;
 using namespace dnn;
@@ -19,7 +13,7 @@ public:
     OpenCV_DNN();
 
     inline Mat
-    getOutputImg () { return outputImg; }
+    getOutputImg () { return outputImg.clone(); }
 
     inline int
     getPeopleNumber () { return people; }

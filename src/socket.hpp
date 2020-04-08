@@ -14,6 +14,11 @@
 
 using namespace std;
 
+#define GO_TAKE_PICTURE 0
+#define UNTIL_TAKE_PICTURE 1
+#define DONE_TAKE_PICTURE 2
+#define GO_INFERENCE 3
+
 #define MAXBUFSIZE 512
 #define PORT    10051
 
@@ -23,7 +28,13 @@ static const int MAXPENDING = 1;
 ssize_t
 Recv (int sock, const void *buf, ssize_t size, ssize_t unit);
 
-vector<unsigned char>
-RecvBuffer ();
+void
+Send_notification (int clntSock);
+
+ssize_t
+handle_cam (int clntSock, Mat* imgs);
+
+void
+RecvBuffer (Mat* imgs, int camNumber, bool& workload, bool& terminate);
 
 #endif
