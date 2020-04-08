@@ -35,7 +35,7 @@ int main (int argc, char* argv[]) {
             /* 여기에서 모든 imgs에 대해 각각 MachineLearning 을 적용하여야함. */
             string currTime = getCurrTime();
             int totalPeopleNum = 0;
-            for (int i=0; i<totalCam; i++) {
+            for (int i=0; i<totalCam; i++) { // i <-- camId-1
                 web.upload_input (imgs[i], currTime + "__" + to_string(i) + ".jpeg");
                 dnn.MachineLearning (imgs[i]);
                 outImgs[i] = dnn.getOutputImg();
