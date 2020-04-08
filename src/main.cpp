@@ -42,10 +42,10 @@ int main (int argc, char* argv[]) {
                 totalPeopleNum += dnn.getPeopleNumber();
                 imgs[i].release();
             }
-            Mat mergedOut = (outImgs[0].rows/2, outImgs[0].cols, outImgs[0].type(), Scalar(255, 255, 255));
+            cv::Mat mergedOut(outImgs[0].rows/2, outImgs[0].cols, outImgs[0].type(), cv::Scalar(255, 255, 255));
             // 이 패딩 이미지에 @totalPeopleNum 먼저 출력하기.
             for (int i=0; i<totalCam; i++) {
-                hconcat (mergedOut, outImgs[i], mergedOut); // 모든 이미지들을 가로로 붙이기.
+                cv::hconcat (mergedOut, outImgs[i], mergedOut); // 모든 이미지들을 가로로 붙이기.
                 outImgs[i].release();
             }
             web.upload_output (mergedOut, totalPeopleNum, currTime + ".jpeg");

@@ -62,7 +62,7 @@ handle_cam (const int& clntSock, cv::Mat& imgs, bool& picture_flag, bool& termin
             recvd = Recv (clntSock, &vec[0], bufSize, sizeof(unsigned char));
             ASSERT (recvd == vec.size() * sizeof(unsigned char));
 
-            imgs[camId] = cv::imdecode (vec, 1); // Decode bytes into Mat class image.
+            imgs = cv::imdecode (vec, 1); // Decode bytes into Mat class image.
             vec.clear();
 
             m.lock();
