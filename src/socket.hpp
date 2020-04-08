@@ -31,10 +31,16 @@ Recv (int sock, const void *buf, ssize_t size, ssize_t unit);
 void
 Send_notification (int clntSock);
 
-ssize_t
-handle_cam (int clntSock, Mat* imgs);
+void
+send_notification (int clntSock);
 
 void
-RecvBuffer (Mat* imgs, int camNumber, bool& workload, bool& terminate);
+send_terminate (int clntSock, bool& terminate);
+
+void
+handle_cam (int clntSock, Mat* imgs, bool& picture_flag, bool& terminate, std::mutex& m);
+
+void
+RecvBuffer (Mat* imgs, int totalCam, int& workload, bool& terminate, std::mutex& m);
 
 #endif
