@@ -43,6 +43,7 @@ handle_cam (const int& clntSock, std::vector<cv::Mat>& imgs, bool& picture_flag,
             int recvd;
 
             // Receive id of cam
+            printf ("First, recv a camId...\n");
             int camId;
             recvd = Recv (clntSock, &camId, sizeof(camId), sizeof(int));
             ASSERT (recvd == sizeof(camId));
