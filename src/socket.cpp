@@ -132,7 +132,7 @@ RecvBuffer (cv::Mat* imgs, int totalCam, int& workload, bool& terminate_flag, st
     for (int i=0; i<totalCam; i++) {
         picture_flag[i] = false; // i번째 스레드의 사진이 수신되었으면 true로 변경됨
         std::thread t (handle_cam, clntSock[connectedNum], imgs, std::ref(picture_flag[i]), std::ref(terminate_flag));
-        thrs.push_back(t);
+        thrs[i] = t;
     }
 
     int dummy = 0;
@@ -160,10 +160,12 @@ RecvBuffer (cv::Mat* imgs, int totalCam, int& workload, bool& terminate_flag, st
         }
     }
 
+    // terminate_flag = true 라면
     for (int i=0; i<totalCam; i++) {
         thrs[i].join(); // 각 스레드에서 handle_cam() 이 리턴될때까지 대기 (사진을 찍을 때까지 대기)
         close (clntSock[i]); // 스레드가 종료되었으면 해당 소켓을 종료
     }
     close (servSock);
+    delete[] thrs;
     delete[] clntSock;
 }
