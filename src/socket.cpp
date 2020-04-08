@@ -40,16 +40,15 @@ handle_cam (const int& clntSock, std::vector<cv::Mat>& imgs, bool& picture_flag,
             // 이후 데이터를 수신하고 디코딩하여 imgs[camId-1] 에 저장.
             // imgs[camId-1] 저장이 끝난 스레드는 종료.
             
-            send_terminate_flag (clntSock, terminate_flag);
-
             int recvd;
 
             // Receive id of cam
             int camId;
             recvd = Recv (clntSock, &camId, sizeof(camId), sizeof(int));
             ASSERT (recvd == sizeof(camId));
-            printf ("Got camId: %d\n", camId);
-            printf ("Now send_notification!\n");
+            printf (" >> Got camId: %d\n", camId);
+
+            send_terminate_flag (clntSock, terminate_flag);
 
             // Send notification
             send_notification (clntSock);
@@ -133,6 +132,7 @@ RecvBuffer (std::vector<cv::Mat>& imgs, const int& totalCam, int& workload, bool
     bool* picture_flag = new bool[totalCam]; // 여기 스레드에서 각 스레드별 사진수신여부를 총합하는 플래그
     for (int i=0; i<totalCam; i++) {
         picture_flag[i] = false; // i번째 스레드의 사진이 수신되었으면 true로 변경됨
+        printf ("[thread %d] created!\n", i);
         thrs[i] = std::thread(handle_cam, std::ref(clntSock[connectedNum]), std::ref(imgs), std::ref(picture_flag[i]), std::ref(terminate_flag), std::ref(m));
     }
 
