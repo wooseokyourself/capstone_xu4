@@ -10,7 +10,7 @@ TARGET_DEBUG = .server_debug.out
 
 # compiler, flags, libs
 CXX = g++
-CXXFLAGS = -std=c++11
+CXXFLAGS = -std=c++11 -pthread
 OPENCV = `pkg-config --cflags --libs opencv4`
 
 # Sources

@@ -14,16 +14,33 @@
 
 using namespace std;
 
+#define GO_TAKE_PICTURE 0
+#define UNTIL_TAKE_PICTURE 1
+#define DONE_TAKE_PICTURE 2
+#define GO_INFERENCE 3
+
 #define MAXBUFSIZE 512
 #define PORT    10051
 
 // Maximum number of requests to wait for a connection.
-static const int MAXPENDING = 1;
+static const int MAXPENDING = 10;
 
 ssize_t
-Recv (int sock, const void *buf, ssize_t size, ssize_t unit);
+Recv (const int& sock, const void *buf, ssize_t size, ssize_t unit);
 
-vector<unsigned char>
-RecvBuffer ();
+void
+Send_notification (const int& clntSock);
+
+void
+send_terminate_flag (const int& clntSock, bool& terminate_flag);
+
+void
+send_notification (const int& clntSock);
+
+void
+handle_cam (const int& clntSock, std::vector<cv::Mat>& imgs, bool& picture_flag, bool& terminate_flag, std::mutex& m);
+
+void
+RecvBuffer (std::vector<cv::Mat>& imgs, const int& totalCam, int& workload, bool& terminate_flag, std::mutex& m);
 
 #endif
