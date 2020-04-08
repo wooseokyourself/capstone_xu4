@@ -32,10 +32,10 @@ void
 Send_notification (const int& clntSock);
 
 void
-send_notification (const int& clntSock);
+send_terminate_flag (const int& clntSock, bool& terminate_flag);
 
 void
-send_terminate_flag (const int& clntSock, bool& terminate_flag);
+send_notification (const int& clntSock);
 
 void
 handle_cam (const int& clntSock, std::vector<cv::Mat>& imgs, bool& picture_flag, bool& terminate_flag, std::mutex& m);

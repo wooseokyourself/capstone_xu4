@@ -15,20 +15,24 @@ Recv (const int& sock, const void *buf, ssize_t size, ssize_t unit) {
 	return recvd;
 }
 
+void
+send_terminate_flag (const int& clntSock, bool& terminate_flag) {
+    printf ("Second, send terminate_flag\n");
+    printf (" >> terminate flag's size: %d\n", sizeof(terminate_flag));
+    int sent = send (clntSock, &terminate_flag, sizeof(terminate_flag), 0);
+    printf (" >> sent: %d\n", sent);
+    ASSERT (sent == sizeof(terminate_flag));
+}
+
 /* Notify the client to take a picture. */
 void
 send_notification (const int& clntSock) {
+    printf ("Third, send notification\n");
+    printf (" >> notification's size: %d\n", sizeof(bool));
     bool notification = true;
     int sent = send (clntSock, &notification, sizeof(notification), 0);
+    printf (" >> sent: %d\n", sent);
     ASSERT (sent == sizeof(notification));
-}
-
-void
-send_terminate_flag (const int& clntSock, bool& terminate_flag) {
-    printf ("terminate flag's size: %d\n", sizeof(terminate_flag));
-    int sent = send (clntSock, &terminate_flag, sizeof(terminate_flag), 0);
-    printf ("sent: %d\n", sent);
-    ASSERT (sent == sizeof(terminate_flag));
 }
 
 void
@@ -45,7 +49,7 @@ handle_cam (const int& clntSock, std::vector<cv::Mat>& imgs, bool& picture_flag,
             // Receive id of cam
             printf ("First, recv a camId...\n");
             int camId;
-            recvd = Recv (clntSock, &camId, sizeof(camId), sizeof(int));
+            recvd = Recv (clntSock, &camId, sizeof(camId), 1);
             ASSERT (recvd == sizeof(camId));
             printf (" >> Got camId: %d\n", camId);
 
