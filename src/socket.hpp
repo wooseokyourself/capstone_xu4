@@ -38,9 +38,9 @@ void
 send_terminate (int clntSock, bool& terminate);
 
 void
-handle_cam (int clntSock, Mat* imgs, bool& picture_flag, bool& terminate, std::mutex& m);
+handle_cam (int clntSock, cv::Mat* imgs, bool& picture_flag, bool& terminate, std::mutex& m);
 
 void
-RecvBuffer (Mat* imgs, int totalCam, int& workload, bool& terminate, std::mutex& m);
+RecvBuffer (cv::Mat* imgs, int totalCam, int& workload, bool& terminate, std::mutex& m);
 
 #endif

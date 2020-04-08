@@ -30,7 +30,7 @@ send_terminate (int clntSock, bool& terminate) {
 }
 
 void
-handle_cam (int clntSock, Mat* imgs, bool& picture_flag, bool& terminate, std::mutex& m) {
+handle_cam (int clntSock, cv::Mat* imgs, bool& picture_flag, bool& terminate, std::mutex& m) {
     int dummy;
     while (!terminate) { // 종료신호가 없으면 이 스레드 계속 실행
         if (!picture_flag) { // 사진을 가져오라는 명령이 떨어짐
@@ -74,7 +74,7 @@ handle_cam (int clntSock, Mat* imgs, bool& picture_flag, bool& terminate, std::m
 }
 
 void
-RecvBuffer (Mat* imgs, int totalCam, int& workload, bool& terminate, std::mutex& m) {
+RecvBuffer (cv::Mat* imgs, int totalCam, int& workload, bool& terminate, std::mutex& m) {
     // Use LINGER.
     struct linger ling = {0, };
     ling.l_onoff = 1;	// linger use
