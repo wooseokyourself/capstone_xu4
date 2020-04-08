@@ -23,7 +23,7 @@ using namespace std;
 #define PORT    10051
 
 // Maximum number of requests to wait for a connection.
-static const int MAXPENDING = 1;
+static const int MAXPENDING = 10;
 
 ssize_t
 Recv (int sock, const void *buf, ssize_t size, ssize_t unit);
