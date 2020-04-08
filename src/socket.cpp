@@ -30,7 +30,7 @@ send_terminate_flag (const int& clntSock, bool& terminate_flag) {
 }
 
 void
-handle_cam (const int& clntSock, cv::Mat& imgs, bool& picture_flag, bool& terminate_flag, std::mutex& m) {
+handle_cam (const int& clntSock, std::vector<cv::Mat>& imgs, bool& picture_flag, bool& terminate_flag, std::mutex& m) {
     int dummy;
     while (!terminate_flag) { // 종료신호가 없으면 이 스레드 계속 실행
         if (!picture_flag) { // 사진을 가져오라는 명령이 떨어짐
