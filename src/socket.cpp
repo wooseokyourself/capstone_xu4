@@ -25,7 +25,9 @@ send_notification (const int& clntSock) {
 
 void
 send_terminate_flag (const int& clntSock, bool& terminate_flag) {
+    printf ("terminate flag's size: %d\n", sizeof(terminate_flag));
     int sent = send (clntSock, &terminate_flag, sizeof(terminate_flag), 0);
+    printf ("sent: %d\n", sent);
     ASSERT (sent == sizeof(terminate_flag));
 }
 
@@ -118,7 +120,7 @@ RecvBuffer (std::vector<cv::Mat>& imgs, const int& totalCam, int& workload, bool
         // Print Client's info.
         char clntName[INET_ADDRSTRLEN];
         if (inet_ntop (AF_INET, &clntAddr.sin_addr.s_addr, clntName, sizeof(clntName)) != NULL)
-            printf ("Client connected: %d\n", connectedNum);
+            printf ("Client connected: %d\n", connectedNum+1);
         else
             puts ("Unable to get client address");
         connectedNum++;
