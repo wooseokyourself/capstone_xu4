@@ -38,20 +38,19 @@ send_notification (const int& clntSock) {
 void
 handle_cam (const int& clntSock, std::vector<cv::Mat>& imgs, bool& picture_flag, bool& terminate_flag, std::mutex& m) {
     int dummy;
+    int recvd;
+
+    // Receive id of cam
+    printf ("First, recv a camId...\n");
+    int camId;
+    recvd = Recv (clntSock, &camId, sizeof(camId), 1);
+    ASSERT (recvd == sizeof(camId));
+    printf (" >> Got camId: %d\n", camId);
     while (!terminate_flag) { // 종료신호가 없으면 이 스레드 계속 실행
         if (!picture_flag) { // 사진을 가져오라는 명령이 떨어짐
             // 스레드별로 camId를 먼저 수신
             // 이후 데이터를 수신하고 디코딩하여 imgs[camId-1] 에 저장.
             // imgs[camId-1] 저장이 끝난 스레드는 종료.
-            
-            int recvd;
-
-            // Receive id of cam
-            printf ("First, recv a camId...\n");
-            int camId;
-            recvd = Recv (clntSock, &camId, sizeof(camId), 1);
-            ASSERT (recvd == sizeof(camId));
-            printf (" >> Got camId: %d\n", camId);
 
             send_terminate_flag (clntSock, terminate_flag);
 
