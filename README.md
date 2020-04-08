@@ -1,3 +1,6 @@
+# MASTERBRANCH IS NOW TESTING!
+## *to support multi-clients. Supporting single-client program is in "single" branch in this repo.*
+
 # Introduction
 This directory contains server-side of OpenCV DNN YOLOv3 Project developed by 21500740@handong.edu, and is **freely available under the [Beerware license](https://github.com/wooseokyourself/capstone_xu4/blob/master/LICENSE).**
 
@@ -178,11 +181,13 @@ General configuration for OpenCV 4.1.2 =====================================
 
 #### 2.1. Run Release ver.   
     make run   
-* Then the program stuck in listen() to wait connection request.   
+* Then the program will ask you the size of resizing square image which will input into YOLOv3.   
+* Next, the program will ask you the number of clients. You MUST run client after input this.
 * Also see [Client code here](https://github.com/wooseokyourself/capstone_pi).
    
 #### 2.2. Run Debugging ver.   
     make debug_run
+* Debugging ver. supports for single image, just for testing performance of YOLOv3.
 * Program reads **.jpeg** files from '*debug/images/*' sequentially from 1.   
     (ex. debug/images/*1.jpeg*, debug/images/*2.jpeg*, ... debug/images/**$(last).jpeg**)
 * $(last) should be less than 100.
