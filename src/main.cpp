@@ -19,12 +19,12 @@ int main (int argc, char* argv[]) {
     printf ("Input the number of camera: ");
     scanf ("%d", &totalCam);
     // Each cam is identified with its id-1 in the index of arrays.
-    Mat* imgs = new Mat[totalCam];
-    Mat* outImgs = new Mat[totalCam];
+    std::vector<cv::Mat> imgs(totalCam);
+    std::vector<cv::Mat> outImgs(totalCam);
     std::mutex m;
     int workload = GO_TAKE_PICTURE;
     bool terminate = false;
-    std::thread tcp_thr (RecvBuffer, imgs, totalCam, std::ref(workload), std::ref(terminate), std::ref(m)); // 소켓통신 시작
+    std::thread tcp_thr (RecvBuffer, std::ref(imgs), std::ref(totalCam), std::ref(workload), std::ref(terminate), std::ref(m)); // 소켓통신 시작
     int dummy = 0;
     while (true) {
         if (workload == DONE_TAKE_PICTURE) { // 사진촬영을 모두 완료하였다면
@@ -59,7 +59,7 @@ int main (int argc, char* argv[]) {
             dummy++;
         
     }
-    delete[] imgs;
-    delete[] outImgs;
+    imgs.clear();
+    outImgs.clear();
     return 0;
 }

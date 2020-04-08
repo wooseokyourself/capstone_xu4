@@ -1,7 +1,7 @@
 #include "socket.hpp"
 
 ssize_t
-Recv (int sock, const void *buf, ssize_t size, ssize_t unit) {
+Recv (const int& sock, const void *buf, ssize_t size, ssize_t unit) {
 	ssize_t recvd = 0;
 	ssize_t yet = size;
 	while (recvd < size) {
@@ -17,20 +17,20 @@ Recv (int sock, const void *buf, ssize_t size, ssize_t unit) {
 
 /* Notify the client to take a picture. */
 void
-send_notification (int clntSock) {
+send_notification (const int& clntSock) {
     bool notification = true;
     int sent = send (clntSock, &notification, sizeof(notification), 0);
     ASSERT (sent == sizeof(notification));
 }
 
 void
-send_terminate_flag (int clntSock, bool& terminate_flag) {
+send_terminate_flag (const int& clntSock, bool& terminate_flag) {
     int sent = send (clntSock, &terminate_flag, sizeof(terminate_flag), 0);
     ASSERT (sent == sizeof(terminate_flag));
 }
 
 void
-handle_cam (int clntSock, cv::Mat* imgs, bool& picture_flag, bool& terminate_flag, std::mutex& m) {
+handle_cam (const int& clntSock, cv::Mat& imgs, bool& picture_flag, bool& terminate_flag, std::mutex& m) {
     int dummy;
     while (!terminate_flag) { // 종료신호가 없으면 이 스레드 계속 실행
         if (!picture_flag) { // 사진을 가져오라는 명령이 떨어짐
@@ -76,7 +76,7 @@ handle_cam (int clntSock, cv::Mat* imgs, bool& picture_flag, bool& terminate_fla
 }
 
 void
-RecvBuffer (cv::Mat* imgs, int totalCam, int& workload, bool& terminate_flag, std::mutex& m) {
+RecvBuffer (cv::Mat& imgs, const int& totalCam, int& workload, bool& terminate_flag, std::mutex& m) {
     // Use LINGER.
     struct linger ling = {0, };
     ling.l_onoff = 1;	// linger use
@@ -131,7 +131,7 @@ RecvBuffer (cv::Mat* imgs, int totalCam, int& workload, bool& terminate_flag, st
     bool* picture_flag = new bool[totalCam]; // 여기 스레드에서 각 스레드별 사진수신여부를 총합하는 플래그
     for (int i=0; i<totalCam; i++) {
         picture_flag[i] = false; // i번째 스레드의 사진이 수신되었으면 true로 변경됨
-        thrs[i] = std::thread(handle_cam, clntSock[connectedNum], imgs, std::ref(picture_flag[i]), std::ref(terminate_flag));
+        thrs[i] = std::thread(handle_cam, std::ref(clntSock[connectedNum]), std::ref(imgs), std::ref(picture_flag[i]), std::ref(terminate_flag));
     }
 
     int dummy = 0;

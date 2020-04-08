@@ -26,21 +26,21 @@ using namespace std;
 static const int MAXPENDING = 10;
 
 ssize_t
-Recv (int sock, const void *buf, ssize_t size, ssize_t unit);
+Recv (const int& sock, const void *buf, ssize_t size, ssize_t unit);
 
 void
-Send_notification (int clntSock);
+Send_notification (const int& clntSock);
 
 void
-send_notification (int clntSock);
+send_notification (const int& clntSock);
 
 void
 send_terminate_flag (int clntSock, bool& terminate_flag);
 
 void
-handle_cam (int clntSock, cv::Mat* imgs, bool& picture_flag, bool& terminate_flag, std::mutex& m);
+handle_cam (const int& clntSock, cv::Mat& imgs, bool& picture_flag, bool& terminate_flag, std::mutex& m);
 
 void
-RecvBuffer (cv::Mat* imgs, int totalCam, int& workload, bool& terminate_flag, std::mutex& m);
+RecvBuffer (cv::Mat& imgs, const int& totalCam, int& workload, bool& terminate_flag, std::mutex& m);
 
 #endif
