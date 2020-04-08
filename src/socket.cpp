@@ -131,8 +131,7 @@ RecvBuffer (cv::Mat* imgs, int totalCam, int& workload, bool& terminate_flag, st
     bool* picture_flag = new bool[totalCam]; // 여기 스레드에서 각 스레드별 사진수신여부를 총합하는 플래그
     for (int i=0; i<totalCam; i++) {
         picture_flag[i] = false; // i번째 스레드의 사진이 수신되었으면 true로 변경됨
-        std::thread t (handle_cam, clntSock[connectedNum], imgs, std::ref(picture_flag[i]), std::ref(terminate_flag));
-        thrs[i] = t;
+        thrs[i] = std::thread(handle_cam, clntSock[connectedNum], imgs, std::ref(picture_flag[i]), std::ref(terminate_flag));
     }
 
     int dummy = 0;
