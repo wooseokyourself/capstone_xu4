@@ -35,14 +35,14 @@ int main (int argc, char* argv[]) {
             /* 여기에서 모든 imgs에 대해 각각 MachineLearning 을 적용하여야함. */
             string currTime = getCurrTime();
             int totalPeopleNum = 0;
-            for (int i=0; i<totalCam; i++) { // i <-- camId-1
-                web.upload_input (imgs[i], currTime + "__" + to_string(i) + ".jpeg");
+            for (int i=0; i<totalCam; i++) { // camId = i+1
+                web.upload_input (imgs[i], currTime + "__" + to_string(i+1) + ".jpeg");
                 dnn.MachineLearning (imgs[i]);
                 outImgs[i] = dnn.getOutputImg();
                 totalPeopleNum += dnn.getPeopleNumber();
                 imgs[i].release();
             }
-            cv::Mat mergedOut(outImgs[0].rows/2, outImgs[0].cols, outImgs[0].type(), cv::Scalar(255, 255, 255));
+            cv::Mat mergedOut(outImgs[0].rows, outImgs[0].cols/4, outImgs[0].type(), cv::Scalar(255, 255, 255));
             // 이 패딩 이미지에 @totalPeopleNum 먼저 출력하기.
             for (int i=0; i<totalCam; i++) {
                 cv::hconcat (mergedOut, outImgs[i], mergedOut); // 모든 이미지들을 가로로 붙이기.

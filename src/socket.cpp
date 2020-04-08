@@ -74,7 +74,7 @@ handle_cam (const int& clntSock, std::vector<cv::Mat>& imgs, bool& picture_flag,
             m.lock();
             picture_flag = true; // 사진수신을 완료하였음을 알림
             m.unlock();
-            printf ("<%d's camera sent a picture completely!>\n");
+            printf ("<%d's camera sent a picture completely!>\n", camId);
         }
         else // 사진수신할 필요가 없으므로 대기
             dummy++;
