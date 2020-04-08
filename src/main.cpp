@@ -36,7 +36,7 @@ int main (int argc, char* argv[]) {
             string currTime = getCurrTime();
             int totalPeopleNum = 0;
             for (int i=0; i<totalCam; i++) {
-                web.upload_input (imgs[i], currTime + "__" + i + ".jpeg");
+                web.upload_input (imgs[i], currTime + "__" + to_string(i) + ".jpeg");
                 dnn.MachineLearning (imgs[i]);
                 outImgs[i] = dnn.getOutputImg();
                 totalPeopleNum += dnn.getPeopleNumber();
