@@ -24,21 +24,23 @@ send_notification (int clntSock) {
 }
 
 void
-send_terminate (int clntSock, bool& terminate) {
-    int sent = send (clntSock, &terminate, sizeof(terminate), 0);
-    ASSERT (sent == sizeof(terminate));
+send_terminate_flag (int clntSock, bool& terminate_flag) {
+    int sent = send (clntSock, &terminate_flag, sizeof(terminate_flag), 0);
+    ASSERT (sent == sizeof(terminate_flag));
 }
 
 void
-handle_cam (int clntSock, cv::Mat* imgs, bool& picture_flag, bool& terminate, std::mutex& m) {
+handle_cam (int clntSock, cv::Mat* imgs, bool& picture_flag, bool& terminate_flag, std::mutex& m) {
     int dummy;
-    while (!terminate) { // 종료신호가 없으면 이 스레드 계속 실행
+    while (!terminate_flag) { // 종료신호가 없으면 이 스레드 계속 실행
         if (!picture_flag) { // 사진을 가져오라는 명령이 떨어짐
             // 스레드별로 camId를 먼저 수신
             // 이후 데이터를 수신하고 디코딩하여 imgs[camId-1] 에 저장.
             // imgs[camId-1] 저장이 끝난 스레드는 종료.
             
-            send_terminate (clntSock, terminate);
+            send_terminate_flag (clntSock, terminate_flag);
+
+            int recvd;
 
             // Receive id of cam
             int camId;
@@ -60,7 +62,7 @@ handle_cam (int clntSock, cv::Mat* imgs, bool& picture_flag, bool& terminate, st
             recvd = Recv (clntSock, &vec[0], bufSize, sizeof(unsigned char));
             ASSERT (recvd == vec.size() * sizeof(unsigned char));
 
-            imgs[camId] = imdecode (vec, 1); // Decode bytes into Mat class image.
+            imgs[camId] = cv::imdecode (vec, 1); // Decode bytes into Mat class image.
             vec.clear();
 
             m.lock();
@@ -70,11 +72,11 @@ handle_cam (int clntSock, cv::Mat* imgs, bool& picture_flag, bool& terminate, st
         else // 사진수신할 필요가 없으므로 대기
             dummy++;
     }
-    send_terminate (clntSock, terminate);
+    send_terminate_flag (clntSock, terminate_flag);
 }
 
 void
-RecvBuffer (cv::Mat* imgs, int totalCam, int& workload, bool& terminate, std::mutex& m) {
+RecvBuffer (cv::Mat* imgs, int totalCam, int& workload, bool& terminate_flag, std::mutex& m) {
     // Use LINGER.
     struct linger ling = {0, };
     ling.l_onoff = 1;	// linger use
@@ -103,8 +105,6 @@ RecvBuffer (cv::Mat* imgs, int totalCam, int& workload, bool& terminate, std::mu
     // Client socket.
     struct sockaddr_in clntAddr; // Create client address structure.
     socklen_t clntAddrLen = sizeof(clntAddr);
-    // Set LINGER: client socket
-    setsockopt (clntSock[i], SOL_SOCKET, SO_LINGER, (char *) &ling, sizeof(ling));
 
     int* clntSock = new int[totalCam];
     int connectedNum = 0;
@@ -112,6 +112,8 @@ RecvBuffer (cv::Mat* imgs, int totalCam, int& workload, bool& terminate, std::mu
     while (connectedNum < totalCam) { // 초기 카메라 연결
         //만약 카메라가 연결되지 않을 경우 여기에서 무한대기됨
         // Waiting for external connection.
+        // Set LINGER: client socket
+        setsockopt (clntSock[connectedNum], SOL_SOCKET, SO_LINGER, (char *) &ling, sizeof(ling));
         clntSock[connectedNum] = accept (servSock, (struct sockaddr *) &clntAddr, &clntAddrLen);
         // Print Client's info.
         char clntName[INET_ADDRSTRLEN];
@@ -119,21 +121,22 @@ RecvBuffer (cv::Mat* imgs, int totalCam, int& workload, bool& terminate, std::mu
             printf ("Client connected: %d\n", connectedNum);
         else
             puts ("Unable to get client address");
+        connectedNum++;
     }
 
     // 이 시점에서 클라이언트소켓은 모두 clntSock 에 저장되어있는상태
 
     // 각 소켓별로 송수신을 담당하는 스레드 할당
     std::thread* thrs = new std::thread[totalCam];
-    bool* picutre_flag = new bool[totalCam]; // 여기 스레드에서 각 스레드별 사진수신여부를 총합하는 플래그
+    bool* picture_flag = new bool[totalCam]; // 여기 스레드에서 각 스레드별 사진수신여부를 총합하는 플래그
     for (int i=0; i<totalCam; i++) {
         picture_flag[i] = false; // i번째 스레드의 사진이 수신되었으면 true로 변경됨
-        std::thread t (handle_cam, clntSock[connectedNum], imgs, std::ref(picture_flag[i]), std::ref(terminate));
+        std::thread t (handle_cam, clntSock[connectedNum], imgs, std::ref(picture_flag[i]), std::ref(terminate_flag));
         thrs.push_back(t);
     }
 
     int dummy = 0;
-    while (!terminate) { // 초기 스레드들을 배분하면 이후에는 프로그램이 종료될때까지 여기에서 머뭄
+    while (!terminate_flag) { // 초기 스레드들을 배분하면 이후에는 프로그램이 종료될때까지 여기에서 머뭄
         if (workload == GO_TAKE_PICTURE) { // 사진을 가져오라는 명령이 떨어짐
 
             for (int i=0; i<totalCam; i++)

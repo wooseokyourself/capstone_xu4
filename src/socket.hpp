@@ -35,12 +35,12 @@ void
 send_notification (int clntSock);
 
 void
-send_terminate (int clntSock, bool& terminate);
+send_terminate_flag (int clntSock, bool& terminate_flag);
 
 void
-handle_cam (int clntSock, cv::Mat* imgs, bool& picture_flag, bool& terminate, std::mutex& m);
+handle_cam (int clntSock, cv::Mat* imgs, bool& picture_flag, bool& terminate_flag, std::mutex& m);
 
 void
-RecvBuffer (cv::Mat* imgs, int totalCam, int& workload, bool& terminate, std::mutex& m);
+RecvBuffer (cv::Mat* imgs, int totalCam, int& workload, bool& terminate_flag, std::mutex& m);
 
 #endif

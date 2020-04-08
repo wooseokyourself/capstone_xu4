@@ -17,7 +17,7 @@ int main (int argc, char* argv[]) {
 
     int totalCam = 0;
     printf ("Input the number of camera: ");
-    scanf ("%d", totalCam);
+    scanf ("%d", &totalCam);
     // Each cam is identified with its id-1 in the index of arrays.
     Mat* imgs = new Mat[totalCam];
     Mat* outImgs = new Mat[totalCam];
