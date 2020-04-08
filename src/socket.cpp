@@ -138,7 +138,7 @@ RecvBuffer (std::vector<cv::Mat>& imgs, const int& totalCam, int& workload, bool
     for (int i=0; i<totalCam; i++) {
         picture_flag[i] = false; // i번째 스레드의 사진이 수신되었으면 true로 변경됨
         printf ("[thread %d] created!\n", i);
-        thrs[i] = std::thread(handle_cam, std::ref(clntSock[connectedNum]), std::ref(imgs), std::ref(picture_flag[i]), std::ref(terminate_flag), std::ref(m));
+        thrs[i] = std::thread(handle_cam, std::ref(clntSock[i]), std::ref(imgs), std::ref(picture_flag[i]), std::ref(terminate_flag), std::ref(m));
     }
 
     int dummy = 0;
