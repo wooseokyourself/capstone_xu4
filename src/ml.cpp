@@ -6,7 +6,8 @@ OpenCV_DNN::OpenCV_DNN () {
     this->CONFIG_PATH = "model/yolov3.cfg";
     this->CLASSES_PATH = "model/coco.names";
    	
-    people = 0;
+    this->people = 0;
+    this->t = 0;
 
     // Set DNN.
     this->mean = Scalar(); // 0
@@ -38,7 +39,7 @@ OpenCV_DNN::OpenCV_DNN () {
     else
         inpSize += (32 - m);
     printf ("Inpsize is [ %d ].\n", inpSize);
-    printf ("The expected inferencing time per picture is about [ %d ] ms.\n", 39*(inpSize/32)*(inpSize/32));
+    // printf ("The expected inferencing time per picture is about [ %d ] ms.\n", 39*(inpSize/32)*(inpSize/32));
 
     this->inpWidth = inpSize;
     this->inpHeight = inpSize;
@@ -166,15 +167,17 @@ OpenCV_DNN::MachineLearning (Mat inputImg) {
     // Draw rect and other info in output image.
     vector<double> layersTimes;
     double freq = getTickFrequency() / 1000;
-    double t = net.getPerfProfile(layersTimes) / freq;
-    string label_inferTime = format ("Inference time: %.2f ms", t);
-    string label_confThreshold = format ("confThreshold: %.1f", confThreshold);
+    this->t = net.getPerfProfile(layersTimes) / freq;
+    
+    // string label_inferTime = format ("Inference time: %.2f ms", t);
+    // string label_confThreshold = format ("confThreshold: %.1f", confThreshold);
     string label_resolution = format ("Resolution: %d X %d", outputImg.cols, outputImg.rows);
-    string label_people = format ("People: %d", this->people);
-    putText (outputImg, label_inferTime, Point(0, 35), FONT_HERSHEY_SIMPLEX, 1.0, Scalar(0, 0, 255), 2);
-    putText (outputImg, label_confThreshold, Point(0, 70), FONT_HERSHEY_SIMPLEX, 1.0, Scalar(0, 0, 255), 2);
-    putText (outputImg, label_resolution, Point(0, 105), FONT_HERSHEY_SIMPLEX, 1.0, Scalar(0, 0, 255), 2);
-    putText (outputImg, label_people, Point(0, 140), FONT_HERSHEY_SIMPLEX, 1.0, Scalar(0, 0, 255), 2);
+    // string label_people = format ("People: %d", this->people);
+    // putText (outputImg, label_inferTime, Point(0, 35), FONT_HERSHEY_SIMPLEX, 0.5, Scalar(0, 0, 255), 2);
+    // putText (outputImg, label_confThreshold, Point(0, 70), FONT_HERSHEY_SIMPLEX, 0.5, Scalar(0, 0, 255), 2);
+    putText (outputImg, label_resolution, Point(0, 105), FONT_HERSHEY_SIMPLEX, 0.5, Scalar(0, 0, 255), 2);
+    // putText (outputImg, label_people, Point(0, 140), FONT_HERSHEY_SIMPLEX, 0.5, Scalar(0, 0, 255), 2);
+    
 }
 #endif
 

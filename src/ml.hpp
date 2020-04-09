@@ -13,10 +13,13 @@ public:
     OpenCV_DNN();
 
     inline Mat
-    getOutputImg () { return outputImg.clone(); }
+    getOutputImg () { return this->outputImg.clone(); }
 
     inline int
-    getPeopleNumber () { return people; }
+    getPeopleNumber () { return this->people; }
+
+    inline double
+    getInferenceTime () { return this->t; }
 
     void 
     MachineLearning (Mat inputImg);
@@ -40,6 +43,7 @@ private: // Informations for output.
 
     Mat outputImg;
     int people;
+    double t; // inference time
 
 
 private: // Variables for Machine Learning.
