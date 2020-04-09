@@ -55,7 +55,7 @@ int main (int argc, char* argv[]) {
                 cv::hconcat (mergedOut, outImgs[i], mergedOut); // 모든 이미지들을 가로로 붙이기.
                 outImgs[i].release();
             }
-            cv::vconcat (infoPad, mergetOut, mergedOut);
+            cv::vconcat (infoPad, mergedOut, mergedOut);
             web.upload_output (mergedOut, totalPeopleNum, currTime + ".jpeg");
             infoPad.release();
             mergedOut.release();
