@@ -205,9 +205,9 @@ General configuration for OpenCV 4.1.2 =====================================
 # Example Results
 
 ## from Raspi camera (Release ver.)
-![result 1](https://user-images.githubusercontent.com/49421142/77255814-91d4b600-6cad-11ea-9ee9-6d7c47b7027b.JPG)
-![result 3](https://user-images.githubusercontent.com/49421142/77255816-95683d00-6cad-11ea-8f11-21a13eff36ba.JPG)
-![result 2](https://user-images.githubusercontent.com/49421142/77255815-94371000-6cad-11ea-9fb3-8651462a395c.JPG)
+![2020_04_09_19_01_22](https://user-images.githubusercontent.com/49421142/78919234-992cf980-7acc-11ea-9450-b354f0d26eb4.jpeg)
+![2020_04_09_18_54_45](https://user-images.githubusercontent.com/49421142/78919433-dc876800-7acc-11ea-98d3-3cec899e4a62.jpeg)
+
 
 ## from test images (Debugging ver.)
 ![result 4](https://user-images.githubusercontent.com/49421142/77255817-96996a00-6cad-11ea-9a56-aacc81d4889f.JPG)
