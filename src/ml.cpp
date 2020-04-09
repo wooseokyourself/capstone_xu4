@@ -175,7 +175,7 @@ OpenCV_DNN::MachineLearning (Mat inputImg) {
     // string label_people = format ("People: %d", this->people);
     // putText (outputImg, label_inferTime, Point(0, 35), FONT_HERSHEY_SIMPLEX, 0.5, Scalar(0, 0, 255), 2);
     // putText (outputImg, label_confThreshold, Point(0, 70), FONT_HERSHEY_SIMPLEX, 0.5, Scalar(0, 0, 255), 2);
-    putText (outputImg, label_resolution, Point(0, 105), FONT_HERSHEY_SIMPLEX, 0.5, Scalar(0, 0, 255), 2);
+    putText (outputImg, label_resolution, Point(0, 35), FONT_HERSHEY_SIMPLEX, 0.5, Scalar(0, 0, 255), 0.5);
     // putText (outputImg, label_people, Point(0, 140), FONT_HERSHEY_SIMPLEX, 0.5, Scalar(0, 0, 255), 2);
     
 }

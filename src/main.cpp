@@ -48,8 +48,8 @@ int main (int argc, char* argv[]) {
             // 이 패딩 이미지에 @totalPeopleNum 먼저 출력하기.
             string label_inferTime = format ("Total inference time: %.2f ms", totalTime);
             string label_people = format ("People: %d", totalPeopleNum);
-            cv::putText (infoPad, label_inferTime, cv::Point(0, 35), cv::FONT_HERSHEY_SIMPLEX, 0.5, cv::Scalar(0, 0, 255), 2);
-            cv::putText (infoPad, label_inferTime, cv::Point(0, 70), cv::FONT_HERSHEY_SIMPLEX, 0.5, cv::Scalar(0, 0, 255), 2);
+            cv::putText (infoPad, label_inferTime, cv::Point(0, 35), cv::FONT_HERSHEY_SIMPLEX, 0.5, cv::Scalar(0, 0, 255), 0.5);
+            cv::putText (infoPad, label_people, cv::Point(0, 70), cv::FONT_HERSHEY_SIMPLEX, 0.5, cv::Scalar(0, 0, 255), 0.5);
             cv::Mat mergedOut = outImgs[0].clone();
             outImgs[0].release();
             for (int i=1; i<totalCam; i++) {
