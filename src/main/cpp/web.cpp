@@ -1,29 +1,39 @@
 #include "web.hpp"
 
-Uploader::Uploader (string WEB_ROOT) {
-    this->INPUT_IMG_SAVE_PATH = WEB_ROOT + "inputs/";
-    this->OUTPUT_IMG_SAVE_PATH = WEB_ROOT + "outputs/";
+Uploader::Uploader (string ROI_DIR_PATH, string RESULT_DIR_PATH) {
+    this->ROI_DIR_PATH = ROI_DIR_PATH;
+    this->RESULT_DIR_PATH = RESULT_DIR_PATH;
 }
 
 void
-Uploader::upload_input (Mat inputImg, string fileName = getCurrTime()) {
-    imwrite (INPUT_IMG_SAVE_PATH + fileName, inputImg);
+Uploader::upload_input (const io_data& _io_data) {
+    for (int i=0; i<_io_data.imgs.size(); i++) {
+        imwrite (ROI_DIR_PATH + (i+1) + ".jpeg", _io_data.imgs[i]);
+    }
 }
 
 /*
-    Write @resultMat as "@fileName.jpeg" into UPLOAD_PATH dir
+    Write @resultMat as "@file_name.jpeg" into UPLOAD_PATH dir
     and renew 'results.txt'.
 */
 void
-Uploader::upload_output (Mat resultImg, int peopleNumber, string fileName = getCurrTime()) {
-    imwrite (OUTPUT_IMG_SAVE_PATH + fileName, resultImg);
+Uploader::upload_output (const io_data& _io_data, string file_name = getCurrTime()) {
+    for (int i=0; i<_io_data.imgs.size(); i++) {
+        imwrite (RESULT_DIR_PATH + (i+1) + "/" + file_name + "_" + (i+1) + ".jpeg", _io_data.imgs[i]);
+    }
 
-    // Open 'results.txt'.
-	const char* results_PATH = (OUTPUT_IMG_SAVE_PATH + "results.txt").c_str();
-	FILE* results = fopen (results_PATH, "a");	
+    // Open 'people.txt'.
+	const char* results_PATH = (RESULT_DIR_PATH + "people.txt").c_str();
+	FILE* fp = fopen (results_PATH, "a");	
 
-    // Write "@resultImg People: @peopleNumber" in the bottom row of 'results.txt'.
-    const char* info = (fileName + " " + "People: " + to_string(peopleNumber) + "\n").c_str();
-    fputs (info, results);
+    const char* total_num = (_io_data.total_people_num + "\n").c_str();
+    fputs (total_num, fp);
+
+    for (int i=0; i<_io_data.imgs.size(); i++) {
+        const char* each_picture_name = (file_name + "_" + (i+1) + ".jpeg" + "\n").c_str();
+        const char* each_picture_num = (_io_data.nums[i] + "\n").c_str();
+        fputs (each_picture_name, fp);
+        fputs (each_picture_num, fp);
+    }
 	fclose (results);
 }

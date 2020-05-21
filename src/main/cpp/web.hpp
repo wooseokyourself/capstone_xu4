@@ -11,17 +11,19 @@ using namespace std;
 
 class Uploader {
 public:
-    Uploader(string WEB_ROOT);
+
+    Uploader(string ROI_DIR_PATH, string RESULT_DIR_PATH);
 
     void
-    upload_input (Mat inputImg, string fileName);
+    upload_input (const io_data& _io_data);
 
     void
-    upload_output (Mat resultImg, int peopleNumber, string fileName);
+    upload_output (const io_data& _io_data, string file_name = getCurrTime());
 
 private:
-    string INPUT_IMG_SAVE_PATH;
-    string OUTPUT_IMG_SAVE_PATH;
+
+    string ROI_DIR_PATH;
+    string RESULT_DIR_PATH;
     char* results_PATH;
 };
 

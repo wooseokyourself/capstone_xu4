@@ -19,7 +19,6 @@ DEBUG_SRC = -DDEBUG src/common.cpp src/ml.cpp src/web.cpp src/debug_main.cpp
 
 # Task options
 OPT = #-DDIVIDE
-
 #-----------------------------------------------#
 
 # Compile and Run: release version

@@ -2,34 +2,33 @@
 #define ML
 
 #include "common.hpp"
+#include "admin.hpp"
 
 using namespace std;
 using namespace cv;
 using namespace dnn;
 
+
 class OpenCV_DNN {
 public:
 
-    OpenCV_DNN();
+    OpenCV_DNN(Size resize_res, float confThreshold, float nmsThreshold);
 
-    inline Mat
-    getOutputImg () { return this->outputImg.clone(); }
+    void
+    update (const config_data& data);
 
-    inline int
-    getPeopleNumber () { return this->people; }
-
-    inline double
-    getInferenceTime () { return this->t; }
-
-    void 
-    MachineLearning (Mat inputImg);
+    io_data
+    inference (input_data& data);
 
 protected:
+
+    int 
+    infer_util (Mat& img);
 
     inline void
     preprocess (Mat& frame);
     
-    void
+    int
     postprocess (Mat& frame, const vector<Mat>& outs);
 
     void
@@ -37,14 +36,6 @@ protected:
 
     void
     drawPred (int classId, float conf, int left, int top, int right, int bottom, Mat& frame);
-    
-
-private: // Informations for output.
-
-    Mat outputImg;
-    int people;
-    double t; // inference time
-
 
 private: // Variables for Machine Learning.
 
@@ -55,17 +46,18 @@ private: // Variables for Machine Learning.
 
     Net net;
 
+    // DNN Info
     Scalar mean;
-
     double scale;
     double scalarfactor;
     bool swapRB;
-    int inpWidth;
-    int inpHeight;
 
+    // Admin Mode
+    Size resize_res;
     float confThreshold;
     float nmsThreshold;
 
+    // Model Info
     vector<string> classes;
     vector<cv::String> outNames;
 };

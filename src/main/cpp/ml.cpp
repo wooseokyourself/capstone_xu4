@@ -1,13 +1,10 @@
 #include "ml.hpp"
 
-OpenCV_DNN::OpenCV_DNN () {
+OpenCV_DNN::OpenCV_DNN (Size resize_res, float confThreshold, float nmsThreshold) {
     // Set path.
     this->MODEL_PATH = "model/yolov3.weights";
     this->CONFIG_PATH = "model/yolov3.cfg";
     this->CLASSES_PATH = "model/coco.names";
-   	
-    this->people = 0;
-    this->t = 0;
 
     // Set DNN.
     this->mean = Scalar(); // 0
@@ -16,35 +13,10 @@ OpenCV_DNN::OpenCV_DNN () {
     this->scale = 1/255.0; // parameter of net.setInput()
     this->swapRB = true;
 
-    /*
-    	320x320 -> faster
-    	416x416 -> normal  input size (trained size)
-    	608x608 -> more accurate
-	    1216x1216 -> more more accurate
-    */
-    int inpSize = 416;
-    printf ("Input the size of resized image for YOLOv3. ( >= 320, default=416)\n");
-    printf ("Your input will be changed to the nearest multiple of 32.\n");
-    while (true) {
-        printf (" : ");
-        scanf ("%d", &inpSize);
-        if (inpSize < 320)
-            printf ("Input value >= 320.\n");
-        else
-            break;
-    }
-    int m = inpSize%32;
-    if (m < 16)
-        inpSize -= m;
-    else
-        inpSize += (32 - m);
-    printf ("Inpsize is [ %d ].\n", inpSize);
-    // printf ("The expected inferencing time per picture is about [ %d ] ms.\n", 39*(inpSize/32)*(inpSize/32));
-
-    this->inpWidth = inpSize;
-    this->inpHeight = inpSize;
-    this->confThreshold = 0.4;
-    this->nmsThreshold = 0.5;
+    // Admin Mode
+    this->resize_res = resize_res;
+    this->confThreshold = confThreshold;
+    this->nmsThreshold = nmsThreshold;
 
     // Open file with classes names.
     string file = CLASSES_PATH;
@@ -57,175 +29,88 @@ OpenCV_DNN::OpenCV_DNN () {
 
 	// Load model.
     this->net = readNet (MODEL_PATH, CONFIG_PATH);
-
-    /*
-    Set Backend. References here:
-        enum  	cv::dnn::Backend {
-                    cv::dnn::DNN_BACKEND_DEFAULT = 0,
-                    cv::dnn::DNN_BACKEND_HALIDE,
-                    cv::dnn::DNN_BACKEND_INFERENCE_ENGINE,
-                    cv::dnn::DNN_BACKEND_OPENCV,
-                    cv::dnn::DNN_BACKEND_VKCOM,
-                    cv::dnn::DNN_BACKEND_CUDA
-        }
-    */
     this->net.setPreferableBackend(DNN_BACKEND_OPENCV);
-
-    /*
-    Set Target device. References here:
-        enum  	cv::dnn::Target {
-                    cv::dnn::DNN_TARGET_CPU = 0,
-                    cv::dnn::DNN_TARGET_OPENCL,
-                    cv::dnn::DNN_TARGET_OPENCL_FP16,
-                    cv::dnn::DNN_TARGET_MYRIAD,
-                    cv::dnn::DNN_TARGET_VULKAN,
-                    cv::dnn::DNN_TARGET_FPGA,
-                    cv::dnn::DNN_TARGET_CUDA,
-                    cv::dnn::DNN_TARGET_CUDA_FP16
-    }
-    */
     this->net.setPreferableTarget(DNN_TARGET_CPU);
     this->outNames = net.getUnconnectedOutLayersNames();
+
+    // Set Output Info
+    this->people = 0;
+    this->t = 0;
 }
 
-#ifdef DIVIDE
-void 
-OpenCV_DNN::MachineLearning (Mat inputImg) {
-    this->outputImg = inputImg.clone();
-    this->people = 0;
-
-    // Divide image by 4
-    int halfWidth, halfHeight;
-
-    if (outputImg.cols % 2 == 0)
-        halfWidth = outputImg.cols/2;
-    else
-        halfWidth = outputImg.cols/2 - 1;
-
-    if (outputImg.rows % 2 == 0)
-        halfHeight = outputImg.rows/2;
-    else
-        halfHeight = outputImg.rows/2 - 1;
-
-    // Shallow copy
-    Mat LT = Mat(outputImg, Rect (0, 0, halfWidth, halfHeight));
-    Mat RT = Mat(outputImg, Rect (halfWidth, 0, halfWidth, halfHeight));
-    Mat LD = Mat(outputImg, Rect (0, halfHeight, halfWidth, halfHeight));
-    Mat RD = Mat(outputImg, Rect (halfWidth, halfHeight, halfWidth, halfHeight));
-
-    // Image processig.
-    vector<Mat> outsLT, outsRT, outsLD, outsRD;
-    vector<double> layersTimes;
-    double total_t = 0;
-
-    preprocess (LT);
-    net.forward(outsLT, outNames);
-    postprocess(LT, outsLT);
-    total_t += net.getPerfProfile(layersTimes);
-
-    preprocess (RT);
-    net.forward(outsRT, outNames);
-    postprocess(RT, outsRT);
-    total_t += net.getPerfProfile(layersTimes);
-
-    preprocess (LD);
-    net.forward(outsLD, outNames);
-    postprocess(LD, outsLD);
-    total_t += net.getPerfProfile(layersTimes);
-
-    preprocess (RD);
-    net.forward(outsRD, outNames);
-    postprocess(RD, outsRD);
-    total_t += net.getPerfProfile(layersTimes);
-
-    // Draw rect and other info in output image.
-    double freq = getTickFrequency() / 1000;
-    total_t = total_t / freq;
-    string label_inferTime = format ("Inference time: %.2f ms", total_t);
-    string label_confThreshold = format ("confThreshold: %.1f", confThreshold);
-    string label_resolution = format ("Resolution: %d X %d", outputImg.cols, outputImg.rows);
-    string label_people = format ("People: %d", this->people);
-    putText (outputImg, label_inferTime, Point(0, 35), FONT_HERSHEY_SIMPLEX, 1.0, Scalar(0, 0, 255), 2);
-    putText (outputImg, label_confThreshold, Point(0, 70), FONT_HERSHEY_SIMPLEX, 1.0, Scalar(0, 0, 255), 2);
-    putText (outputImg, label_resolution, Point(0, 105), FONT_HERSHEY_SIMPLEX, 1.0, Scalar(0, 0, 255), 2);
-    putText (outputImg, label_people, Point(0, 140), FONT_HERSHEY_SIMPLEX, 1.0, Scalar(0, 0, 255), 2);
-    line(outputImg, Point(0, halfHeight), Point(outputImg.cols, halfHeight), Scalar(255, 0, 0), 1, 4, 0);
-    line(outputImg, Point(halfWidth, 0), Point(halfWidth, outputImg.rows), Scalar(255, 0, 0), 1, 4, 0);
+void
+OpenCV_DNN::update (const config_data& data) {
+    /*
+        data 의 각 데이터를 현재 클래스에 적용
+    */
+    this->resize_res = data.resize_res;
+    this->confThreshold = data.confThreshold;
+    this->nmsThreshold = data.nmsThreshold;
 }
-#else
-void 
-OpenCV_DNN::MachineLearning (Mat inputImg) {
-    this->outputImg = inputImg.clone();
-    this->people = 0;
 
+void
+OpenCV_DNN::inference (io_data& _io_data) {
+    for (int i=0; i<_io_data.imgs.size(); i++) {
+        int each_pic_people_num = infer_util (_io_data.imgs[i]);
+        _io_data.nums[i] = each_pic_people_num;
+        _io_data.total_people_num += each_pic_people_num;
+    }
+}
+
+/* Change @img to result image, and returns people number of the @img. */
+int 
+OpenCV_DNN::infer_util (Mat& img) {
     // Image processig.
     vector<Mat> outs;
-    preprocess(outputImg);
+    preprocess(img);
     net.forward(outs, outNames);
-    postprocess(outputImg, outs);
+    int people_num = postprocess(img, outs);
 
     // Draw rect and other info in output image.
     vector<double> layersTimes;
     double freq = getTickFrequency() / 1000;
     this->t = net.getPerfProfile(layersTimes) / freq;
     
-    // string label_inferTime = format ("Inference time: %.2f ms", t);
+    string label_inferTime = format ("Inference time: %.2f ms", t);
     // string label_confThreshold = format ("confThreshold: %.1f", confThreshold);
-    string label_resolution = format ("Resolution: %d X %d", outputImg.cols, outputImg.rows);
-    // string label_people = format ("People: %d", this->people);
-    // putText (outputImg, label_inferTime, Point(0, 35), FONT_HERSHEY_SIMPLEX, 0.5, Scalar(0, 0, 255), 2);
-    // putText (outputImg, label_confThreshold, Point(0, 70), FONT_HERSHEY_SIMPLEX, 0.5, Scalar(0, 0, 255), 2);
-    putText (outputImg, label_resolution, Point(0, 35), FONT_HERSHEY_SIMPLEX, 0.5, Scalar(0, 0, 255), 0.5);
-    // putText (outputImg, label_people, Point(0, 140), FONT_HERSHEY_SIMPLEX, 0.5, Scalar(0, 0, 255), 2);
-    
+    // string label_resolution = format ("Resolution: %d X %d", img.cols, img.rows);
+    string label_people = format ("People: %d", this->people);
+    putText (img, label_inferTime, Point(0, 35), FONT_HERSHEY_SIMPLEX, 0.5, Scalar(0, 0, 255), 2);
+    // putText (img, label_confThreshold, Point(0, 70), FONT_HERSHEY_SIMPLEX, 0.5, Scalar(0, 0, 255), 2);
+    // putText (img, label_resolution, Point(0, 35), FONT_HERSHEY_SIMPLEX, 0.5, Scalar(0, 0, 255), 0.5);
+    putText (img, label_people, Point(0, 70), FONT_HERSHEY_SIMPLEX, 0.5, Scalar(0, 0, 255), 2);
+
+    return people_num;
 }
-#endif
 
 
 inline void
 OpenCV_DNN::preprocess (Mat& frame) {
     imagePadding (frame);
     static Mat blob;
-    Size inpSize = Size(this->inpWidth, this->inpHeight);
     // Create a 4D blob from a frame.
-    if (inpSize.width <= 0)
-        inpSize.width = frame.cols;
-    if (inpSize.height <= 0)
-        inpSize.height = frame.rows;
+    if (this->resize_res.width <= 0)
+        this->resize_res.width = frame.cols;
+    if (this->resize_res.height <= 0)
+        this->resize_res.height = frame.rows;
 
-	/*
-	Mat
-	blobFromImage  (
-			ImputArray	image,			입력영상. 1 or 3 or 4 채널
-			double		scalarfactor=1.0,	입력영상 픽셀에 곱할 값
-			const size&	size = Size(),		출력영상 크기
-			const Scalar&	mean = Scalar(),	입력영상의 채널에서 뺄 평균 값.
-								만약 image가 BGR 순서이고 swapRB가 true이면
-								(R평균,G평균,B평균) 순서로 값 지정.
-								인자 없으면 Scalar().
-			bool		swapRB = false,		첫 번째 채널과 세 번째 채널을 바꿀 것인지
-								결정하는 플래그.
-								true이면 BGR --> RGB
-			bool		crop = false		입력영상의 크기를 변경 후, 크롭(crop)을
-								수행할 것인지 결정하는 플래그.
-			int		ddepth			출력blob의 깊이. CV_32F 또는 CV_8U.
-			)
-	*/
-    blob = blobFromImage (frame, this->scalarfactor, inpSize, Scalar(), this->swapRB, false, CV_8U);
+    blob = blobFromImage (frame, this->scalarfactor, this->resize_res, Scalar(), this->swapRB, false, CV_8U);
 
     // Run a model.
     this->net.setInput (blob, "", this->scale, this->mean);
     
     if (net.getLayer(0)->outputNameToIndex("im_info") != -1)  // Faster-RCNN or R-FCN
     {
-        resize(frame, frame, inpSize);
-        Mat imInfo = (Mat_<float>(1, 3) << inpSize.height, inpSize.width, 1.6f);
+        resize(frame, frame, this->resize_res);
+        Mat imInfo = (Mat_<float>(1, 3) << this->resize_res.height, this->resize_res.width, 1.6f);
         this->net.setInput(imInfo, "im_info");
     }
 }
 
-void
+/* Returns people number */
+int
 OpenCV_DNN::postprocess (Mat& frame, const vector<Mat>& outs) {
+    int people = 0;
     static vector<int> outLayers = this->net.getUnconnectedOutLayers();
     static string outLayerType = this->net.getLayer(outLayers[0])->type;
 
@@ -313,6 +198,7 @@ OpenCV_DNN::postprocess (Mat& frame, const vector<Mat>& outs) {
                     box.x + box.width, box.y + box.height, frame);
         }
     }
+    return people;
 }
 
 /* Make the frame a square with padded space. */

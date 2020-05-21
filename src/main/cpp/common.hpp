@@ -19,9 +19,38 @@
 #include <opencv2/highgui.hpp>
 #include <opencv2/imgcodecs.hpp>
 
+
 #define ASSERT assert
 
-std::string 
+#define ADMIN_MODE 0
+#define BASIC_MODE 1
+#define TERMINATE_MODE 2
+
+using std::string;
+
+string 
 getCurrTime ();
+
+class io_data {
+public:
+
+    std::vector<cv::Mat> imgs; // output images
+    std::vector<int> nums; // each outp's people number
+    int total_people_num; // all outp's total people number 
+    double inference_time; // inference time
+
+public:
+
+    io_data (int camera_num) {
+        this->imgs.reserve (camera_num);
+        this->nums.reserve (camera_num);
+        this->total_people_num = 0;
+        this->inference_time = 0;
+    }
+    ~io_data () {
+        this->imgs.clear();
+        this->nums.clear();
+    }
+};
 
 #endif
