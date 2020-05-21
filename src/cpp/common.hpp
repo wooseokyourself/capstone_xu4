@@ -41,16 +41,10 @@ public:
 
 public:
 
-    io_data (int camera_num) {
-        this->imgs.reserve (camera_num);
-        this->nums.reserve (camera_num);
-        this->total_people_num = 0;
-        this->inference_time = 0;
-    }
-    ~io_data () {
-        this->imgs.clear();
-        this->nums.clear();
-    }
+    io_data (int camera_num);
+
+    ~io_data ();
+    
 };
 
 #endif

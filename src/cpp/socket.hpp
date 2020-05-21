@@ -35,9 +35,6 @@ void
 send_terminate_flag (const int& clntSock, bool& terminate_flag);
 
 void
-send_notification (const int& clntSock);
-
-void
 handle_thread (const int& clntSock, std::vector<cv::Mat>& imgs, bool& picture_flag, int& MODE_FLAG, std::mutex& m);
 
 void
