@@ -25,4 +25,10 @@ using namespace std;
 #define MAXBUFSIZE 512
 #define PORT    10001
 
+void
+handle_thread (const string& path, const int& camId, std::vector<cv::Mat>& imgs, bool& picture_flag, int& MODE_FLAG, std::mutex& m);
+
+void
+camera_handler (std::vector<cv::Mat>& imgs, const int& totalCam, int& WORK_FLAG, int& MODE_FLAG, std::mutex& m);
+
 #endif
