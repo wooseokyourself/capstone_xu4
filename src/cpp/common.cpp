@@ -1,11 +1,5 @@
 #include "common.hpp"
 
-    ROOT_PATH = "../..";
-    CONFIG_PATH = ROOT_PATH + "/config";
-    BIN_PATH = ROOT_PATH + "/bin";
-    ROI_DIR_PATH = CONFIG_PATH + "/images";
-    RESULT_DIR_PATH = ROOT_PATH + "/resources/images";
-
 string
 ROOT_PATH() { return "../.."; }
 
