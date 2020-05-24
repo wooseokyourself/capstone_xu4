@@ -30,25 +30,25 @@
 using std::string;
 
 string
-ROOT_PATH();
+_ROOT__PATH();
 
 string
-CONFIG_PATH();
+_CONFIG__PATH();
 
 string
-BIN_PATH();
+_BIN__PATH();
 
 string
-ROI_DIR_PATH();
+_ROI__DIR__PATH();
 
 string
-RESULT_DIR_PATH();
+_RESULT__DIR__PATH();
 
-#define ROOT_PATH ROOT_PATH()
-#define CONFIG_PATH CONFIG_PATH()
-#define BIN_PATH BIN_PATH()
-#define ROI_DIR_PATH ROI_DIR_PATH()
-#define RESULT_DIR_PATH RESULT_DIR_PATH()
+#define ROOT_PATH _ROOT__PATH()
+#define CONFIG_PATH _CONFIG__PATH()
+#define BIN_PATH _BIN__PATH()
+#define ROI_DIR_PATH _ROI__DIR__PATH()
+#define RESULT_DIR_PATH _RESULT__DIR__PATH()
 
 string 
 getCurrTime ();

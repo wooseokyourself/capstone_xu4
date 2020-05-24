@@ -1,19 +1,19 @@
 #include "common.hpp"
 
 string
-ROOT_PATH() { return "../.."; }
+_ROOT__PATH() { return "../.."; }
 
 string
-CONFIG_PATH() { return (ROOT_PATH() + "/config"); }
+_CONFIG__PATH() { return (ROOT_PATH() + "/config"); }
 
 string
-BIN_PATH() { return (ROOT_PATH() + "/bin"); }
+_BIN__PATH() { return (ROOT_PATH() + "/bin"); }
 
 string
-ROI_DIR_PATH() { return (CONFIG_PATH() + "/images"); }
+_ROI__DIR__PATH() { return (CONFIG_PATH() + "/images"); }
 
 string
-RESULT_DIR_PATH() { return (ROOT_PATH() + "/resources/images"); }
+_RESULT__DIR__PATH() { return (ROOT_PATH() + "/resources/images"); }
 
 /* Return "YYYY_MM_DD_HH:MM:SS" */
 string
