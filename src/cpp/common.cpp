@@ -10,16 +10,16 @@ string
 ROOT_PATH() { return "../.."; }
 
 string
-CONFIG_PATH() { return ROOT_PATH() + "/config"; }
+CONFIG_PATH() { return (ROOT_PATH() + "/config"); }
 
 string
-BIN_PATH() { return ROOT_PATH() + "/bin"; }
+BIN_PATH() { return (ROOT_PATH() + "/bin"); }
 
 string
-ROI_DIR_PATH() { return CONFIG_PATH() + "/images"; }
+ROI_DIR_PATH() { return (CONFIG_PATH() + "/images"); }
 
 string
-RESULT_DIR_PATH() { return ROOT_PATH() + "/resources/images"; }
+RESULT_DIR_PATH() { return (ROOT_PATH() + "/resources/images"); }
 
 /* Return "YYYY_MM_DD_HH:MM:SS" */
 string
