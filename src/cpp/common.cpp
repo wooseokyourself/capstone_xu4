@@ -1,11 +1,5 @@
 #include "common.hpp"
 
-P::ROOT_PATH = "../..";
-P::CONFIG_PATH = P::ROOT_PATH + "/config";
-P::BIN_PATH = P::ROOT_PATH + "/bin";
-P::ROI_DIR_PATH = P::CONFIG_PATH + "/images";
-P::RESULT_DIR_PATH = P::ROOT_PATH + "/resources/images";
-
 /* Return "YYYY_MM_DD_HH:MM:SS" */
 string
 getCurrTime () {
@@ -30,14 +24,6 @@ getCurrTime () {
 	// currTime += (":" + temp);
     return currTime;
 }
-/*
-P::P () {
-    this->ROOT_PATH = "../..";
-    this->CONFIG_PATH = this->ROOT_PATH + "/config";
-    this->BIN_PATH = this->ROOT_PATH + "/bin";
-    this->ROI_DIR_PATH = this->CONFIG_PATH + "/images";
-    this->RESULT_DIR_PATH = this->ROOT_PATH + "/resources/images";
-}*/
 
 io_data::io_data (int camera_num) {
     this->imgs.reserve (camera_num);

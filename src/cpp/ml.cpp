@@ -2,9 +2,9 @@
 
 OpenCV_DNN::OpenCV_DNN (Size resize_res, float confThreshold, float nmsThreshold) {
     // Set path.
-    this->MODEL_PATH = P::BIN_PATH + "/model/yolov3.weights";
-    this->CFG_PATH = P::BIN_PATH + "/model/yolov3.cfg";
-    this->CLASSES_PATH = P::BIN_PATH + "/model/coco.names";
+    this->MODEL_PATH = BIN_PATH + "/model/yolov3.weights";
+    this->CFG_PATH = BIN_PATH + "/model/yolov3.cfg";
+    this->CLASSES_PATH = BIN_PATH + "/model/coco.names";
 
     // Set DNN.
     this->mean = Scalar(); // 0

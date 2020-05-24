@@ -6,6 +6,12 @@
 /* 어플 최초 실행시 conf_data를 웹에서 입력받은 뒤에 이 C++ 프로그램이 실행되어야 config data를 초기화할 수 있음 */
 int
 main (int argc, char* argv[]) {
+    ROOT_PATH = "../..";
+    CONFIG_PATH = ROOT_PATH + "/config";
+    BIN_PATH = ROOT_PATH + "/bin";
+    ROI_DIR_PATH = CONFIG_PATH + "/images";
+    RESULT_DIR_PATH = ROOT_PATH + "/resources/images";
+
     config_data conf_data;
     conf_data.sync(); // 서비스 최초 실행시 제일 먼저 conf_data를 읽어온다.
     OpenCV_DNN dnn (conf_data.resize_res, conf_data.confThreshold, conf_data.nmsThreshold);
