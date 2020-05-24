@@ -41,8 +41,8 @@ camera_handler (std::vector<cv::Mat>& imgs, const int& totalCam, int& WORK_FLAG,
     bool picture_flag[2];
     picture_flag[0] = false;
     picture_flag[1] = false;
-    thrs[0] = std::thread(handle_thread, (BIN_PATH + "/testvideos/1.mp4"), 1, std::ref(imgs), std::ref(picture_flag[0]), std::ref(MODE_FLAG), std::ref(m));
-    thrs[1] = std::thread(handle_thread, (BIN_PATH + "/testvideos/2.mp4"), 2, std::ref(imgs), std::ref(picture_flag[1]), std::ref(MODE_FLAG), std::ref(m));
+    thrs[0] = std::thread(handle_thread, (P::BIN_PATH + "/testvideos/1.mp4"), 1, std::ref(imgs), std::ref(picture_flag[0]), std::ref(MODE_FLAG), std::ref(m));
+    thrs[1] = std::thread(handle_thread, (P::BIN_PATH + "/testvideos/2.mp4"), 2, std::ref(imgs), std::ref(picture_flag[1]), std::ref(MODE_FLAG), std::ref(m));
 
     int dummy = 0;
     while (true) { // 초기 스레드들을 배분하면 이후에는 프로그램이 종료될때까지 여기에서 머뭄
