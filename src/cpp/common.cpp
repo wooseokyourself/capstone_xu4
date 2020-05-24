@@ -1,5 +1,11 @@
 #include "common.hpp"
 
+string ROOT_PATH = "../..";
+string CONFIG_PATH = ROOT_PATH + "/config";
+string BIN_PATH = ROOT_PATH + "/bin";
+string ROI_DIR_PATH = CONFIG_PATH + "/images";
+string RESULT_DIR_PATH = ROOT_PATH + "/resources/images";
+
 /* Return "YYYY_MM_DD_HH:MM:SS" */
 string
 getCurrTime () {

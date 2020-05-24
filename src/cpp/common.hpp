@@ -29,12 +29,6 @@
 
 using std::string;
 
-string ROOT_PATH = "../..";
-string CONFIG_PATH = ROOT_PATH + "/config";
-string BIN_PATH = ROOT_PATH + "/bin";
-string ROI_DIR_PATH = CONFIG_PATH + "/images";
-string RESULT_DIR_PATH = ROOT_PATH + "/resources/images";
-
 string 
 getCurrTime ();
 
