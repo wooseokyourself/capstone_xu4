@@ -30,11 +30,11 @@
 using std::string;
 
 
-extern string ROOT_PATH;
-extern string CONFIG_PATH;
-extern string BIN_PATH;
-extern string ROI_DIR_PATH;
-extern string RESULT_DIR_PATH;
+string ROOT_PATH;
+string CONFIG_PATH;
+string BIN_PATH;
+string ROI_DIR_PATH;
+string RESULT_DIR_PATH;
 
 
 string 
