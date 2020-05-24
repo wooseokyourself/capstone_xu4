@@ -29,13 +29,26 @@
 
 using std::string;
 
+string
+ROOT_PATH();
 
-string ROOT_PATH;
-string CONFIG_PATH;
-string BIN_PATH;
-string ROI_DIR_PATH;
-string RESULT_DIR_PATH;
+string
+CONFIG_PATH();
 
+string
+BIN_PATH();
+
+string
+ROI_DIR_PATH();
+
+string
+RESULT_DIR_PATH();
+
+#define ROOT_PATH ROOT_PATH()
+#define CONFIG_PATH CONFIG_PATH()
+#define BIN_PATH BIN_PATH()
+#define ROI_DIR_PATH ROI_DIR_PATH()
+#define RESULT_DIR_PATH RESULT_DIR_PATH()
 
 string 
 getCurrTime ();
