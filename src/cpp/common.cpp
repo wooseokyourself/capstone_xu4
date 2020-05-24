@@ -24,14 +24,14 @@ getCurrTime () {
 	// currTime += (":" + temp);
     return currTime;
 }
-
+/*
 P::P () {
     this->ROOT_PATH = "../..";
     this->CONFIG_PATH = this->ROOT_PATH + "/config";
     this->BIN_PATH = this->ROOT_PATH + "/bin";
     this->ROI_DIR_PATH = this->CONFIG_PATH + "/images";
     this->RESULT_DIR_PATH = this->ROOT_PATH + "/resources/images";
-}
+}*/
 
 io_data::io_data (int camera_num) {
     this->imgs.reserve (camera_num);

@@ -29,9 +29,18 @@
 
 using std::string;
 
+namespace P {
+    string ROOT_PATH = "../..";
+    string CONFIG_PATH = ROOT_PATH + "/config";
+    string BIN_PATH = ROOT_PATH + "/bin";
+    string ROI_DIR_PATH = CONFIG_PATH + "/images";
+    string RESULT_DIR_PATH = ROOT_PATH + "/resources/images";
+}
+
 string 
 getCurrTime ();
 
+/*
 class P {
 public:
     string ROOT_PATH;
@@ -41,7 +50,7 @@ public:
     string RESULT_DIR_PATH;
 public:
     P();
-};
+};*/
 
 class io_data {
 public:
