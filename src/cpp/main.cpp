@@ -9,7 +9,7 @@ main (int argc, char* argv[]) {
     config_data conf_data;
     conf_data.sync(); // 서비스 최초 실행시 제일 먼저 conf_data를 읽어온다.
     OpenCV_DNN dnn (conf_data.resize_res, conf_data.confThreshold, conf_data.nmsThreshold);
-    Uploader ups (conf_data.camera_number);
+    Uploader ups;
 
     io_data _io_data (conf_data.camera_number);
 
