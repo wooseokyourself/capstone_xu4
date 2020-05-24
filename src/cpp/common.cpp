@@ -4,16 +4,16 @@ string
 _ROOT__PATH() { return "../.."; }
 
 string
-_CONFIG__PATH() { return (ROOT_PATH() + "/config"); }
+_CONFIG__PATH() { return (_ROOT__PATH() + "/config"); }
 
 string
-_BIN__PATH() { return (ROOT_PATH() + "/bin"); }
+_BIN__PATH() { return (_ROOT__PATH() + "/bin"); }
 
 string
-_ROI__DIR__PATH() { return (CONFIG_PATH() + "/images"); }
+_ROI__DIR__PATH() { return (_CONFIG__PATH() + "/images"); }
 
 string
-_RESULT__DIR__PATH() { return (ROOT_PATH() + "/resources/images"); }
+_RESULT__DIR__PATH() { return (_ROOT__PATH() + "/resources/images"); }
 
 /* Return "YYYY_MM_DD_HH:MM:SS" */
 string
