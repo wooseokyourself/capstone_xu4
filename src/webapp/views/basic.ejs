@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>MAIN</title>
+		<style>
+			* {text-align: center; margin:auto; }
+			table {width: 80%;}
+			td { padding: 1%; }
+			.test { border: 1px solid black;}
+			.title { font-weight: bolder; font-size:3em; margin: 30px 5px; clear:both; display:inline-block;}
+			.subtitle { font-weight: bolder; font-size:1.5em; margin: 10px 10px; }
+			.emphasis { color: blue; font-weight: bolder; font-size:130%; margin:1%;}
+			.more_emphasis { color: red; font-weight: bolder; font-size:150%; margin:3%;}
+			.admin {background-color: white; border:none; position:absolute; top:2%; right:2%; display:inline-block; width:10%; height:10%;}
+			.button-link { border: none; background: none; cursor: pointer; color: black; font-family: inherit; font-size: inherit; }
+			.button-link:hover { color:blue; font-weight: bolder;}
+			.img_left {width: auto; height: auto; max-width:60%; max-height:40%;  }
+			.img_right {width: auto; height: auto; max-width:60%; max-height:40%;  }
+			.icon {padding:1px 10px; }
+			.src_list{clear:both;}
+			.img_list{border: 1px solid black; margin-bottom: 5%; display:inline-block;}
+		</style>
+	</head>
+	<body>
+
+		<div class="title">기본 페이지</div>
+		<form action="/BASIC/toADMIN_1" method="GET">
+				<button type="submit"  class = "admin"> <img src = 'src/webapp/views/data/icon_key.png'></button>
+		</form>
+
+		<br><hr><hr><br>
+
+		<div class="subtitle">카메라 연결 정보</div><br>
+		<% if(c_num != 0){ %>
+		<div class="emphasis"><%= c_num %> 대의 카메라가 연결되어 있습니다. </div>
+		<% }else{ %>
+		<div class="emphasis"> 현재 연결된 카메라가 없습니다. </div>
+		<% } %>
+		<table>
+			<% for(var i = 0; i<c_num; i++){ %>
+			<tr><td>
+				<%= "[" + (i+1) + "번] " + c_ip[i] %>
+			</td></tr>
+			<% } %>
+		</table>
+		<br><hr><hr><br>
+		<div class="subtitle">이미지 보기</div><br>
+		<table class="icon">
+			<tr>
+				<td>
+				<% if (curr_img_name){ %>
+					<img class = img_left src = '<%=path%><%= curr_img_camera %>/<%= curr_img_name %>' onClick="alert('이미지 상의 인원 수는 '+<%= curr_img_num %>+'명입니다.')">
+				<% }else{ %>
+					<div class="emphasis">(미 선택)</div>
+				<% } %>
+				</td>
+				<td>
+					<% if (curr_img_name){ %>
+						<img class = img_right src = '<%=path%><%= curr_img_camera %>/<%= recent_img_name %>' onClick="alert('이미지 상의 인원 수는 '+<%= recent_img_num %>+'명입니다.')">
+					<% }else{ %>
+						<div class="emphasis">(미 선택)</div>
+					<% } %>
+				</td>
+			</tr>
+			<tr>
+				<td>현재 선택 이미지
+					<% if (curr_img_name){ %>
+						<div class="emphasis"><%= curr_img_name %></div>
+						<!-- <div class="more_emphasis"><%= curr_img_num %></div></td> -->
+					<% } %>
+				<td>해당 카메라의 최근 이미지
+					<% if (curr_img_name){ %>
+						<div class="emphasis"><%= recent_img_name %></div>
+						<!-- <div class="more_emphasis"><%= recent_img_num %></div></td> -->
+					<% } %>
+				</td>
+		</tr>
+		</table>
+
+		<div class=src_list>
+			<br><hr><hr><br>
+			<table class="icon">
+				<tr>
+					<td><img class = "icon" src = 'src/webapp/views/data/icon_camera.png'></td>
+					<td><img class = "icon" src = 'src/webapp/views/data/icon_picture.png'></td>
+					<td><img class = "icon" src = 'src/webapp/views/data/icon_person.png'></td>
+				</tr>
+				<tr>
+					<td><div class="emphasis"><%= c_num %></div></td>
+					<td><div class="emphasis">
+					<% for(var i =0; i< c_num; i++) { %>
+						<%=c_log[i]%>
+						<%if(i!=c_num-1){%>
+							/
+						<%}%>
+					<% } %>
+				</div></td>
+					<td><div class="emphasis"><%= p_num %></div></td>
+			</tr>
+			</table>
+			<br><hr><hr><br>
+			<div class="subtitle" >이미지 목록	</div><br>
+			<% for(var i =0; i< c_num; i++) { %>
+				<div class = "img_list" style = "width:<%= 90/c_num %>%;">
+					<table>
+						<tr>
+							<div class="emphasis"> CAMERA <%= i+1 %> </div>
+						</tr>
+						<% for(var j =0; j< c_log[i]; j++) { %>
+							<tr>
+								<td>
+									<form action="/BASIC/image/<%=i+1%>/<%= img_list[i][j]%>" method="get">
+										<button type="submit" class="button-link" ><%= img_list[i][j] %></button>
+									</form>
+								</td>
+							</tr>
+						<% } %>
+						</table>
+				</div>
+			<% } %>
+		</div>
+
+	</body>
+</html>

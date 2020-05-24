@@ -1,0 +1,8 @@
+number of ROI
+(1번째 프레임의 ROI 개수), (2번째 프레임의 ROI 개수), … , (N번째 프레임의 ROI 개수)
+
+data of ROI
+(1번째 프레임의 ROI 좌표 값)
+(2번째 프레임의 ROI 좌표 값)
+…
+(N번째 프레임의 ROI 좌표 값)
