@@ -1,6 +1,6 @@
-#include "socket.hpp"
+#include "test.hpp"
 #include "ml.hpp"
-#include "web.hpp"
+#include "uploader.hpp"
 #include "admin.hpp"
 
 /* 어플 최초 실행시 conf_data를 웹에서 입력받은 뒤에 이 C++ 프로그램이 실행되어야 config data를 초기화할 수 있음 */

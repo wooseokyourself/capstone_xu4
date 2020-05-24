@@ -69,12 +69,12 @@ OpenCV_DNN::infer_util (Mat& img) {
     // Draw rect and other info in output image.
     vector<double> layersTimes;
     double freq = getTickFrequency() / 1000;
-    this->t = net.getPerfProfile(layersTimes) / freq;
+    double t = net.getPerfProfile(layersTimes) / freq;
     
     string label_inferTime = format ("Inference time: %.2f ms", t);
     // string label_confThreshold = format ("confThreshold: %.1f", confThreshold);
     // string label_resolution = format ("Resolution: %d X %d", img.cols, img.rows);
-    string label_people = format ("People: %d", this->people);
+    string label_people = format ("People: %d", people_num);
     putText (img, label_inferTime, Point(0, 35), FONT_HERSHEY_SIMPLEX, 0.5, Scalar(0, 0, 255), 2);
     // putText (img, label_confThreshold, Point(0, 70), FONT_HERSHEY_SIMPLEX, 0.5, Scalar(0, 0, 255), 2);
     // putText (img, label_resolution, Point(0, 35), FONT_HERSHEY_SIMPLEX, 0.5, Scalar(0, 0, 255), 0.5);
