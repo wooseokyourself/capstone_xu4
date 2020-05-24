@@ -15,13 +15,13 @@ OPENCV = `pkg-config --cflags --libs opencv4`
 
 # Sources
 RELEASE_SRC = $(CPPSRC)/common.cpp $(CPPSRC)/admin.cpp $(CPPSRC)/ml.cpp $(CPPSRC)/socket.cpp $(CPPSRC)/uploader.cpp $(CPPSRC)/main.cpp
-DEBUG_SRC = -DDEBUG 
+DEBUG_SRC =  $(CPPSRC)/common.cpp $(CPPSRC)/admin.cpp $(CPPSRC)/ml.cpp $(CPPSRC)/test.cpp $(CPPSRC)/uploader.cpp $(CPPSRC)/main.cpp
 
 # Task options
 OPT = #-DDIVIDE
 #-----------------------------------------------#
 
-# Compile and Run: release version
+# Compile: release version
 
 all: $(CPP_TARGET)
 	@echo "Compile is done! Run with 'make run'"
@@ -29,22 +29,22 @@ all: $(CPP_TARGET)
 $(CPP_TARGET):
 	$(CXX) $(CXXFLAGS) $(OPT) $(RELEASE_SRC) $(OPENCV) -o $(CPP_TARGET)
 
-run:
-	node $(WEBAPP)/server.js
-
 #-----------------------------------------------#
-## NOT USED!
-# Compile and Run: debug version
 
-debug: $(TARGET_DEBUG)
+# Compile: debug version
+
+debug: $(CPP_TARGET)
 	@echo "Compile is done! Run with 'make debug_run'"
 
-$(TARGET_DEBUG):
-	$(CXX) $(CXXFLAGS) $(OPT) $(DEBUG_SRC) $(OPENCV) -o $(TARGET_DEBUG)
+$(CPP_TARGET):
+	$(CXX) $(CXXFLAGS) $(OPT) $(DEBUG_SRC) $(OPENCV) -o $(CPP_TARGET)
 
-debug_run:
-	@read -p "Enter the last number of debug/images/*.jpeg: " LAST; \
-	./.server_debug.out $(WEB_ROOT) $$LAST
+#-----------------------------------------------#
+
+# Run
+
+run:
+	node $(WEBAPP)/server.js
 
 #-----------------------------------------------#
 

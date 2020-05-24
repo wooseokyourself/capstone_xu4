@@ -40,7 +40,7 @@ protected:
 private: // Variables for Machine Learning.
 
     string MODEL_PATH;
-    string CONFIG_PATH;
+    string CFG_PATH;
     string CLASSES_PATH;
     string INPUT_IMAGE_PATH;
 

@@ -2,9 +2,9 @@
 
 OpenCV_DNN::OpenCV_DNN (Size resize_res, float confThreshold, float nmsThreshold) {
     // Set path.
-    this->MODEL_PATH = "model/yolov3.weights";
-    this->CONFIG_PATH = "model/yolov3.cfg";
-    this->CLASSES_PATH = "model/coco.names";
+    this->MODEL_PATH = BIN_PATH + "/model/yolov3.weights";
+    this->CFG_PATH = BIN_PATH + "/model/yolov3.cfg";
+    this->CLASSES_PATH = BIN_PATH + "/model/coco.names";
 
     // Set DNN.
     this->mean = Scalar(); // 0
@@ -28,7 +28,7 @@ OpenCV_DNN::OpenCV_DNN (Size resize_res, float confThreshold, float nmsThreshold
     }
 
 	// Load model.
-    this->net = readNet (MODEL_PATH, CONFIG_PATH);
+    this->net = readNet (MODEL_PATH, CFG_PATH);
     this->net.setPreferableBackend(DNN_BACKEND_OPENCV);
     this->net.setPreferableTarget(DNN_TARGET_CPU);
     this->outNames = net.getUnconnectedOutLayersNames();
