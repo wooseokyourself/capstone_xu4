@@ -14,7 +14,7 @@ public:
     cv::Size resize_res;
     float confThreshold; // default=0.4
     float nmsThreshold; // default=0.5
-    std::vector< pair<int, string> > overlapping_area;
+    std::vector< std::pair<int, string> > overlapping_area;
 
 public:
 

@@ -32,10 +32,6 @@ OpenCV_DNN::OpenCV_DNN (Size resize_res, float confThreshold, float nmsThreshold
     this->net.setPreferableBackend(DNN_BACKEND_OPENCV);
     this->net.setPreferableTarget(DNN_TARGET_CPU);
     this->outNames = net.getUnconnectedOutLayersNames();
-
-    // Set Output Info
-    this->people = 0;
-    this->t = 0;
 }
 
 void

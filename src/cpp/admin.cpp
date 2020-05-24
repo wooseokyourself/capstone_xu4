@@ -34,8 +34,8 @@ config_data::sync () {
 int
 config_data::read_mode_flag () {
     char buf[20];
-    FILE* fp = fopen (path, "r");
     const char* path = (CONFIG_PATH + "/mode.txt").c_str();
+    FILE* fp = fopen (path, "r");
     ASSERT (fp == NULL);
     fgets (buf, sizeof(buf), fp);
     fclose (fp);

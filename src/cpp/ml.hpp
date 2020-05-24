@@ -18,7 +18,7 @@ public:
     update (const config_data& data);
 
     io_data
-    inference (input_data& data);
+    inference (io_data& _io_data);
 
 protected:
 

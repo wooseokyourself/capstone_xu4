@@ -3,7 +3,7 @@
 void
 handle_thread (const string& path, const int& camId, std::vector<cv::Mat>& imgs, bool& picture_flag, int& MODE_FLAG, std::mutex& m) {
     VideoCapture cap(path);
-    ASSERT (cap.isOpened() == true)
+    ASSERT (cap.isOpened() == true);
     Mat frame;
     cap >> frame;
     int dummy;
