@@ -12,7 +12,9 @@ Uploader::upload_input (const io_data& _io_data) {
     and renew 'results.txt'.
 */
 void
-Uploader::upload_output (const io_data& _io_data, string file_name = getCurrTime()) {
+Uploader::upload_output (const io_data& _io_data) {
+    string file_name = getCurrTime();
+    
     for (int i=0; i<_io_data.imgs.size(); i++) {
         imwrite (RESULT_DIR_PATH + "/" + to_string(i+1) + "/" + file_name + "_" + to_string(i+1) + ".jpeg", _io_data.imgs[i]);
     }

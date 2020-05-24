@@ -16,7 +16,7 @@ public:
     upload_input (const io_data& _io_data);
 
     void
-    upload_output (const io_data& _io_data, string file_name = getCurrTime());
+    upload_output (const io_data& _io_data);
 
 };
 
