@@ -70,6 +70,6 @@ init:
 update:
 	git add .
 	git commit -m "debugging"
-	git push -u mac nodejs
+	git push -u mac master
 
 #-----------------------------------------------#
