@@ -32,20 +32,26 @@ using std::string;
 string 
 getCurrTime ();
 
+class P {
+public:
+    string ROOT_PATH;
+    string CONFIG_PATH;
+    string BIN_PATH;
+    string ROI_DIR_PATH;
+    string RESULT_DIR_PATH;
+public:
+    string P();
+};
+
 class io_data {
 public:
-
     std::vector<cv::Mat> imgs; // output images
     std::vector<int> nums; // each outp's people number
     int total_people_num; // all outp's total people number 
     double inference_time; // inference time
-
 public:
-
     io_data (int camera_num);
-
     ~io_data ();
-    
 };
 
 #endif
