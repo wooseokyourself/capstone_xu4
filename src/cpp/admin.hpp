@@ -3,24 +3,34 @@
 
 #include "common.hpp"
 
+using namespace cv;
+
 class config_data {
 public:
 
-    string CONFIG_PATH;
+    int prev_flag;
     int camera_number;
-    Size capture_res;
-    Size resize_res;
+    cv::Size capture_res;
+    cv::Size resize_res;
     float confThreshold; // default=0.4
     float nmsThreshold; // default=0.5
-    std::vector< pair<int, string> > overlapping_area;
+    std::vector< std::pair<int, string> > overlapping_area;
 
 public:
-    
-    config_data (string CONFIG_PATH);
+
+    config_data ();
+
+    bool
+    sync ();
+
+protected:
+
+    int
+    read_mode_flag ();
 
     void
-    read ();
-    
+    read_all_config ();
+
 };
 
 #endif

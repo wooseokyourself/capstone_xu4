@@ -2,9 +2,9 @@
 
 OpenCV_DNN::OpenCV_DNN (Size resize_res, float confThreshold, float nmsThreshold) {
     // Set path.
-    this->MODEL_PATH = "model/yolov3.weights";
-    this->CONFIG_PATH = "model/yolov3.cfg";
-    this->CLASSES_PATH = "model/coco.names";
+    this->MODEL_PATH = BIN_PATH + "/model/yolov3.weights";
+    this->CFG_PATH = BIN_PATH + "/model/yolov3.cfg";
+    this->CLASSES_PATH = BIN_PATH + "/model/coco.names";
 
     // Set DNN.
     this->mean = Scalar(); // 0
@@ -28,14 +28,10 @@ OpenCV_DNN::OpenCV_DNN (Size resize_res, float confThreshold, float nmsThreshold
     }
 
 	// Load model.
-    this->net = readNet (MODEL_PATH, CONFIG_PATH);
+    this->net = readNet (MODEL_PATH, CFG_PATH);
     this->net.setPreferableBackend(DNN_BACKEND_OPENCV);
     this->net.setPreferableTarget(DNN_TARGET_CPU);
     this->outNames = net.getUnconnectedOutLayersNames();
-
-    // Set Output Info
-    this->people = 0;
-    this->t = 0;
 }
 
 void
@@ -69,12 +65,12 @@ OpenCV_DNN::infer_util (Mat& img) {
     // Draw rect and other info in output image.
     vector<double> layersTimes;
     double freq = getTickFrequency() / 1000;
-    this->t = net.getPerfProfile(layersTimes) / freq;
+    double t = net.getPerfProfile(layersTimes) / freq;
     
     string label_inferTime = format ("Inference time: %.2f ms", t);
     // string label_confThreshold = format ("confThreshold: %.1f", confThreshold);
     // string label_resolution = format ("Resolution: %d X %d", img.cols, img.rows);
-    string label_people = format ("People: %d", this->people);
+    string label_people = format ("People: %d", people_num);
     putText (img, label_inferTime, Point(0, 35), FONT_HERSHEY_SIMPLEX, 0.5, Scalar(0, 0, 255), 2);
     // putText (img, label_confThreshold, Point(0, 70), FONT_HERSHEY_SIMPLEX, 0.5, Scalar(0, 0, 255), 2);
     // putText (img, label_resolution, Point(0, 35), FONT_HERSHEY_SIMPLEX, 0.5, Scalar(0, 0, 255), 0.5);
