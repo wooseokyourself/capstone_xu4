@@ -42,7 +42,7 @@ config_data::read_mode_flag () {
     const char* path = (CONFIG_PATH + "/mode.txt").c_str();
     FILE* fp = fopen (path, "r");
     printf (" fp=fopen()\n");
-    ASSERT (fp == NULL);
+    ASSERT (fp != NULL);
     fgets (buf, sizeof(buf), fp);
     printf (" now fclose(fp)\n");
     fclose (fp);
