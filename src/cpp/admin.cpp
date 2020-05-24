@@ -12,18 +12,22 @@ config_data::sync () {
     int now_flag = read_mode_flag();
     ASSERT (now_flag != -1);
     if (prev_flag == ADMIN_MODE && now_flag == BASIC_MODE) {
+        printf ("prev_flag == ADMIN && now_flag == BASIC\n");
         this->read_all_config();
         prev_flag = now_flag;
         return true;
     }
     else if (prev_flag == ADMIN_MODE && now_flag == ADMIN_MODE) {
+        printf ("prev_flag == ADMIN && now_flag == ADMIN\n");
         return false;        
     }
     else if (prev_flag == BASIC_MODE && now_flag == ADMIN_MODE) {
+        printf ("prev_flag == BASIC && now_flag == ADMIN\n");
         prev_flag = now_flag;
         return false;
     }
     else if (prev_flag == BASIC_MODE && now_flag == BASIC_MODE) {
+        printf ("prev_flag == BASIC && now_flag == BASIC\n");
         return true;
     }
     else {
@@ -33,12 +37,16 @@ config_data::sync () {
 
 int
 config_data::read_mode_flag () {
+    printf ("read_mode_flag()\n");
     char buf[20];
     const char* path = (CONFIG_PATH + "/mode.txt").c_str();
     FILE* fp = fopen (path, "r");
+    printf (" fp=fopen()\n");
     ASSERT (fp == NULL);
     fgets (buf, sizeof(buf), fp);
+    printf (" now fclose(fp)\n");
     fclose (fp);
+    printf (" fclose done\n");
     string str (buf);
     if (str == "admin")
         return ADMIN_MODE;
