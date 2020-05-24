@@ -1,6 +1,3 @@
-### MASTER BRANCH IS NOW TESTING!
-### >> *to support multi-clients. Supporting single-client program is in "singlecam" branch in this repo.*
-
 # Introduction
 This directory contains server-side of OpenCV DNN YOLOv3 Project developed by 21500740@handong.edu, and is **freely available under the [Beerware license](https://github.com/wooseokyourself/capstone_xu4/blob/master/LICENSE).**
 
