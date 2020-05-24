@@ -39,8 +39,9 @@ int
 config_data::read_mode_flag () {
     printf ("read_mode_flag()\n");
     char buf[20];
-    const char* path = (CONFIG_PATH + "/mode.txt").c_str();
-    FILE* fp = fopen (path, "a");
+    // const char* path = (CONFIG_PATH + "/mode.txt").c_str();
+    const char* path = ("../config/mode.txt").c_str();
+    FILE* fp = fopen (path, "r");
     printf (" fp=fopen()\n");
     ASSERT (fp != NULL);
     fgets (buf, sizeof(buf), fp);
@@ -64,7 +65,7 @@ config_data::read_all_config () {
 
     // Read admin_input.txt
     const char* path = (CONFIG_PATH + "/admin_input.txt").c_str();
-    fp = fopen (path, "a");
+    fp = fopen (path, "r");
     fgets(buf, sizeof(buf), fp);
     this->camera_number = atoi(buf);
     fgets(buf, sizeof(buf), fp);
