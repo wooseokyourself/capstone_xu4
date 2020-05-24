@@ -30,11 +30,11 @@
 using std::string;
 
 namespace P {
-    string ROOT_PATH = "../..";
-    string CONFIG_PATH = ROOT_PATH + "/config";
-    string BIN_PATH = ROOT_PATH + "/bin";
-    string ROI_DIR_PATH = CONFIG_PATH + "/images";
-    string RESULT_DIR_PATH = ROOT_PATH + "/resources/images";
+    string ROOT_PATH;
+    string CONFIG_PATH;
+    string BIN_PATH;
+    string ROI_DIR_PATH;
+    string RESULT_DIR_PATH;
 }
 
 string 

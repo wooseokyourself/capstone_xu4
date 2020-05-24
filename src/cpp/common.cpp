@@ -1,5 +1,11 @@
 #include "common.hpp"
 
+P::ROOT_PATH = "../..";
+P::CONFIG_PATH = P::ROOT_PATH + "/config";
+P::BIN_PATH = P::ROOT_PATH + "/bin";
+P::ROI_DIR_PATH = P::CONFIG_PATH + "/images";
+P::RESULT_DIR_PATH = P::ROOT_PATH + "/resources/images";
+
 /* Return "YYYY_MM_DD_HH:MM:SS" */
 string
 getCurrTime () {
