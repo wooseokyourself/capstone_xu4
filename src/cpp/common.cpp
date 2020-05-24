@@ -1,7 +1,7 @@
 #include "common.hpp"
 
 /* Return "YYYY_MM_DD_HH:MM:SS" */
-std::string
+string
 getCurrTime () {
     time_t timeObj = time(NULL);
 	struct  tm* tm = localtime(&timeObj);

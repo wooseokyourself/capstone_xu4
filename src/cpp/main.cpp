@@ -3,17 +3,13 @@
 #include "web.hpp"
 #include "admin.hpp"
 
-#define CONFIG_PATH $(ROOT)/path/blah/
-#define ROI_DIR_PATH
-#define RESULT_DIR_PATH $(ROOT)/blah/blah/
-
 /* 어플 최초 실행시 conf_data를 웹에서 입력받은 뒤에 이 C++ 프로그램이 실행되어야 config data를 초기화할 수 있음 */
 int
 main (int argc, char* argv[]) {
-    config_data conf_data (CONFIG_PATH);
-    conf_data.read(); // 서비스 최초 실행시 제일 먼저 conf_data를 읽어온다.
+    config_data conf_data ();
+    conf_data.sync(); // 서비스 최초 실행시 제일 먼저 conf_data를 읽어온다.
     OpenCV_DNN dnn (conf_data.resize_res, conf_data.confThreshold, conf_data.nmsThreshold);
-    Uploader ups (RESULT_DIR_PATH);
+    Uploader ups (conf_data.camera_number);
 
     io_data _io_data (conf_data.camera_number);
 
@@ -26,12 +22,8 @@ main (int argc, char* argv[]) {
     
     int dummy = 0;
     while (true) {
-        if (MODE_FLAG == ADMIN_MODE) {
-            conf_data.read();
+        if (conf_data.sync()) { 
             dnn.update (conf_data);
-            MODE_FLAG == BASIC_MODE;
-        }
-        else if (MODE_FLAG == BASIC_MODE) {
             if (WORK_FLAG == DONE_TAKE_PICTURE) { // 사진촬영을 모두 완료하였다면
                 m.lock();
                 WORK_FLAG = GO_INFERENCE;
@@ -49,8 +41,8 @@ main (int argc, char* argv[]) {
                 dummy++;
             }
         }
-        else { // terminate
-            break;
+        else { // Admin Mode이므로 대기
+            dummy++;
         }
     }
     return 0;

@@ -1,12 +1,12 @@
-# apache2 service's root
-# It MUST be ABSOLUTE PATH and has '/' at the end of itself.
-WEB_ROOT = /home/html/ws/www/
+BIN = bin
+CPPSRC = src/cpp
+WEBAPP = src/webapp
+RSRC = resources
 
 #-----------------------------------------------#
 
 # Target
-TARGET = .server.out
-TARGET_DEBUG = .server_debug.out
+CPP_TARGET = $(BIN)/a.out
 
 # compiler, flags, libs
 CXX = g++
@@ -14,8 +14,8 @@ CXXFLAGS = -std=c++11 -pthread
 OPENCV = `pkg-config --cflags --libs opencv4`
 
 # Sources
-RELEASE_SRC = src/common.cpp src/ml.cpp src/web.cpp src/socket.cpp src/main.cpp
-DEBUG_SRC = -DDEBUG src/common.cpp src/ml.cpp src/web.cpp src/debug_main.cpp
+RELEASE_SRC = $(CPPSRC)/common.cpp $(CPPSRC)/admin.cpp $(CPPSRC)/ml.cpp $(CPPSRC)/socket.cpp $(CPPSRC)/uploader.cpp $(CPPSRC)/main.cpp
+DEBUG_SRC = -DDEBUG 
 
 # Task options
 OPT = #-DDIVIDE
@@ -23,17 +23,17 @@ OPT = #-DDIVIDE
 
 # Compile and Run: release version
 
-all: $(TARGET)
+all: $(CPP_TARGET)
 	@echo "Compile is done! Run with 'make run'"
 
-$(TARGET):
-	$(CXX) $(CXXFLAGS) $(OPT) $(RELEASE_SRC) $(OPENCV) -o $(TARGET)
+$(CPP_TARGET):
+	$(CXX) $(CXXFLAGS) $(OPT) $(RELEASE_SRC) $(OPENCV) -o $(CPP_TARGET)
 
 run:
-	./.server.out $(WEB_ROOT)
+	node $(WEBAPP)/server.js
 
 #-----------------------------------------------#
-
+## NOT USED!
 # Compile and Run: debug version
 
 debug: $(TARGET_DEBUG)
@@ -51,26 +51,25 @@ debug_run:
 # Make init and Remove target file
 
 clean:
-	rm -f *.out
-	rm -f .*.out
+	rm -f $(BIN)/*.out
 
 #-----------------------------------------------#
 
 # Remove all subdirs and files in $(WEB_ROOT)
 
 init:
-	rm -r $(WEB_ROOT)*
-	cp -r -f src/web/* $(WEB_ROOT)
-	mkdir $(WEB_ROOT)inputs
-	mkdir $(WEB_ROOT)outputs
-	touch $(WEB_ROOT)outputs/results.txt
+	rm -rf $(RSRC)
+	mkdir $(RSRC)
+	mkdir $(RSRC)/images
+	touch $(RSRC)/camera_ip.txt
+	touch $(RSRC)/people.txt
 
 #-----------------------------------------------#
 
 # for myself
 update:
 	git add .
-	git commit -m "update"
-	git push -u mac master
+	git commit -m "debugging"
+	git push -u mac nodejs
 
 #-----------------------------------------------#
