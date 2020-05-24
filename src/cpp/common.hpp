@@ -40,7 +40,7 @@ public:
     string ROI_DIR_PATH;
     string RESULT_DIR_PATH;
 public:
-    string P();
+    P();
 };
 
 class io_data {
