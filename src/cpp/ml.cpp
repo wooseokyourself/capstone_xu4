@@ -46,6 +46,7 @@ OpenCV_DNN::update (const config_data& data) {
 
 void
 OpenCV_DNN::inference (io_data& _io_data) {
+    printf ("in _io_data, number of image is %d\n", _io_data.imgs.size());
     for (int i=0; i<_io_data.imgs.size(); i++) {
         int each_pic_people_num = infer_util (_io_data.imgs[i]);
         _io_data.nums[i] = each_pic_people_num;
@@ -56,6 +57,7 @@ OpenCV_DNN::inference (io_data& _io_data) {
 /* Change @img to result image, and returns people number of the @img. */
 int 
 OpenCV_DNN::infer_util (Mat& img) {
+    printf (" this is infer_util!\n");
     // Image processig.
     vector<Mat> outs;
     preprocess(img);
