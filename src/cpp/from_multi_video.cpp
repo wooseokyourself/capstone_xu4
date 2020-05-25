@@ -17,9 +17,11 @@ handle_thread (const string& path, const int& camId, std::vector<cv::Mat>& imgs,
             printf (" handle_thread's taking picture!\n");
             // 재생중인 동영상에서 캡쳐하기
             imgs[camId-1] = frame.clone();
-
+            printf (" frame to imgs[camId-1] clone is done!\n");
             m.lock();
+            printf (" lock! in order to picture_flag <-- true\n");
             picture_flag = true; // 사진수신을 완료하였음을 알림
+            printf (" unlock!\n");
             m.unlock();
             printf ("<%d's camera sent a picture completely!>\n", camId);
         }
