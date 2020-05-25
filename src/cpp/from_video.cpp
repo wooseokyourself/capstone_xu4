@@ -8,28 +8,21 @@ handle_thread (const string& path, const int& camId, std::vector<cv::Mat>& imgs,
     cap >> frame;
     int dummy;
     while (true) { // 베이직 모드라면 이 스레드 계속 실행
-        cap >> frame;
-        if (MODE_FLAG == BASIC_MODE) {
-            if (!picture_flag) { // 사진을 가져오라는 명령이 떨어짐
-
-                // 재생중인 동영상에서 캡쳐하기
-                imgs[camId-1] = frame.clone();
-
-                m.lock();
-                picture_flag = true; // 사진수신을 완료하였음을 알림
-                m.unlock();
-                printf ("<%d's camera sent a picture completely!>\n", camId);
-            }
-            else {// 사진수신할 필요가 없으므로 대기
-                dummy++;
-            }
-        }
-        else if (MODE_FLAG == ADMIN_MODE) {
-            // 사진 찍지 말고 대기
-            dummy++;
-        }
-        else { // TERMINATE_MODE
+        if (MODE_FLAG == TERMINATE_MODE)
             break;
+        cap >> frame;
+        if (!picture_flag) { // 사진을 가져오라는 명령이 떨어짐
+
+            // 재생중인 동영상에서 캡쳐하기
+            imgs[camId-1] = frame.clone();
+
+            m.lock();
+            picture_flag = true; // 사진수신을 완료하였음을 알림
+            m.unlock();
+            printf ("<%d's camera sent a picture completely!>\n", camId);
+        }
+        else {// 사진수신할 필요가 없으므로 대기
+            dummy++;
         }
     }
 }
@@ -48,37 +41,29 @@ camera_handler (std::vector<cv::Mat>& imgs, const int& totalCam, int& WORK_FLAG,
 
     int dummy = 0;
     while (true) { // 초기 스레드들을 배분하면 이후에는 프로그램이 종료될때까지 여기에서 머뭄
-        if (MODE_FLAG == BASIC_MODE) {
-            if (WORK_FLAG == GO_TAKE_PICTURE) { // 사진을 가져오라는 명령이 떨어짐
+        if (MODE_FLAG == TERMINATE_MODE)
+            break;
+        if (WORK_FLAG == GO_TAKE_PICTURE) { // 사진을 가져오라는 명령이 떨어짐
 
+            for (int i=0; i<totalCam; i++)
+                picture_flag[i] = false; // 각 스레드들에게 사진 수신하라고 알리기
+            
+            while (true) { // 각 스레드 사진수신 완료되었는지 조사
+                bool go_to_next_work = true;
                 for (int i=0; i<totalCam; i++)
-                    picture_flag[i] = false; // 각 스레드들에게 사진 수신하라고 알리기
-                
-                while (true) { // 각 스레드 사진수신 완료되었는지 조사
-                    bool go_to_next_work = true;
-                    for (int i=0; i<totalCam; i++)
-                        if (!picture_flag[i]) // 아직 사진이 수신되지 않은 스레드가 있다면
-                            go_to_next_work = false;
-                    if (go_to_next_work) // 모든 사진이 다 수신되었다면
-                        break;
-                }
-                // 모든 스레드들이 사진수신을 완료하였으므로
-                m.lock();
-                WORK_FLAG = DONE_TAKE_PICTURE; // 이를 확인한 메인스레드는 Mat* imgs를 입력으로 딥러닝 시행
-                m.unlock();
+                    if (!picture_flag[i]) // 아직 사진이 수신되지 않은 스레드가 있다면
+                        go_to_next_work = false;
+                if (go_to_next_work) // 모든 사진이 다 수신되었다면
+                    break;
             }
-            else { // 현재 딥러닝중이므로 대기
-                dummy++;
-            }
+            // 모든 스레드들이 사진수신을 완료하였으므로
+            m.lock();
+            WORK_FLAG = DONE_TAKE_PICTURE; // 이를 확인한 메인스레드는 Mat* imgs를 입력으로 딥러닝 시행
+            m.unlock();
         }
-        else if (MODE_FLAG == ADMIN_MODE) {
-            // 사진찍지말고 대기
+        else { // 현재 딥러닝중이므로 대기
             dummy++;
         }
-        else { // TERMINATE_MODE
-            break;
-        }
-
     }
 
     for (int i=0; i<totalCam; i++)
