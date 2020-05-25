@@ -39,9 +39,7 @@ int
 config_data::read_mode_flag () {
     printf ("read_mode_flag()\n");
     char buf[20];
-    // const char* path = (CONFIG_PATH + "/mode.txt").c_str();
-    string temp("../config/mode.txt");
-    const char* path = temp.c_str();
+    const char* path = (CONFIG_PATH + "/mode.txt").c_str();
     FILE* fp = fopen (path, "r");
     printf (" fp=fopen()\n");
     ASSERT (fp != NULL);
