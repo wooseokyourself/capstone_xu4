@@ -1,5 +1,5 @@
-#ifndef TEST
-#define TEST
+#ifndef FROM_VIDEO
+#define FROM_VIDEO
 
 #include "common.hpp"
 
