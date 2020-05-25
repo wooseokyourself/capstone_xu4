@@ -7,6 +7,8 @@ RSRC = resources
 
 # Target
 CPP_TARGET = $(BIN)/a.out
+CPP_MULTI_TARGET = $(BIN)/a.out
+CPP_SINGLE_TARGET = $(BIN)/a.out
 
 # compiler, flags, libs
 CXX = g++
@@ -34,16 +36,16 @@ $(CPP_TARGET):
 
 # Compile: debug version
 
-multi: $(CPP_TARGET)
+multi: $(CPP_MULTI_TARGET)
 	@echo "Multi Video's Compile is done!"
 
-$(CPP_TARGET):
+$(CPP_MULTI_TARGET):
 	$(CXX) $(CXXFLAGS) $(OPT) $(MULTI_VIDEO_SRC) $(OPENCV) -o $(CPP_TARGET)
 
 single: $(CPP_TARGET)
 	@echo "Single Video's Compile is done!"
 
-$(CPP_TARGET):
+$(CPP_SINGLE_TARGET):
 	$(CXX) $(CXXFLAGS) $(OPT) $(SINGLE_VIDEO_SRC) $(OPENCV) -o $(CPP_TARGET)
 	
 
