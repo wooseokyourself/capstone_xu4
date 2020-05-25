@@ -42,7 +42,7 @@ multi: $(CPP_MULTI_TARGET)
 $(CPP_MULTI_TARGET):
 	$(CXX) $(CXXFLAGS) $(OPT) $(MULTI_VIDEO_SRC) $(OPENCV) -o $(CPP_TARGET)
 
-single: $(CPP_TARGET)
+single: $(CPP_SINGLE_TARGET)
 	@echo "Single Video's Compile is done!"
 
 $(CPP_SINGLE_TARGET):
