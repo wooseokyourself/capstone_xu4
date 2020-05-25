@@ -36,7 +36,7 @@ camera_handler (std::vector<cv::Mat>& imgs, const int& totalCam, int& WORK_FLAG,
     for (int i=0; i<totalCam; i++) {
         picture_flag[i] = false;
         thrs[i] = std::thread(handle_thread, (BIN_PATH + "/testvideos/" + to_string(i+1) + ".mp4"), i+1,
-             std::ref(imgs), std::ref(picture_flag[0]), std::ref(MODE_FLAG), std::ref(m));
+             std::ref(imgs), std::ref(picture_flag[i]), std::ref(MODE_FLAG), std::ref(m));
     }
     
 
@@ -52,10 +52,8 @@ camera_handler (std::vector<cv::Mat>& imgs, const int& totalCam, int& WORK_FLAG,
             while (true) { // 각 스레드 사진수신 완료되었는지 조사
                 bool go_to_next_work = true;
                 for (int i=0; i<totalCam; i++)
-                    if (!picture_flag[i]) {// 아직 사진이 수신되지 않은 스레드가 있다면
-                        printf ("  %d cam didn't recv picture yet!\n", i+1);
+                    if (!picture_flag[i]) // 아직 사진이 수신되지 않은 스레드가 있다면
                         go_to_next_work = false;
-                    }
                 if (go_to_next_work) // 모든 사진이 다 수신되었다면
                     break;
             }
