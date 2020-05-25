@@ -7,6 +7,7 @@ handle_thread (const string& path, const int& camId, std::vector<cv::Mat>& imgs,
     Mat frame;
     cap >> frame;
     int dummy;
+    printf ("handle_thread first call! picture_flag is %d\n", picture_flag);
     while (true) { // 베이직 모드라면 이 스레드 계속 실행
         printf ("handle_thread's loop!\n");
         if (MODE_FLAG == TERMINATE_MODE)
