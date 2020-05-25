@@ -5,14 +5,12 @@ handle_thread (const string& path, const int& camId, std::vector<cv::Mat>& imgs,
     VideoCapture cap(path);
     ASSERT (cap.isOpened() == true);
     Mat frame;
-    cap >> frame;
     int dummy;
     printf ("handle_thread first call! picture_flag is %d\n", picture_flag);
-    while (true) { // 베이직 모드라면 이 스레드 계속 실행
+    while (cap.read (frame)) { // 베이직 모드라면 이 스레드 계속 실행
         printf ("handle_thread's loop!\n");
         if (MODE_FLAG == TERMINATE_MODE)
             break;
-        cap >> frame;
         if (!picture_flag) { // 사진을 가져오라는 명령이 떨어짐
             printf (" handle_thread's taking picture!\n");
             // 재생중인 동영상에서 캡쳐하기
