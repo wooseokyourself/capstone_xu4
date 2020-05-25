@@ -1,4 +1,4 @@
-#include "socket.hpp"
+#include "test.hpp"
 #include "ml.hpp"
 #include "uploader.hpp"
 #include "admin.hpp"
@@ -9,7 +9,12 @@ main (int argc, char* argv[]) {
     printf ("start program\n");
     config_data conf_data;
     printf ("conf sync!\n");
-    conf_data.sync(); // 서비스 최초 실행시 제일 먼저 conf_data를 읽어온다.
+    // conf_data.sync(); // 서비스 최초 실행시 제일 먼저 conf_data를 읽어온다.
+    conf_data.camera_number = 2;
+    conf_data.capture_res.width = 416;
+    conf_data.capture_res.height = 416;
+    conf_data.resize_res.width = 416;
+    conf_data.resize_res.height = 416;
     printf ("conf sync done!\n");
     OpenCV_DNN dnn (conf_data.resize_res, conf_data.confThreshold, conf_data.nmsThreshold);
     printf ("dnn done !\n");

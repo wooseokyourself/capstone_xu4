@@ -15,7 +15,7 @@ OPENCV = `pkg-config --cflags --libs opencv4`
 
 # Sources
 RELEASE_SRC = $(CPPSRC)/common.cpp $(CPPSRC)/admin.cpp $(CPPSRC)/ml.cpp $(CPPSRC)/socket.cpp $(CPPSRC)/uploader.cpp $(CPPSRC)/main.cpp
-DEBUG_SRC =  $(CPPSRC)/common.cpp $(CPPSRC)/admin.cpp $(CPPSRC)/ml.cpp $(CPPSRC)/test.cpp $(CPPSRC)/uploader.cpp $(CPPSRC)/main.cpp
+DEBUG_SRC =  $(CPPSRC)/common.cpp $(CPPSRC)/admin.cpp $(CPPSRC)/ml.cpp $(CPPSRC)/test.cpp $(CPPSRC)/uploader.cpp $(CPPSRC)/debug_main.cpp
 
 # Task options
 OPT = #-DDIVIDE
