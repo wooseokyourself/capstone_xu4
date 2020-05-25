@@ -8,11 +8,12 @@ handle_thread (const string& path, const int& camId, std::vector<cv::Mat>& imgs,
     cap >> frame;
     int dummy;
     while (true) { // 베이직 모드라면 이 스레드 계속 실행
+        printf ("handle_thread's loop!\n");
         if (MODE_FLAG == TERMINATE_MODE)
             break;
         cap >> frame;
         if (!picture_flag) { // 사진을 가져오라는 명령이 떨어짐
-
+            printf (" handle_thread's taking picture!\n");
             // 재생중인 동영상에서 캡쳐하기
             imgs[camId-1] = frame.clone();
 
@@ -51,8 +52,10 @@ camera_handler (std::vector<cv::Mat>& imgs, const int& totalCam, int& WORK_FLAG,
             while (true) { // 각 스레드 사진수신 완료되었는지 조사
                 bool go_to_next_work = true;
                 for (int i=0; i<totalCam; i++)
-                    if (!picture_flag[i]) // 아직 사진이 수신되지 않은 스레드가 있다면
+                    if (!picture_flag[i]) {// 아직 사진이 수신되지 않은 스레드가 있다면
+                        printf ("  %d cam didn't recv picture yet!\n", i+1);
                         go_to_next_work = false;
+                    }
                 if (go_to_next_work) // 모든 사진이 다 수신되었다면
                     break;
             }
