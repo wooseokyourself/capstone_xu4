@@ -1,4 +1,4 @@
-#include "from_video.hpp"
+#include "from_multi_video.hpp"
 
 void
 handle_thread (const string& path, const int& camId, std::vector<cv::Mat>& imgs, bool& picture_flag, int& MODE_FLAG, std::mutex& m) {

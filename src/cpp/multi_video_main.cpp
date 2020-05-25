@@ -1,4 +1,4 @@
-#include "from_video.hpp"
+#include "from_multi_video.hpp"
 #include "ml.hpp"
 #include "uploader.hpp"
 #include "admin.hpp"
@@ -10,7 +10,7 @@ main (int argc, char* argv[]) {
     config_data conf_data;
     printf ("conf sync!\n");
     // conf_data.sync(); // 서비스 최초 실행시 제일 먼저 conf_data를 읽어온다.
-    conf_data.camera_number = 2;
+    conf_data.camera_number = 1;
     conf_data.capture_res.width = 416;
     conf_data.capture_res.height = 416;
     conf_data.resize_res.width = 416;

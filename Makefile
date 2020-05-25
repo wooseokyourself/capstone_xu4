@@ -15,7 +15,8 @@ OPENCV = `pkg-config --cflags --libs opencv4`
 
 # Sources
 RELEASE_SRC = $(CPPSRC)/common.cpp $(CPPSRC)/admin.cpp $(CPPSRC)/ml.cpp $(CPPSRC)/socket.cpp $(CPPSRC)/uploader.cpp $(CPPSRC)/main.cpp
-DEBUG_SRC =  $(CPPSRC)/common.cpp $(CPPSRC)/admin.cpp $(CPPSRC)/ml.cpp $(CPPSRC)/from_video.cpp $(CPPSRC)/uploader.cpp $(CPPSRC)/debug_main.cpp
+MULTI_VIDEO_SRC =  $(CPPSRC)/common.cpp $(CPPSRC)/admin.cpp $(CPPSRC)/ml.cpp $(CPPSRC)/from_multi_video.cpp $(CPPSRC)/uploader.cpp $(CPPSRC)/multi_video_main.cpp
+SINGLE_VIDEO_SRC = $(CPPSRC)/common.cpp $(CPPSRC)/admin.cpp $(CPPSRC)/ml.cpp $(CPPSRC)/from_single_video.cpp $(CPPSRC)/uploader.cpp $(CPPSRC)/single_video_main.cpp
 
 # Task options
 OPT = #-DDIVIDE
@@ -33,11 +34,18 @@ $(CPP_TARGET):
 
 # Compile: debug version
 
-debug: $(CPP_TARGET)
-	@echo "Compile is done! Run with 'make debug_run'"
+multi: $(CPP_TARGET)
+	@echo "Multi Video's Compile is done!"
 
 $(CPP_TARGET):
-	$(CXX) $(CXXFLAGS) $(OPT) $(DEBUG_SRC) $(OPENCV) -o $(CPP_TARGET)
+	$(CXX) $(CXXFLAGS) $(OPT) $(MULTI_VIDEO_SRC) $(OPENCV) -o $(CPP_TARGET)
+
+single: $(CPP_TARGET)
+	@echo "Single Video's Compile is done!"
+
+$(CPP_TARGET):
+	$(CXX) $(CXXFLAGS) $(OPT) $(SINGLE_VIDEO_SRC) $(OPENCV) -o $(CPP_TARGET)
+	
 
 #-----------------------------------------------#
 

@@ -1,5 +1,5 @@
-#ifndef FROM_VIDEO
-#define FROM_VIDEO
+#ifndef FROM_MULTI_VIDEO
+#define FROM_MULTI_VIDEO
 
 #include "common.hpp"
 
