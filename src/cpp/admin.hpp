@@ -17,17 +17,13 @@ public:
     std::vector< std::pair<int, string> > overlapping_area;
 
 public:
-
     config_data ();
-
     bool
     sync ();
 
 protected:
-
     int
     read_mode_flag ();
-
     void
     read_all_config ();
 

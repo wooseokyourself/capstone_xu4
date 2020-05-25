@@ -50,9 +50,9 @@ config_data::read_mode_flag () {
     fclose (fp);
     printf (" fclose done\n");
     string str (buf);
-    if (str == "admin")
+    if (str == "admin\n")
         return ADMIN_MODE;
-    else if (str == "basic")
+    else if (str == "basic\n")
         return BASIC_MODE;
     else
         return -1;
