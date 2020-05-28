@@ -87,7 +87,7 @@ handle_thread (const int& clntSock, std::vector<cv::Mat>& imgs, cv::Size& res, b
 }
 
 void
-camera_handler (io_data& _io_data, config_data& _conf_data, int& WORK_FLAG, int& MODE_FLAG, std::mutex& m) {\
+camera_handler (io_data& _io_data, config_data& _conf_data, int& WORK_FLAG, int& MODE_FLAG, std::mutex& m) {
     const int& camera_number = _conf_data.camera_number;
 
     // Use LINGER.
