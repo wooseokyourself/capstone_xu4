@@ -23,15 +23,6 @@ MULTI_VIDEO_SRC =  $(CPPSRC)/common.cpp $(CPPSRC)/admin.cpp $(CPPSRC)/ml.cpp $(C
 OPT = #-DDIVIDE
 #-----------------------------------------------#
 
-# Compile: release version
-
-all: $(CPP_TARGET)
-	@echo "Compile is done! Run with 'make run'"
-
-$(CPP_TARGET):
-	$(CXX) $(CXXFLAGS) $(OPT) $(RELEASE_SRC) $(OPENCV) -o $(CPP_TARGET)
-
-#-----------------------------------------------#
 
 # Compile: debug version
 
@@ -40,6 +31,18 @@ multi: $(CPP_MULTI_TARGET)
 
 $(CPP_MULTI_TARGET):
 	$(CXX) $(CXXFLAGS) $(OPT) $(MULTI_VIDEO_SRC) $(OPENCV) -o $(CPP_MULTI_TARGET)
+
+
+#-----------------------------------------------#
+
+
+# Compile: release version
+
+all: $(CPP_TARGET)
+	@echo "Compile is done! Run with 'make run'"
+
+$(CPP_TARGET):
+	$(CXX) $(CXXFLAGS) $(OPT) $(RELEASE_SRC) $(OPENCV) -o $(CPP_TARGET)
 	
 
 #-----------------------------------------------#
