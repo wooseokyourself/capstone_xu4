@@ -83,7 +83,7 @@ handle_thread (const int& clntSock, std::vector<cv::Mat>& imgs, cv::Size& res, b
             dummy++;
         }
     }
-    send_terminate_flag (clntSock, MODE_FLAG);
+    send_mode_flag (clntSock, MODE_FLAG);
 }
 
 void
