@@ -91,8 +91,10 @@ handle_thread (const int& clntSock, std::vector<cv::Mat>& imgs, bool& picture_fl
 }
 
 void
-camera_handler (std::vector<cv::Mat>& imgs, const int& totalCam, int& WORK_FLAG, int& MODE_FLAG, std::mutex& m) {\
+camera_handler (io_data& _io_data, const int& totalCam, int& WORK_FLAG, int& MODE_FLAG, std::mutex& m) {\
     printf ("camera_handler called!\n");
+    
+
     // Use LINGER.
     struct linger ling = {0, };
     ling.l_onoff = 1;	// linger use
@@ -149,7 +151,7 @@ camera_handler (std::vector<cv::Mat>& imgs, const int& totalCam, int& WORK_FLAG,
     for (int i=0; i<totalCam; i++) {
         picture_flag[i] = false; // i번째 스레드의 사진이 수신되었으면 true로 변경됨
         printf ("[thread %d] created!\n", i);
-        thrs[i] = std::thread(handle_thread, std::ref(clntSock[i]), std::ref(imgs), std::ref(picture_flag[i]), std::ref(MODE_FLAG), std::ref(m));
+        thrs[i] = std::thread(handle_thread, std::ref(clntSock[i]), std::ref(_io_data.imgs), std::ref(picture_flag[i]), std::ref(MODE_FLAG), std::ref(m));
     }
 
     // 각 스레드를 총괄하는 루프

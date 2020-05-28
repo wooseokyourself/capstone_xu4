@@ -66,6 +66,7 @@ config_data::read_all_config () {
     fp = fopen (path, "r");
     fgets(buf, sizeof(buf), fp);
     this->camera_number = atoi(buf);
+    printf (" reading camera number=%d\n", this->camera_number);
     fgets(buf, sizeof(buf), fp);
     this->capture_res.width = atoi(buf);
     fgets(buf, sizeof(buf), fp);
