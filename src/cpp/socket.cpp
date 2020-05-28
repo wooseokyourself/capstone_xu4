@@ -52,7 +52,7 @@ handle_thread (const int& clntSock, std::vector<cv::Mat>& imgs, bool& picture_fl
     recvd = Recv (clntSock, &camId, sizeof(camId), 1);
     ASSERT (recvd == sizeof(camId));
     printf (" >> Got camId: %d\n", camId);
-    while (true) { // 베이직 모드라면 이 스레드 계속 실행
+    while (true) {
         if (MODE_FLAG == TERMINATE_MODE)
             break;
         if (!picture_flag) { // 사진을 가져오라는 명령이 떨어짐

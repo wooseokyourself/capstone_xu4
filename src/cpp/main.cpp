@@ -31,13 +31,9 @@ main (int argc, char* argv[]) {
             printf (" WORK_FLAG: DONE_TAKE_PICTURE --> GO_INFERENCE\n");
             m.lock();
             WORK_FLAG = GO_INFERENCE;
-            m.unlock();
-
             ups.upload_input (_io_data);
             dnn.inference(_io_data);
             ups.upload_output (_io_data);
-
-            m.lock();
             WORK_FLAG = GO_TAKE_PICTURE; // 다시 사진촬영 요청
             m.unlock();
             printf (" WORK_FLAG: DONE_TAKE_PICTURE --> GO_TAKE_PICTURE\n");
