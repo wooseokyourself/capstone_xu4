@@ -40,16 +40,12 @@ config_data::sync () {
 
 int
 config_data::read_mode_flag () {
-    printf ("read_mode_flag()\n");
     char buf[20];
     const char* path = (CONFIG_PATH + "/mode.txt").c_str();
     FILE* fp = fopen (path, "r");
-    printf (" fp=fopen()\n");
     ASSERT (fp != NULL);
     fgets (buf, sizeof(buf), fp);
-    printf (" now fclose(fp)\n");
     fclose (fp);
-    printf (" fclose done\n");
     string str (buf);
     if (str == "admin\n" || str == "admin")
         return ADMIN_MODE;
