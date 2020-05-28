@@ -20,7 +20,7 @@ using namespace std;
 #define GO_INFERENCE 3
 
 #define MAXBUFSIZE 512
-#define PORT    10051
+#define PORT 10001
 
 // Maximum number of requests to wait for a connection.
 static const int MAXPENDING = 10;
