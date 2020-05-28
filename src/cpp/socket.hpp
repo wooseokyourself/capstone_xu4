@@ -38,6 +38,6 @@ void
 handle_thread (const int& clntSock, std::vector<cv::Mat>& imgs, bool& picture_flag, int& MODE_FLAG, std::mutex& m);
 
 void
-camera_handler (std::vector<cv::Mat>& imgs, const int& totalCam, int& WORK_FLAG, int& MODE_FLAG, std::mutex& m);
+camera_handler (io_data& _io_data, const int& totalCam, int& WORK_FLAG, int& MODE_FLAG, std::mutex& m);
 
 #endif
