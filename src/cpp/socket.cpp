@@ -53,45 +53,38 @@ handle_thread (const int& clntSock, std::vector<cv::Mat>& imgs, bool& picture_fl
     ASSERT (recvd == sizeof(camId));
     printf (" >> Got camId: %d\n", camId);
     while (true) { // 베이직 모드라면 이 스레드 계속 실행
-        if (MODE_FLAG == BASIC_MODE) {
-            if (!picture_flag) { // 사진을 가져오라는 명령이 떨어짐
-                // 스레드별로 camId를 먼저 수신
-                // 이후 데이터를 수신하고 디코딩하여 imgs[camId-1] 에 저장.
-                // imgs[camId-1] 저장이 끝난 스레드는 종료.
-
-                send_terminate_flag (clntSock, MODE_FLAG);
-
-                // Send notification
-                send_notification (clntSock);
-
-                // Receive @vec.size()
-                recvd = 0;
-                ssize_t bufSize;
-                recvd = Recv (clntSock, &bufSize, sizeof(bufSize), sizeof(size_t *));
-
-                // Receive @vec
-                vector<unsigned char> vec(bufSize);
-                recvd = Recv (clntSock, &vec[0], bufSize, sizeof(unsigned char));
-                ASSERT (recvd == vec.size() * sizeof(unsigned char));
-
-                imgs[camId-1] = cv::imdecode (vec, 1); // Decode bytes into Mat class image.
-                vec.clear();
-
-                m.lock();
-                picture_flag = true; // 사진수신을 완료하였음을 알림
-                m.unlock();
-                printf ("<%d's camera sent a picture completely!>\n", camId);
-            }
-            else {// 사진수신할 필요가 없으므로 대기
-                dummy++;
-            }
-        }
-        else if (MODE_FLAG == ADMIN_MODE) {
-            // 사진 찍지 말고 대기
-            dummy++;
-        }
-        else { // TERMINATE_MODE
+        if (MODE_FLAG == TERMINATE_MODE)
             break;
+        if (!picture_flag) { // 사진을 가져오라는 명령이 떨어짐
+            // 스레드별로 camId를 먼저 수신
+            // 이후 데이터를 수신하고 디코딩하여 imgs[camId-1] 에 저장.
+            // imgs[camId-1] 저장이 끝난 스레드는 종료.
+
+            send_terminate_flag (clntSock, MODE_FLAG);
+
+            // Send notification
+            send_notification (clntSock);
+
+            // Receive @vec.size()
+            recvd = 0;
+            ssize_t bufSize;
+            recvd = Recv (clntSock, &bufSize, sizeof(bufSize), sizeof(size_t *));
+
+            // Receive @vec
+            vector<unsigned char> vec(bufSize);
+            recvd = Recv (clntSock, &vec[0], bufSize, sizeof(unsigned char));
+            ASSERT (recvd == vec.size() * sizeof(unsigned char));
+
+            imgs[camId-1] = cv::imdecode (vec, 1); // Decode bytes into Mat class image.
+            vec.clear();
+
+            m.lock();
+            picture_flag = true; // 사진수신을 완료하였음을 알림
+            m.unlock();
+            printf ("<%d's camera sent a picture completely!>\n", camId);
+        }
+        else {// 사진수신할 필요가 없으므로 대기
+            dummy++;
         }
     }
     send_terminate_flag (clntSock, MODE_FLAG);
@@ -160,37 +153,29 @@ camera_handler (std::vector<cv::Mat>& imgs, const int& totalCam, int& WORK_FLAG,
     // 각 스레드를 총괄하는 루프
     int dummy = 0;
     while (true) { // 초기 스레드들을 배분하면 이후에는 프로그램이 종료될때까지 여기에서 머뭄
-        if (MODE_FLAG == BASIC_MODE) {
-            if (WORK_FLAG == GO_TAKE_PICTURE) { // 사진을 가져오라는 명령이 떨어짐
+        if (MODE_FLAG == TERMINATE_MODE)
+            break;
+        if (WORK_FLAG == GO_TAKE_PICTURE) { // 사진을 가져오라는 명령이 떨어짐
 
+            for (int i=0; i<totalCam; i++)
+                picture_flag[i] = false; // 각 스레드들에게 사진 수신하라고 알리기
+            
+            while (true) { // 각 스레드 사진수신 완료되었는지 조사
+                bool go_to_next_work = true;
                 for (int i=0; i<totalCam; i++)
-                    picture_flag[i] = false; // 각 스레드들에게 사진 수신하라고 알리기
-                
-                while (true) { // 각 스레드 사진수신 완료되었는지 조사
-                    bool go_to_next_work = true;
-                    for (int i=0; i<totalCam; i++)
-                        if (!picture_flag[i]) // 아직 사진이 수신되지 않은 스레드가 있다면
-                            go_to_next_work = false;
-                    if (go_to_next_work) // 모든 사진이 다 수신되었다면
-                        break;
-                }
-                // 모든 스레드들이 사진수신을 완료하였으므로
-                m.lock();
-                WORK_FLAG = DONE_TAKE_PICTURE; // 이를 확인한 메인스레드는 Mat* imgs를 입력으로 딥러닝 시행
-                m.unlock();
+                    if (!picture_flag[i]) // 아직 사진이 수신되지 않은 스레드가 있다면
+                        go_to_next_work = false;
+                if (go_to_next_work) // 모든 사진이 다 수신되었다면
+                    break;
             }
-            else { // 현재 딥러닝중이므로 대기
-                dummy++;
-            }
+            // 모든 스레드들이 사진수신을 완료하였으므로
+            m.lock();
+            WORK_FLAG = DONE_TAKE_PICTURE; // 이를 확인한 메인스레드는 Mat* imgs를 입력으로 딥러닝 시행
+            m.unlock();
         }
-        else if (MODE_FLAG == ADMIN_MODE) {
-            // 사진찍지말고 대기
+        else { // 현재 딥러닝중이므로 대기
             dummy++;
         }
-        else { // TERMINATE_MODE
-            break;
-        }
-
     }
 
     for (int i=0; i<totalCam; i++) {

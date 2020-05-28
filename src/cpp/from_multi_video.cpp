@@ -11,6 +11,7 @@ handle_thread (const string& path, const int& camId, std::vector<cv::Mat>& imgs,
         printf ("handle_thread's loop!\n");
         if (MODE_FLAG == TERMINATE_MODE)
             break;
+        ASSERT (frame.empty() == true);
         if (!picture_flag) { // 사진을 가져오라는 명령이 떨어짐
             printf (" handle_thread's taking picture!\n");
             // 재생중인 동영상에서 캡쳐하기

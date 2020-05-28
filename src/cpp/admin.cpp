@@ -4,6 +4,9 @@ config_data::config_data () {
     this->prev_flag = ADMIN_MODE;
     this->confThreshold = 0.4;
     this->nmsThreshold = 0.5;
+
+    // 본 함수호출은 디버깅용
+    this->sync();
 }
 
 /* Returns true when it's basic mode. */
@@ -77,6 +80,6 @@ config_data::read_all_config () {
     this->resize_res.height = atoi(buf);
     fclose (fp);
 
-    // Read ROI.txt
+    // ROI.txt 파일 여기에서 읽는 기능 추가해야함
 
 }
