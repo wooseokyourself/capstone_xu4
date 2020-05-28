@@ -40,7 +40,7 @@ main (int argc, char* argv[]) {
                 m.lock();
                 WORK_FLAG = GO_TAKE_PICTURE; // 다시 사진촬영 요청
                 m.unlock();
-                printf (" WORK_FLAG: DONE_TAKE_PICTURE --> GO_TAKE_PICTURE\n")
+                printf (" WORK_FLAG: DONE_TAKE_PICTURE --> GO_TAKE_PICTURE\n");
             }
             else {// 사진촬영중이므로 대기
                 dummy++;
