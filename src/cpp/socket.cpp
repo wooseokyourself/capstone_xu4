@@ -132,10 +132,13 @@ camera_handler (io_data& _io_data, const int& totalCam, int& WORK_FLAG, int& MOD
         //만약 카메라가 연결되지 않을 경우 여기에서 무한대기됨
         // Waiting for external connection.
         // Set LINGER: client socket
+        printf (" > setsockopt()\n");
         setsockopt (clntSock[connectedNum], SOL_SOCKET, SO_LINGER, (char *) &ling, sizeof(ling));
+        printf (" > accept()\n");
         clntSock[connectedNum] = accept (servSock, (struct sockaddr *) &clntAddr, &clntAddrLen);
         // Print Client's info.
         char clntName[INET_ADDRSTRLEN];
+        printf (" > inet_ntop()\n");
         if (inet_ntop (AF_INET, &clntAddr.sin_addr.s_addr, clntName, sizeof(clntName)) != NULL)
             printf ("Client connected: %d\n", connectedNum+1);
         else
