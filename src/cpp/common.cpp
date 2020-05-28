@@ -41,6 +41,7 @@ getCurrTime () {
 }
 
 io_data::io_data (int camera_num) {
+    printf ("init camear_number=%d, reserve imgs to %d\n", camera_num, camera_num);
     this->imgs.reserve (camera_num);
     this->nums.reserve (camera_num);
     this->total_people_num = 0;
