@@ -13,7 +13,7 @@ string
 _ROI__DIR__PATH() { return (_CONFIG__PATH() + "/images"); }
 
 string
-_RESULT__DIR__PATH() { return (_ROOT__PATH() + "/resources/images"); }
+_RESULT__DIR__PATH() { return (_ROOT__PATH() + "/resources"); }
 
 /* Return "YYYY_MM_DD_HH:MM:SS" */
 string
