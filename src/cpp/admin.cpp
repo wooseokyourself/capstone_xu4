@@ -35,7 +35,7 @@ config_data::sync () {
     }
     else if (prev_flag == BASIC_MODE && now_flag == BASIC_MODE) {
         // printf ("prev_flag == BASIC && now_flag == BASIC\n");
-        return true;
+        return false;
     }
     else {
         return -1;

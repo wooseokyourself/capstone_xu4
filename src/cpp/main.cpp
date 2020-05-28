@@ -25,30 +25,25 @@ main (int argc, char* argv[]) {
                         std::ref(WORK_FLAG), std::ref(MODE_FLAG), std::ref(m)); // 소켓통신 시작
     int dummy = 0;
     while (true) {
-        if (conf_data.sync()) {
+        if (conf_data.sync()) // prev==ADMIN && now==BASIC 이면 config 갱신
             dnn.update (conf_data);
-            if (WORK_FLAG == DONE_TAKE_PICTURE) { // 사진촬영을 모두 완료하였다면
-                printf (" WORK_FLAG: DONE_TAKE_PICTURE --> GO_INFERENCE\n");
-                m.lock();
-                WORK_FLAG = GO_INFERENCE;
-                m.unlock();
+        if (WORK_FLAG == DONE_TAKE_PICTURE) { // 사진촬영을 모두 완료하였다면
+            printf (" WORK_FLAG: DONE_TAKE_PICTURE --> GO_INFERENCE\n");
+            m.lock();
+            WORK_FLAG = GO_INFERENCE;
+            m.unlock();
 
-                ups.upload_input (_io_data);
-                dnn.inference(_io_data);
-                ups.upload_output (_io_data);
+            ups.upload_input (_io_data);
+            dnn.inference(_io_data);
+            ups.upload_output (_io_data);
 
-                m.lock();
-                WORK_FLAG = GO_TAKE_PICTURE; // 다시 사진촬영 요청
-                m.unlock();
-                printf (" WORK_FLAG: DONE_TAKE_PICTURE --> GO_TAKE_PICTURE\n");
-            }
-            else {// 사진촬영중이므로 대기
-                dummy++;
-            }
+            m.lock();
+            WORK_FLAG = GO_TAKE_PICTURE; // 다시 사진촬영 요청
+            m.unlock();
+            printf (" WORK_FLAG: DONE_TAKE_PICTURE --> GO_TAKE_PICTURE\n");
         }
-        else { // Admin Mode이므로 대기
+        else// 사진촬영중이므로 대기
             dummy++;
-        }
     }
     return 0;
 }
