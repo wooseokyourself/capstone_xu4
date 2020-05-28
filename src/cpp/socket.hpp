@@ -2,6 +2,7 @@
 #define SOCKET
 
 #include "common.hpp"
+#include "admin.hpp"
 
 #include <sys/stat.h>
 #include <sys/socket.h>
@@ -29,15 +30,18 @@ ssize_t
 Recv (const int& sock, const void *buf, ssize_t size, ssize_t unit);
 
 void
+send_mode_flag (const int& clntSock, int& MODE_FLAG);
+
+void
+send_res (const int& clntSock, cv::Size& res);
+
+void
 send_notification (const int& clntSock);
 
 void
-send_terminate_flag (const int& clntSock, bool& terminate_flag);
+handle_thread (const int& clntSock, std::vector<cv::Mat>& imgs, const cv::Size& res, bool& picture_flag, int& MODE_FLAG, std::mutex& m);
 
 void
-handle_thread (const int& clntSock, std::vector<cv::Mat>& imgs, bool& picture_flag, int& MODE_FLAG, std::mutex& m);
-
-void
-camera_handler (io_data& _io_data, const int& totalCam, int& WORK_FLAG, int& MODE_FLAG, std::mutex& m);
+camera_handler (io_data& _io_data, config_data& _conf_data, int& WORK_FLAG, int& MODE_FLAG, std::mutex& m);
 
 #endif
