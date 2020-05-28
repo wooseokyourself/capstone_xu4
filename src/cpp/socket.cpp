@@ -169,6 +169,7 @@ camera_handler (std::vector<cv::Mat>& imgs, const int& totalCam, int& WORK_FLAG,
                     break;
             }
             // 모든 스레드들이 사진수신을 완료하였으므로
+            printf (" WORK_FLAG: GO_TAKE_PICTURE --> DONE_TAKE_PICTURE\n");
             m.lock();
             WORK_FLAG = DONE_TAKE_PICTURE; // 이를 확인한 메인스레드는 Mat* imgs를 입력으로 딥러닝 시행
             m.unlock();

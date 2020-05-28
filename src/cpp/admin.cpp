@@ -9,28 +9,28 @@ config_data::config_data () {
     this->sync();
 }
 
-/* Returns true when it's basic mode. */
+/* Returns true when the server has to be reset with config data. */
 bool
 config_data::sync () {
     int now_flag = read_mode_flag();
     ASSERT (now_flag != -1);
     if (prev_flag == ADMIN_MODE && now_flag == BASIC_MODE) {
-        printf ("prev_flag == ADMIN && now_flag == BASIC\n");
+        // printf ("prev_flag == ADMIN && now_flag == BASIC\n");
         this->read_all_config();
         prev_flag = now_flag;
         return true;
     }
     else if (prev_flag == ADMIN_MODE && now_flag == ADMIN_MODE) {
-        printf ("prev_flag == ADMIN && now_flag == ADMIN\n");
+        // printf ("prev_flag == ADMIN && now_flag == ADMIN\n");
         return false;        
     }
     else if (prev_flag == BASIC_MODE && now_flag == ADMIN_MODE) {
-        printf ("prev_flag == BASIC && now_flag == ADMIN\n");
+        // printf ("prev_flag == BASIC && now_flag == ADMIN\n");
         prev_flag = now_flag;
         return false;
     }
     else if (prev_flag == BASIC_MODE && now_flag == BASIC_MODE) {
-        printf ("prev_flag == BASIC && now_flag == BASIC\n");
+        // printf ("prev_flag == BASIC && now_flag == BASIC\n");
         return true;
     }
     else {

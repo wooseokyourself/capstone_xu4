@@ -21,33 +21,26 @@ main (int argc, char* argv[]) {
     int WORK_FLAG = GO_TAKE_PICTURE;
 
     std::mutex m;
-    printf ("1\n"); 
     std::thread cam_thr (camera_handler, std::ref(_io_data.imgs), std::ref(conf_data.camera_number), 
                         std::ref(WORK_FLAG), std::ref(MODE_FLAG), std::ref(m)); // 소켓통신 시작
-    printf ("2\n");
     int dummy = 0;
     while (true) {
-        printf ("3\n");
-        if (conf_data.sync()) { 
-            printf ("4\n");
+        if (conf_data.sync()) {
             dnn.update (conf_data);
-            printf ("5\n");
             if (WORK_FLAG == DONE_TAKE_PICTURE) { // 사진촬영을 모두 완료하였다면
-                printf ("6\n");
+                printf (" WORK_FLAG: DONE_TAKE_PICTURE --> GO_INFERENCE\n");
                 m.lock();
                 WORK_FLAG = GO_INFERENCE;
                 m.unlock();
-                printf ("7\n");
+
                 ups.upload_input (_io_data);
-                printf ("8\n");
                 dnn.inference(_io_data);
-                printf ("9\n");
                 ups.upload_output (_io_data);
-                printf ("10\n");
 
                 m.lock();
                 WORK_FLAG = GO_TAKE_PICTURE; // 다시 사진촬영 요청
                 m.unlock();
+                printf (" WORK_FLAG: DONE_TAKE_PICTURE --> GO_TAKE_PICTURE\n")
             }
             else {// 사진촬영중이므로 대기
                 dummy++;
