@@ -125,7 +125,7 @@ camera_handler (std::vector<cv::Mat>& imgs, const int& totalCam, int& WORK_FLAG,
     int* clntSock = new int[totalCam];
     int connectedNum = 0;
     
-    printf (" accessing cam connection loop...\n");
+    printf (" accessing cam connection loop... totalCam=%d\n", totalCam);
     while (connectedNum < totalCam) { // 초기 카메라 연결
         //만약 카메라가 연결되지 않을 경우 여기에서 무한대기됨
         // Waiting for external connection.
