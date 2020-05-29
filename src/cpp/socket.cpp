@@ -149,7 +149,7 @@ camera_handler (io_data& _io_data, config_data& _conf_data, int& WORK_FLAG, int&
     for (int i=0; i<camera_number; i++) {
         picture_flag[i] = false; // i번째 스레드의 사진이 수신되었으면 true로 변경됨
         // printf ("[thread %d] created!\n", i);
-        thrs[i] = std::thread(handle_thread, std::ref(clntSock[i]), std::ref(_io_data.imgs), std::ref(picture_flag[i]), std::ref(_conf_data.capture_res), std::ref(MODE_FLAG), std::ref(m));
+        thrs[i] = std::thread(handle_thread, std::ref(clntSock[i]), std::ref(_io_data.imgs), std::ref(_conf_data.capture_res), std::ref(picture_flag[i]), std::ref(MODE_FLAG), std::ref(m));
     }
 
     // 각 스레드를 총괄하는 루프
