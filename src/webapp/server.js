@@ -6,6 +6,7 @@ HGU 20-2 capstone web
 //1-1) 상태 변수
 var mode = 1;		// 1~3.admin / 4.basic
 var isSet = false;
+var isON_child = false;
 //1-2) 상수
 var express_port = 10001;
 var path_child = __dirname + '/../../bin/a.out'
@@ -63,7 +64,7 @@ var fs = require('fs');
 fs.writeFileSync(path_data_mode, "admin\n", 'utf8');
 //2-3) child 실행
 var spawn = require('child_process').spawn;
-var child = spawn(path_child);
+var child;
 //2-4) 엔진 설정 (view engine - ejs + static path 설정 + express listen)
 app.set("view engine", "ejs");
 app.set('views', __dirname+'/views');
@@ -82,6 +83,11 @@ app.get('/', function(req, res){
 			});
 			break;
 		case 2:
+			if(!isON_child){
+				console.log("child procoss is now on\n");
+				child = spawn(path_child);
+				isON_child = true;
+			}
 			list_src_ROI = fs.readdirSync(path_src_ROI);
 			num_src_ROI = list_src_ROI.length;
 			if(!num_src_ROI){
