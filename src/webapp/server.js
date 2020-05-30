@@ -86,6 +86,26 @@ app.get('/', function(req, res){
 			if(!isON_child){
 				console.log("child procoss is now on\n");
 				child = spawn(path_child);
+				var scriptOutput = "";
+				child.stdout.setEncoding('utf8');
+				child.stdout.on('data', function(data) {
+					console.log('stdout: ' + data);
+					data = data.toString();
+					scriptOutput += data;
+				});
+
+				child.stderr.setEncoding('utf8');
+				child.stderr.on('data', function(data) {
+					console.log('stderr: ' + data);
+					data = data.toString();
+					scriptOutput += data;
+				});
+
+				child.on('close', function(code) {
+					console.log('closing code: ' + code);
+					console.log('Full output of script: ', scriptOutput);
+				})
+
 				isON_child = true;
 			}
 			list_src_ROI = fs.readdirSync(path_src_ROI);
