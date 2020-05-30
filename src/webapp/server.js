@@ -8,7 +8,7 @@ var mode = 1;		// 1~3.admin / 4.basic
 var isSet = false;
 var isON_child = false;
 //1-2) 상수
-var express_port = 10001;
+var express_port = 80;
 var path_child = __dirname + '/../../bin/a.out'
 var path_img_ROI = 'config/images/';
 var path_src_ROI = __dirname + '/../../config/images/';
