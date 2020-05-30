@@ -22,9 +22,11 @@ send_mode_flag (const int& clntSock, int& MODE_FLAG) {
 }
 
 void
-send_res (const int& clntSock, cv::Size& res) {
-    int sent = send (clntSock, &res, sizeof(res), 0);
-    ASSERT (sent == sizeof(res));
+send_res (const int& clntSock, int& width, int& height) {
+    int sent = send (clntSock, &width, sizeof(width), 0);
+    ASSERT (sent == sizeof(width));
+    sent = send (clntSock, &height, sizeof(height), 0);
+    ASSERT (sent == sizeof(height));
 }
 
 /* Notify the client to take a picture. */
@@ -38,7 +40,7 @@ send_notification (const int& clntSock) {
 
 /* Receive pictures in each thread. */
 void
-handle_thread (const int& clntSock, std::vector<cv::Mat>& imgs, cv::Size& res, bool& picture_flag, int& MODE_FLAG, std::mutex& m) {
+handle_thread (const int& clntSock, std::vector<cv::Mat>& imgs, int& width, int& height, bool& picture_flag, int& MODE_FLAG, std::mutex& m) {
     int dummy;
     int recvd;
 
@@ -56,7 +58,7 @@ handle_thread (const int& clntSock, std::vector<cv::Mat>& imgs, cv::Size& res, b
 
             send_mode_flag (clntSock, MODE_FLAG);
 
-            send_res (clntSock, res);
+            send_res (clntSock, width, height);
 
             // Send notification
             send_notification (clntSock);
@@ -149,7 +151,7 @@ camera_handler (io_data& _io_data, config_data& _conf_data, int& WORK_FLAG, int&
     for (int i=0; i<camera_number; i++) {
         picture_flag[i] = false; // i번째 스레드의 사진이 수신되었으면 true로 변경됨
         // printf ("[thread %d] created!\n", i);
-        thrs[i] = std::thread(handle_thread, std::ref(clntSock[i]), std::ref(_io_data.imgs), std::ref(_conf_data.capture_res), std::ref(picture_flag[i]), std::ref(MODE_FLAG), std::ref(m));
+        thrs[i] = std::thread(handle_thread, std::ref(clntSock[i]), std::ref(_io_data.imgs), std::ref(_conf_data.capture_res_width), std::ref(_conf_data.capture_res_height), std::ref(picture_flag[i]), std::ref(MODE_FLAG), std::ref(m));
     }
 
     // 각 스레드를 총괄하는 루프

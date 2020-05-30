@@ -7,10 +7,10 @@ config_data::config_data () {
 
     // 본 초기화는 디버깅용
     this->camera_number = 1;
-    this->capture_res.width = 416;
-    this->capture_res.height = 416;
-    this->resize_res.width = 416;
-    this->resize_res.height = 416;
+    this->capture_res_width = 416;
+    this->capture_res_height = 416;
+    this->resize_res_width = 416;
+    this->resize_res_height = 416;
 }
 
 /* Returns true when the server has to be reset with config data. */
@@ -72,13 +72,13 @@ config_data::read_all_config () {
     this->camera_number = atoi(buf);
     // printf (" reading camera number=%d\n", this->camera_number);
     fgets(buf, sizeof(buf), fp);
-    this->capture_res.width = atoi(buf);
+    this->capture_res_width = atoi(buf);
     fgets(buf, sizeof(buf), fp);
-    this->capture_res.height = atoi(buf);
+    this->capture_res_height = atoi(buf);
     fgets(buf, sizeof(buf), fp);
-    this->resize_res.width = atoi(buf);
+    this->resize_res_width = atoi(buf);
     fgets(buf, sizeof(buf), fp);
-    this->resize_res.height = atoi(buf);
+    this->resize_res_height = atoi(buf);
     fclose (fp);
 
     // ROI.txt 파일 여기에서 읽는 기능 추가해야함

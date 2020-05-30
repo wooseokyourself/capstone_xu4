@@ -10,8 +10,10 @@ public:
 
     int prev_flag;
     int camera_number;
-    cv::Size capture_res;
-    cv::Size resize_res;
+    int capture_res_width;
+    int capture_res_height;
+    int resize_res_width;
+    int resize_res_height;
     float confThreshold; // default=0.4
     float nmsThreshold; // default=0.5
     std::vector< std::pair<int, string> > overlapping_area;
