@@ -1,6 +1,6 @@
 #include "ml.hpp"
 
-OpenCV_DNN::OpenCV_DNN (Size resize_res, float confThreshold, float nmsThreshold) {
+OpenCV_DNN::OpenCV_DNN (const config_data& data) {
     // Set path.
     this->MODEL_PATH = BIN_PATH + "/model/yolov3.weights";
     this->CFG_PATH = BIN_PATH + "/model/yolov3.cfg";
@@ -12,11 +12,6 @@ OpenCV_DNN::OpenCV_DNN (Size resize_res, float confThreshold, float nmsThreshold
     this->scalarfactor = 1; // parameter of blobFromImage()
     this->scale = 1/255.0; // parameter of net.setInput()
     this->swapRB = true;
-
-    // Admin Mode
-    this->resize_res = resize_res;
-    this->confThreshold = confThreshold;
-    this->nmsThreshold = nmsThreshold;
 
     // Open file with classes names.
     string file = CLASSES_PATH;
@@ -32,6 +27,9 @@ OpenCV_DNN::OpenCV_DNN (Size resize_res, float confThreshold, float nmsThreshold
     this->net.setPreferableBackend(DNN_BACKEND_OPENCV);
     this->net.setPreferableTarget(DNN_TARGET_CPU);
     this->outNames = net.getUnconnectedOutLayersNames();
+
+    // Admin Mode initial setting
+    this->update (data);
 }
 
 void
@@ -39,7 +37,8 @@ OpenCV_DNN::update (const config_data& data) {
     /*
         data 의 각 데이터를 현재 클래스에 적용
     */
-    this->resize_res = data.resize_res;
+    this->resize_res.width = data.resize_res_width;
+    this->resize_res.height = data.resize_res_height;
     this->confThreshold = data.confThreshold;
     this->nmsThreshold = data.nmsThreshold;
 }
