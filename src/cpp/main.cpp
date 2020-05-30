@@ -11,7 +11,7 @@ main (int argc, char* argv[]) {
     printf ("conf sync!\n");
     _conf_data.sync(); // 서비스 최초 실행시 제일 먼저 conf_data를 읽어온다.
     printf ("conf sync done!\n");
-    OpenCV_DNN dnn (_conf_data.resize_res, _conf_data.confThreshold, _conf_data.nmsThreshold);
+    OpenCV_DNN dnn (_conf_data);
     printf ("dnn done !\n");
     Uploader ups;
 

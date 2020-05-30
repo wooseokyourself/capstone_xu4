@@ -12,7 +12,7 @@ using namespace dnn;
 class OpenCV_DNN {
 public:
 
-    OpenCV_DNN(Size resize_res, float confThreshold, float nmsThreshold);
+    OpenCV_DNN(const config_data& data);
 
     void
     update (const config_data& data);
