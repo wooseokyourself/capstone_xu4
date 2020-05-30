@@ -5,12 +5,7 @@ config_data::config_data () {
     this->confThreshold = 0.4;
     this->nmsThreshold = 0.5;
 
-    // 본 초기화는 디버깅용
-    this->camera_number = 1;
-    this->capture_res_width = 416;
-    this->capture_res_height = 416;
-    this->resize_res_width = 416;
-    this->resize_res_height = 416;
+    this->read_all_config();
 }
 
 /* Returns true when the server has to be reset with config data. */
