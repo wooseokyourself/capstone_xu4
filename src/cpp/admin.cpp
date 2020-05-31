@@ -10,7 +10,7 @@ config_data::config_data () {
 
 /* Returns true when the server has to be reset with config data. */
 bool
-config_data::sync (bool is_first_call = false) {
+config_data::sync (bool is_first_call) {
     int now_flag = read_mode_flag();
     ASSERT (now_flag != -1);
     if (prev_flag == ADMIN_MODE && now_flag == BASIC_MODE) {

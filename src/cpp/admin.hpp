@@ -21,7 +21,7 @@ public:
 public:
     config_data ();
     bool
-    sync (bool is_first_call = false);
+    sync (bool is_first_call);
 
 protected:
     int

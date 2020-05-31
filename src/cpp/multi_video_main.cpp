@@ -39,7 +39,7 @@ main (int argc, char* argv[]) {
     while (true) {
         if (MODE_FLAG == TERMINATE_MODE)
             break;
-        if (_conf_data.sync()) // prev==ADMIN && now==BASIC 이면 config 갱신
+        if (_conf_data.sync(false)) // prev==ADMIN && now==BASIC 이면 config 갱신
             dnn.update (_conf_data);
         if (WORK_FLAG == DONE_TAKE_PICTURE) { // 사진촬영을 모두 완료하였다면
             printf (" WORK_FLAG: DONE_TAKE_PICTURE --> GO_INFERENCE\n");
