@@ -190,4 +190,5 @@ camera_handler (io_data& _io_data, config_data& _conf_data, int& WORK_FLAG, int&
     close (servSock);
     delete[] thrs;
     delete[] clntSock;
+    delete[] picture_flag;
 }

@@ -1,7 +1,8 @@
-#ifndef FROM_MULTI_VIDEO
-#define FROM_MULTI_VIDEO
+#ifndef SOCKET
+#define SOCKET
 
 #include "common.hpp"
+#include "admin.hpp"
 
 #include <sys/stat.h>
 #include <sys/socket.h>
@@ -12,9 +13,6 @@
 #include <fcntl.h>
 #include <unistd.h>
 
-#include <opencv2/opencv.hpp>
-
-using namespace cv;
 using namespace std;
 
 #define GO_TAKE_PICTURE 0
@@ -23,12 +21,15 @@ using namespace std;
 #define GO_INFERENCE 3
 
 #define MAXBUFSIZE 512
-#define PORT    10001
+#define PORT 10001
+
+// Maximum number of requests to wait for a connection.
+static const int MAXPENDING = 10;
 
 void
-handle_thread (const string& path, const int& camId, std::vector<cv::Mat>& imgs, bool& picture_flag, int& MODE_FLAG, std::mutex& m);
+handle_thread (int& camId, cv::VideoCapture& cap, std::vector<cv::Mat>& imgs, bool& picture_flag, int& MODE_FLAG, std::mutex& m);
 
 void
-camera_handler (std::vector<cv::Mat>& imgs, const int& totalCam, int& WORK_FLAG, int& MODE_FLAG, std::mutex& m);
+camera_handler (io_data& _io_data, config_data& _conf_data, int& WORK_FLAG, int& MODE_FLAG, std::mutex& m);
 
 #endif

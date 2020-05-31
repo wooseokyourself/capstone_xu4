@@ -24,25 +24,13 @@ OPT = #-DDIVIDE
 #-----------------------------------------------#
 
 
-# Compile: debug version
-
-multi: $(CPP_MULTI_TARGET)
-	@echo "Multi Video's Compile is done!"
-
-$(CPP_MULTI_TARGET):
-	$(CXX) $(CXXFLAGS) $(OPT) $(MULTI_VIDEO_SRC) $(OPENCV) -o $(CPP_MULTI_TARGET)
-
-
-#-----------------------------------------------#
-
-
 # Compile: release version
 
 all: $(CPP_TARGET)
 	@echo "Compile is done! Run with 'make run'"
 
 $(CPP_TARGET):
-	$(CXX) $(CXXFLAGS) $(OPT) $(RELEASE_SRC) $(OPENCV) -o $(CPP_TARGET)
+	$(CXX) $(CXXFLAGS) $(OPT) $(MULTI_VIDEO_SRC) $(OPENCV) -o $(CPP_MULTI_TARGET)
 	
 
 #-----------------------------------------------#
