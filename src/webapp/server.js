@@ -7,6 +7,7 @@ HGU 20-2 capstone web
 var mode = 1;		// 1~3.admin / 4.basic
 var isSet = false;
 var isON_child = false;
+var MAX_CAMERA = 4;
 //1-2) 상수
 var express_port = 10051;
 var root_path = __dirname + '/../..';
@@ -26,20 +27,20 @@ var res_capture=new Array(2);;
 var res_resize=new Array(2);
 var client_num = 0;
 var client_log = 0;
-var recent_image_name = "";
-var recent_image_num = -1;
 var curr_image_name = "";
 var curr_image_camera = 0;
 var curr_image_num = -1;
 var setting_bnum = new Array();;
 var setting_plist = new Array();;
-var num_people = -1;
+var num_people = 0;
 var num_src_deap = new Array();
 var num_src_ROI = 0;
 var num_curr_ROI = 1;
-var list_src_deap = new Array(20);
-for(var i =0 ; i<20; i++){
+var list_src_deap = new Array(MAX_CAMERA);
+var list_people = new Array(MAX_CAMERA);
+for(var i =0 ; i<MAX_CAMERA; i++){
 	list_src_deap[i] = new Array();
+	list_people[i] = new Array();
 }
 var list_src_ROI;
 var list_data_people = new Array();
@@ -52,7 +53,6 @@ function findNumber(list, filename){
 			return list[i+1];
 		}
 	}
-	console.log(list.length);
 	return -1;
 }
 
@@ -130,24 +130,28 @@ app.get('/', function(req, res){
 			break;
 		case 4:
 			list_data_people = fs.readFileSync(path_data_people, 'utf8').toString().split("\n");
-			num_people = list_data_people[0];
 			list_data_camera = fs.readFileSync(path_data_camera, 'utf8').toString().split("\n");
+			num_people = 0;
 			for(var i = 0; i<num_camera; i++){
 				list_src_deap[i] = fs.readdirSync(path_src_deap+String(i+1));
+				for(var j = 0; j<list_src_deap[i].length; j++){
+					var tmp = findNumber(list_data_people, list_src_deap[i][j]);
+					list_people[i][j] = tmp;
+				}
 				num_src_deap[i] = list_src_deap[i].length;
+				num_people += parseInt(list_people[i][list_src_deap[i].length-1]);
 			}
 			res.render('basic', {
-				path: path_img_deap,
-				p_num: num_people,
-				img_list: list_src_deap,
-				c_num: num_camera,
-				c_log: num_src_deap,
-				c_ip: list_data_camera,
-				curr_img_name: curr_image_name,
-				curr_img_camera: curr_image_camera,
-				curr_img_num: curr_image_num,
-				recent_img_name: recent_image_name,
-				recent_img_num: recent_image_num
+				path: path_img_deap,					//이미지 경로
+				p_num: num_people,						//총 사람 수
+				p_list: list_people,					//[][] - i번째 카메라의 j번째 사진의 사람 수
+				img_list: list_src_deap,				//[][] - i번째 카메라의 j번째 사진이름
+				c_num: num_camera,						//카메라의 숫자
+				c_log: num_src_deap,					//[] - i번째 카메라의 사진 수
+				c_ip: list_data_camera,					//[] - i번째 카메라의 ip
+				curr_img_name: curr_image_name,			//현재 선택한 이미지의 이름
+				curr_img_camera: curr_image_camera,		//현재 선택한 이미지의 카메라 넘버
+				curr_img_num: curr_image_num,			//현재 선택한 이미지의 인원수
 			});
 			break;
 	}
@@ -179,8 +183,6 @@ app.get('/ADMIN_2/next', function(req, res){
 	res.redirect('/');
 });
 app.get('/ADMIN_2/prev', function(req, res){
-	// setting_bnum[num_curr_ROI-1] = req.query.b_num;
-	// setting_plist[num_curr_ROI-1] = JSON.parse(req.query.p_list);
 	num_curr_ROI--;
 	res.redirect('/');
 });
@@ -208,9 +210,7 @@ app.get('/ADMIN_2/toBASIC', function(req, res){
 app.get('/BASIC/image/:camera/:filepath', function(req, res){
 	curr_image_camera = req.params.camera;
 	curr_image_name = req.params.filepath;
-	recent_image_name = list_src_deap[curr_image_camera-1][num_src_deap[curr_image_camera-1]-1];
 	curr_image_num = findNumber(list_data_people, curr_image_name);
-	recent_image_num = findNumber(list_data_people , recent_image_name);
 	res.redirect('/');
 });
 app.get('/BASIC/toADMIN_1', function(req, res){
