@@ -2,9 +2,12 @@
 
 /* Receive pictures in each thread. */
 void
-handle_thread (int& camId, cv::VideoCapture& cap, std::vector<cv::Mat>& imgs, bool& picture_flag, int& MODE_FLAG, std::mutex& m) {
+handle_thread (int& camId, std::vector<cv::Mat>& imgs, bool& picture_flag, int& MODE_FLAG, std::mutex& m) {
     int dummy;
     int recvd;
+    cv::VideoCapture cap(BIN_PATH + "/testvideos/" + to_string(camId+1) + ".mp4");
+    if (cap.isOpened())
+        printf ("Client connected: %d\n", camId+1);
     // Receive id of cam
     while (true) {
         if (MODE_FLAG == TERMINATE_MODE)
@@ -35,24 +38,13 @@ handle_thread (int& camId, cv::VideoCapture& cap, std::vector<cv::Mat>& imgs, bo
 void
 camera_handler (io_data& _io_data, config_data& _conf_data, int& WORK_FLAG, int& MODE_FLAG, std::mutex& m) {
     const int& camera_number = _conf_data.camera_number;
-    std::vector<cv::VideoCapture> videos (camera_number);
-    int connected_number = 0;
-    
-    while (connected_number < camera_number) { // 동영상 열기
-        videos[connected_number] = VideoCapture(BIN_PATH + "/testvideos/" + to_string(connected_number+1) + ".mp4");
-        if (videos[connected_number].isOpened())
-            printf ("Client connected: %d\n", connected_number+1);
-        else
-            puts ("Unable to get client address");
-        connected_number++;
-    }
 
     std::thread* thrs = new std::thread[camera_number];
     bool* picture_flag = new bool[camera_number]; // 여기 스레드에서 각 스레드별 사진수신여부를 총합하는 플래그
     for (int i=0; i<camera_number; i++) {
         picture_flag[i] = false; // i번째 스레드의 사진이 수신되었으면 true로 변경됨
         // printf ("[thread %d] created!\n", i);
-        thrs[i] = std::thread(handle_thread, std::ref(i), std::ref(videos[i]), std::ref(_io_data.imgs), std::ref(picture_flag[i]), std::ref(MODE_FLAG), std::ref(m));
+        thrs[i] = std::thread(handle_thread, std::ref(i), std::ref(_io_data.imgs), std::ref(picture_flag[i]), std::ref(MODE_FLAG), std::ref(m));
     }
 
     // 각 스레드를 총괄하는 루프

@@ -27,7 +27,7 @@ using namespace std;
 static const int MAXPENDING = 10;
 
 void
-handle_thread (int& camId, cv::VideoCapture& cap, std::vector<cv::Mat>& imgs, bool& picture_flag, int& MODE_FLAG, std::mutex& m);
+handle_thread (int& camId, std::vector<cv::Mat>& imgs, bool& picture_flag, int& MODE_FLAG, std::mutex& m);
 
 void
 camera_handler (io_data& _io_data, config_data& _conf_data, int& WORK_FLAG, int& MODE_FLAG, std::mutex& m);
