@@ -28,6 +28,7 @@ main (int argc, char* argv[]) {
     bool allConnected = false;
     std::mutex m;
     std::thread cam_thr (camera_handler, std::ref(_io_data), std::ref(_conf_data),
+                        std::ref(clnt_addrs), std::ref(allConnected),
                         std::ref(WORK_FLAG), std::ref(MODE_FLAG), std::ref(m));
     while (true)
         if (allConnected)
