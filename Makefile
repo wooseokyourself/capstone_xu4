@@ -2,6 +2,7 @@ BIN = bin
 CPPSRC = src/cpp
 WEBAPP = src/webapp
 RSRC = resources
+CFG = config
 
 #-----------------------------------------------#
 
@@ -57,6 +58,11 @@ init:
 	mkdir $(RSRC)/images
 	touch $(RSRC)/camera_ip.txt
 	touch $(RSRC)/people.txt
+	rm -rf $(CFG)
+	mkdir $(CFG)/images
+	touch $(CFG)/ROI.txt
+	touch $(CFG)/admin_input.txt
+	touch $(CFG)/mode.txt
 
 #-----------------------------------------------#
 
