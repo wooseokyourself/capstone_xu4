@@ -34,9 +34,11 @@ Uploader::upload_output (const io_data& _io_data) {
 	const char* results_PATH = (RESULT_DIR_PATH + "/people.txt").c_str();
 	FILE* fp = fopen (results_PATH, "a");	
 
+    /*
     const char* total_num = (to_string(_io_data.total_people_num) + "\n").c_str();
     fputs (total_num, fp);
-
+    */
+   
     for (int i=0; i<_io_data.imgs.size(); i++) {
         const char* each_picture_name = (file_name + "_" + to_string(i+1) + ".jpeg" + "\n").c_str();
         const char* each_picture_num = (to_string(_io_data.nums[i]) + "\n").c_str();
