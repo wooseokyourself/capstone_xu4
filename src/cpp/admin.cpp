@@ -97,4 +97,12 @@ config_data::read_ovlaps () {
         }
     }
     fclose (fp);
+
+    printf ("read ovlaps done!\n");
+    for (int i=0; i<this->ovlaps.size(); i++) {
+        for (int j=0; j<this->ovlaps[i].size(); j++) {
+            printf ("%d ", ovlaps[i][j]);
+        }
+        printf ("\n");
+    }
 }
