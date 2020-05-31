@@ -16,12 +16,12 @@ handle_thread (int& camId, cv::VideoCapture& cap, std::vector<cv::Mat>& imgs, bo
             // imgs[camId-1] 저장이 끝난 스레드는 종료.
 
 
-            imgs[camId-1] = frame.clone(); // Decode bytes into Mat class image.
+            imgs[camId] = frame.clone(); // Decode bytes into Mat class image.
 
             m.lock();
             picture_flag = true; // 사진수신을 완료하였음을 알림
             m.unlock();
-            printf ("<%d's camera sent a picture completely!>\n", camId);
+            printf ("<%d's camera sent a picture completely!>\n", camId+1);
         }
         else {// 사진수신할 필요가 없으므로 대기
             dummy++;
@@ -49,7 +49,7 @@ camera_handler (io_data& _io_data, config_data& _conf_data, int& WORK_FLAG, int&
     for (int i=0; i<camera_number; i++) {
         picture_flag[i] = false; // i번째 스레드의 사진이 수신되었으면 true로 변경됨
         // printf ("[thread %d] created!\n", i);
-        thrs[i] = std::thread(handle_thread, std::ref(i+1), std::ref(videos[i]), std::ref(_io_data.imgs), std::ref(picture_flag[i]), std::ref(MODE_FLAG), std::ref(m));
+        thrs[i] = std::thread(handle_thread, std::ref(i), std::ref(videos[i]), std::ref(_io_data.imgs), std::ref(picture_flag[i]), std::ref(MODE_FLAG), std::ref(m));
     }
 
     // 각 스레드를 총괄하는 루프
