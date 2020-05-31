@@ -188,10 +188,16 @@ app.get('/ADMIN_2/toBASIC', function(req, res){
 	console.log("admin_2 to basic");
 	setting_bnum[num_curr_ROI-1] = req.query.b_num;
 	setting_plist[num_curr_ROI-1] = JSON.parse(req.query.p_list);
-	fs.writeFileSync(path_data_ROI, "number of ROI\n"+setting_bnum+"\n\ndata of ROI\n", 'utf8');
+	fs.writeFileSync(path_data_ROI, "", 'utf8');
 	fs.writeFileSync(path_data_mode, "basic\n", 'utf8');
 	for(var i =0 ; i< num_camera; i++){
-		fs.appendFileSync(path_data_ROI, setting_plist[i] + '\n', 'utf8');
+		for(var j =0; j<setting_bnum[i]; j++){
+			for(var k=0; k<4; k++){
+				fs.appendFileSync(path_data_ROI, setting_plist[i][j][k], 'utf8');
+				fs.appendFileSync(path_data_ROI, ' ', 'utf8');
+			}
+		}
+		fs.appendFileSync(path_data_ROI, '\n', 'utf8');
 	}
 	num_curr_ROI = 1;
 	mode=4;
