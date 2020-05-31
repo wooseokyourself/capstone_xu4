@@ -59,6 +59,7 @@ init:
 	touch $(RSRC)/camera_ip.txt
 	touch $(RSRC)/people.txt
 	rm -rf $(CFG)
+	mkdir $(CFG)
 	mkdir $(CFG)/images
 	touch $(CFG)/ROI.txt
 	touch $(CFG)/admin_input.txt
