@@ -5,28 +5,32 @@ void
 handle_thread (int& camId, cv::VideoCapture& cap, std::vector<cv::Mat>& imgs, bool& picture_flag, int& MODE_FLAG, std::mutex& m) {
     int dummy;
     int recvd;
-    cv::Mat frame;
     // Receive id of cam
-    while (cap.read(frame)) {
+    while (true) {
         if (MODE_FLAG == TERMINATE_MODE)
             break;
+        Mat frame;
+        cap >> frame;
+
+        if (frame.empty()) {
+            printf ("frame is empty!\n");
+            break;
+        }
+
         if (!picture_flag) { // 사진을 가져오라는 명령이 떨어짐
-            // 스레드별로 camId를 먼저 수신
-            // 이후 데이터를 수신하고 디코딩하여 imgs[camId-1] 에 저장.
-            // imgs[camId-1] 저장이 끝난 스레드는 종료.
-
-
-            imgs[camId] = frame.clone(); // Decode bytes into Mat class image.
+            imgs[camId] = frame.clone();
 
             m.lock();
             picture_flag = true; // 사진수신을 완료하였음을 알림
             m.unlock();
+            
             printf ("<%d's camera sent a picture completely!>\n", camId+1);
         }
         else {// 사진수신할 필요가 없으므로 대기
             dummy++;
         }
     }
+    cap.release();
 }
 
 void
