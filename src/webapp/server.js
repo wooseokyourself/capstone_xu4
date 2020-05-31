@@ -9,16 +9,17 @@ var isSet = false;
 var isON_child = false;
 //1-2) 상수
 var express_port = 10051;
-var path_child = __dirname + '/../../bin/a.out'
+var root_path = __dirname + '/../..';
+var path_child = root_path + '/bin/a.out'
 var path_img_ROI = 'config/images/';
-var path_src_ROI = __dirname + '/../../config/images/';
+var path_src_ROI = root_path + '/config/images/';
 var path_img_deap = 'resources/images/';
-var path_src_deap = __dirname + '/../../resources/images/';
-var path_data_ROI = __dirname + '/../../config/ROI.txt';
-var path_data_people = __dirname + '/../../resources/people.txt';
-var path_data_camera = __dirname + '/../../resources/camera_ip.txt';
-var path_data_admin = __dirname + '/../../config/admin_input.txt'
-var path_data_mode = __dirname + '/../../config/mode.txt'
+var path_src_deap = root_path + '/resources/images/';
+var path_data_ROI = root_path + '/config/ROI.txt';
+var path_data_people = root_path + '/resources/people.txt';
+var path_data_camera = root_path + '/resources/camera_ip.txt';
+var path_data_admin = root_path + '/config/admin_input.txt'
+var path_data_mode = root_path + '/config/mode.txt'
 //1-3) 일반 변수
 var num_camera;
 var res_capture=new Array(2);;
@@ -85,7 +86,7 @@ app.get('/', function(req, res){
 		case 2:
 			if(!isON_child){
 				console.log("child procoss is now on\n");
-				child = spawn(path_child);
+				child = spawn(path_child, [root_path]);
 				var scriptOutput = "";
 				child.stdout.setEncoding('utf8');
 				child.stdout.on('data', function(data) {

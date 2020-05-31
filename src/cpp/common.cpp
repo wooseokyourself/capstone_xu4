@@ -1,7 +1,9 @@
 #include "common.hpp"
 
+extern string __root_path;
+
 string
-_ROOT__PATH() { return "/home/ws/capstone_xu4"; }
+_ROOT__PATH() { return __root_path; }
 
 string
 _CONFIG__PATH() { return (_ROOT__PATH() + "/config"); }

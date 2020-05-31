@@ -3,9 +3,12 @@
 #include "uploader.hpp"
 #include "admin.hpp"
 
+string __root_path;
+
 /* 어플 최초 실행시 conf_data를 웹에서 입력받은 뒤에 이 C++ 프로그램이 실행되어야 config data를 초기화할 수 있음 */
 int
 main (int argc, char* argv[]) {
+    __root_path = string(argv[1]);
     printf ("start program\n");
     config_data _conf_data;
     printf ("conf sync!\n");
