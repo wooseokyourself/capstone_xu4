@@ -30,7 +30,7 @@ all: $(CPP_TARGET)
 	@echo "Compile is done! Run with 'make run'"
 
 $(CPP_TARGET):
-	$(CXX) $(CXXFLAGS) $(OPT) $(MULTI_VIDEO_SRC) $(OPENCV) -o $(CPP_MULTI_TARGET)
+	$(CXX) $(CXXFLAGS) $(OPT) $(RELEASE_SRC) $(OPENCV) -o $(CPP_TARGET)
 	
 
 #-----------------------------------------------#
