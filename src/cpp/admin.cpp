@@ -6,6 +6,13 @@ config_data::config_data () {
     this->nmsThreshold = 0.5;
 
     this->read_admin_input();
+    this->ovlaps.resize(this->camera_number);
+    for (int i=0; i<this->camera_number; i++) {
+        this->ovlaps[i].push_back(0);
+        this->ovlaps[i].push_back(0);
+        this->ovlaps[i].push_back(0);
+        this->ovlaps[i].push_back(0);
+    }
 }
 
 /* Returns true when the server has to be reset with config data. */
