@@ -40,7 +40,9 @@ send_notification (const int& clntSock) {
 
 /* Receive pictures in each thread. */
 void
-handle_thread (const int& clntSock, std::vector<cv::Mat>& imgs, int& width, int& height, bool& picture_flag, int& MODE_FLAG, std::mutex& m) {
+handle_thread (const int& clntSock, std::vector<cv::Mat>& imgs, 
+                int& width, int& height, bool& picture_flag, 
+                int& MODE_FLAG, std::mutex& m) {
     int dummy;
     int recvd;
 
@@ -89,8 +91,13 @@ handle_thread (const int& clntSock, std::vector<cv::Mat>& imgs, int& width, int&
 }
 
 void
-camera_handler (io_data& _io_data, config_data& _conf_data, int& WORK_FLAG, int& MODE_FLAG, std::mutex& m) {
+camera_handler (io_data& _io_data, config_data& _conf_data,
+                std::vector<string>& clnt_addrs, bool& allConnected, 
+                int& WORK_FLAG, int& MODE_FLAG, std::mutex& m) {
+
     const int& camera_number = _conf_data.camera_number;
+    clnt_addrs.resize (camera_number);
+    allConnected = false;
 
     // Use LINGER.
     struct linger ling = {0, };
@@ -136,12 +143,12 @@ camera_handler (io_data& _io_data, config_data& _conf_data, int& WORK_FLAG, int&
         // Print Client's info.
         char clntName[INET_ADDRSTRLEN];
         // printf (" > inet_ntop()\n");
-        if (inet_ntop (AF_INET, &clntAddr.sin_addr.s_addr, clntName, sizeof(clntName)) != NULL)
-            printf ("Client connected: %d\n", connected_number+1);
-        else
-            puts ("Unable to get client address");
+        ASSERT (inet_ntop (AF_INET, &clntAddr.sin_addr.s_addr, clntName, sizeof(clntName)) != NULL);
+        printf ("Client connected: %d\n", connected_number+1);
+        clnt_addrs[connected_number] = string(clntName);
         connected_number++;
     }
+    allConnected = true;
 
     // 이 시점에서 클라이언트소켓은 모두 clntSock 에 저장되어있는상태
 

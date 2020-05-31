@@ -39,9 +39,13 @@ void
 send_notification (const int& clntSock);
 
 void
-handle_thread (const int& clntSock, std::vector<cv::Mat>& imgs, int& width, int& height, bool& picture_flag, int& MODE_FLAG, std::mutex& m);
+handle_thread (const int& clntSock, std::vector<cv::Mat>& imgs, 
+                int& width, int& height, bool& picture_flag, 
+                int& MODE_FLAG, std::mutex& m);
 
 void
-camera_handler (io_data& _io_data, config_data& _conf_data, int& WORK_FLAG, int& MODE_FLAG, std::mutex& m);
+camera_handler (io_data& _io_data, config_data& _conf_data, 
+                std::vector<string>& clnt_addrs, bool& allConnected, 
+                int& WORK_FLAG, int& MODE_FLAG, std::mutex& m);
 
 #endif

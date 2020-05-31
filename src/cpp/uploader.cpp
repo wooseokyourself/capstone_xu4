@@ -1,6 +1,17 @@
 #include "uploader.hpp"
 
 void
+Uploader::upload_ips (const vector<string>& clnt_addrs) {
+    const char* path = (RESULT_DIR_PATH + "/camera_ip.txt").c_str();
+    FILE* fp = fopen (path, "a");
+    for (int i=0; i<clnt_addrs.size(); i++) {
+        const char* each_clnt_name = (clnt.addrs[i] + "\n").c_str();
+        fputs (each_clnt_name, fp);
+    }
+    fclose (fp);
+}
+
+void
 Uploader::upload_input (const io_data& _io_data) {
     for (int i=0; i<_io_data.imgs.size(); i++) {
         imwrite (ROI_DIR_PATH + "/" + to_string(i+1) + ".jpeg", _io_data.imgs[i]);

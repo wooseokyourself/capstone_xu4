@@ -30,6 +30,8 @@ void
 handle_thread (int camId, std::vector<cv::Mat>& imgs, bool& picture_flag, int& MODE_FLAG, std::mutex& m);
 
 void
-camera_handler (io_data& _io_data, config_data& _conf_data, int& WORK_FLAG, int& MODE_FLAG, std::mutex& m);
+camera_handler (io_data& _io_data, config_data& _conf_data, 
+                std::vector<string>& clnt_addrs, bool& allConnected,
+                int& WORK_FLAG, int& MODE_FLAG, std::mutex& m);
 
 #endif

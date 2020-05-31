@@ -13,6 +13,9 @@ class Uploader {
 public:
 
     void
+    upload_ips (const vector<string>& clnt_addrs);
+
+    void
     upload_input (const io_data& _io_data);
 
     void

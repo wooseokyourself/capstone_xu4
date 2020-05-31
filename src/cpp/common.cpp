@@ -43,6 +43,7 @@ getCurrTime () {
 }
 
 io_data::io_data (int camera_num) {
+    this->camera_num = camera_num;
     this->imgs.resize (camera_num);
     this->nums.resize (camera_num);
     this->total_people_num = 0;
@@ -52,4 +53,14 @@ io_data::io_data (int camera_num) {
 io_data::~io_data () {
     this->imgs.clear();
     this->nums.clear();
+}
+
+void
+io_data::clear () {
+    this->imgs.clear();
+    this->nums.clear();
+    this->imgs.resize (this->camera_num);
+    this->nums.resize (this->camera_num);
+    this->total_people_num = 0;
+    this->inference_time = 0;
 }

@@ -24,9 +24,15 @@ main (int argc, char* argv[]) {
     int MODE_FLAG = BASIC_MODE;
     int WORK_FLAG = GO_TAKE_PICTURE;
 
+    std::vector<string> clnt_addrs;
+    bool allConnected = false;
     std::mutex m;
     std::thread cam_thr (camera_handler, std::ref(_io_data), std::ref(_conf_data),
                         std::ref(WORK_FLAG), std::ref(MODE_FLAG), std::ref(m));
+    while (true)
+        if (allConnected)
+            break;
+    ups.upload_ips (clnt_addrs);
 
     int dummy = 0;
     while (true) {
@@ -39,12 +45,11 @@ main (int argc, char* argv[]) {
             ups.upload_input (_io_data);
             dnn.inference(_io_data);
             ups.upload_output (_io_data);
+            _io_data.clear();
             WORK_FLAG = GO_TAKE_PICTURE; // 다시 사진촬영 요청
             m.unlock();
             printf (" WORK_FLAG: DONE_TAKE_PICTURE --> GO_TAKE_PICTURE\n");
         }
-        else// 사진촬영중이므로 대기
-            dummy++;
     }
     return 0;
 }

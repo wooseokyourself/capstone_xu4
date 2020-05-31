@@ -9,13 +9,9 @@ string __root_path;
 int
 main (int argc, char* argv[]) {
     __root_path = string(argv[1]);
-    printf ("start program\n");
     config_data _conf_data;
-    printf ("conf sync!\n");
-    _conf_data.sync(); // 서비스 최초 실행시 제일 먼저 conf_data를 읽어온다.
-    printf ("conf sync done!\n");
+    _conf_data.sync();
     OpenCV_DNN dnn (_conf_data);
-    printf ("dnn done !\n");
     Uploader ups;
 
     io_data _io_data (_conf_data.camera_number);
@@ -23,10 +19,19 @@ main (int argc, char* argv[]) {
     int MODE_FLAG = BASIC_MODE;
     int WORK_FLAG = GO_TAKE_PICTURE;
 
+    // Camera connection
+    std::vector<string> clnt_addrs;
+    bool allConnected = false;
     std::mutex m;
     std::thread cam_thr (camera_handler, std::ref(_io_data), std::ref(_conf_data),
+                        std::ref(clnt_addrs), std::ref(allConnected),
                         std::ref(WORK_FLAG), std::ref(MODE_FLAG), std::ref(m)); // 소켓통신 시작
-    int dummy = 0;
+    while (true)
+        if (allConnected)
+            break;
+    ups.upload_ips (clnt_addrs);
+    // Camera connection end
+
     while (true) {
         if (_conf_data.sync()) // prev==ADMIN && now==BASIC 이면 config 갱신
             dnn.update (_conf_data);
@@ -37,12 +42,11 @@ main (int argc, char* argv[]) {
             ups.upload_input (_io_data);
             dnn.inference(_io_data);
             ups.upload_output (_io_data);
+            _io_data.clear();
             WORK_FLAG = GO_TAKE_PICTURE; // 다시 사진촬영 요청
             m.unlock();
             printf (" WORK_FLAG: DONE_TAKE_PICTURE --> GO_TAKE_PICTURE\n");
         }
-        else// 사진촬영중이므로 대기
-            dummy++;
     }
     return 0;
 }

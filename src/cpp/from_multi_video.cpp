@@ -38,8 +38,12 @@ handle_thread (int camId, std::vector<cv::Mat>& imgs, bool& picture_flag, int& M
 }
 
 void
-camera_handler (io_data& _io_data, config_data& _conf_data, int& WORK_FLAG, int& MODE_FLAG, std::mutex& m) {
+camera_handler (io_data& _io_data, config_data& _conf_data, 
+                std::vector<string>& clnt_addrs, bool& allConnected,
+                int& WORK_FLAG, int& MODE_FLAG, std::mutex& m) {
     const int& camera_number = _conf_data.camera_number;
+    clnt_addrs.resize (camera_number);
+    allConnected = false;
 
     std::thread* thrs = new std::thread[camera_number];
     bool* picture_flag = new bool[camera_number]; // 여기 스레드에서 각 스레드별 사진수신여부를 총합하는 플래그
@@ -47,6 +51,7 @@ camera_handler (io_data& _io_data, config_data& _conf_data, int& WORK_FLAG, int&
         picture_flag[i] = false; // i번째 스레드의 사진이 수신되었으면 true로 변경됨
         // printf ("[thread %d] created!\n", i);
         printf ("create thread, args of camId=%d\n", i);
+        clnt_addrs[i] = to_string(i) + ".mp4";
         thrs[i] = std::thread(handle_thread, i, std::ref(_io_data.imgs), std::ref(picture_flag[i]), std::ref(MODE_FLAG), std::ref(m));
     }
 

@@ -67,6 +67,7 @@ public:
 
 class io_data {
 public:
+    int camera_num;
     std::vector<cv::Mat> imgs; // output images
     std::vector<int> nums; // each outp's people number
     int total_people_num; // all outp's total people number 
@@ -74,6 +75,7 @@ public:
 public:
     io_data (int camera_num);
     ~io_data ();
+    void clear ();
 };
 
 #endif
