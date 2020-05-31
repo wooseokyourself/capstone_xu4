@@ -41,13 +41,14 @@ OpenCV_DNN::update (const config_data& data) {
     this->resize_res.height = data.resize_res_height;
     this->confThreshold = data.confThreshold;
     this->nmsThreshold = data.nmsThreshold;
+    this->ovlaps = data.ovlaps;
 }
 
 void
 OpenCV_DNN::inference (io_data& _io_data) {
     printf ("in _io_data, number of image is %d\n", _io_data.imgs.size());
     for (int i=0; i<_io_data.imgs.size(); i++) {
-        int each_pic_people_num = infer_util (_io_data.imgs[i]);
+        int each_pic_people_num = infer_util (i, _io_data.imgs[i]);
         _io_data.nums[i] = each_pic_people_num;
         _io_data.total_people_num += each_pic_people_num;
     }
@@ -55,11 +56,11 @@ OpenCV_DNN::inference (io_data& _io_data) {
 
 /* Change @img to result image, and returns people number of the @img. */
 int 
-OpenCV_DNN::infer_util (Mat& img) {
+OpenCV_DNN::infer_util (const int& idx, Mat& img) {
     printf (" this is infer_util!\n");
     // Image processig.
     vector<Mat> outs;
-    preprocess(img);
+    preprocess(idx, img);
     net.forward(outs, outNames);
     int people_num = postprocess(img, outs);
 
@@ -82,7 +83,8 @@ OpenCV_DNN::infer_util (Mat& img) {
 
 
 inline void
-OpenCV_DNN::preprocess (Mat& frame) {
+OpenCV_DNN::preprocess (const int& idx, Mat& frame) {
+    removeOverlaps (idx, frame);
     imagePadding (frame);
     static Mat blob;
     // Create a 4D blob from a frame.
@@ -196,6 +198,18 @@ OpenCV_DNN::postprocess (Mat& frame, const vector<Mat>& outs) {
         }
     }
     return people;
+}
+
+void
+OpenCV_DNN::removeOverlaps (const int& idx, Mat& frame) {
+    const vector<int>& ref = this->ovlaps[idx];
+    for (int i=0; i<ref.size(); i+=4) {
+        int width = ref[i+2] - ref[i];
+        int height = ref[i+3] - ref[i+1];
+        int x = ref[i];
+        int y = ref[i+1];
+        rectangle (frame, Point(ref[i], ref[i+1]), Point(ref[i+2], ref[i+3]), Scalar(255,255,255), FILLED);
+    }
 }
 
 /* Make the frame a square with padded space. */

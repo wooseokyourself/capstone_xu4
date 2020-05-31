@@ -23,13 +23,16 @@ public:
 protected:
 
     int 
-    infer_util (Mat& img);
+    infer_util (const int& idx, Mat& img);
 
     inline void
-    preprocess (Mat& frame);
+    preprocess (const int& idx, Mat& frame);
     
     int
     postprocess (Mat& frame, const vector<Mat>& outs);
+
+    void
+    removeOverlaps (const int& idx, Mat& frame);
 
     void
     imagePadding (Mat& frame);
@@ -56,6 +59,7 @@ private: // Variables for Machine Learning.
     Size resize_res;
     float confThreshold;
     float nmsThreshold;
+    vector< vector<int> > ovlaps;
 
     // Model Info
     vector<string> classes;
