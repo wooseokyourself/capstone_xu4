@@ -80,7 +80,8 @@ app.get('/', function(req, res){
 	switch(mode){
 		case 1:
 			res.render('admin_1', {
-				isSet: isSet
+				isSet: isSet,
+				c_num: MAX_CAMERA
 			});
 			break;
 		case 2:
