@@ -5,10 +5,10 @@ void
 handle_thread (int& camId, std::vector<cv::Mat>& imgs, bool& picture_flag, int& MODE_FLAG, std::mutex& m) {
     int dummy;
     int recvd;
-    printf ("Finding video file is %d.mp4\n", camId+1);
+    printf ("Finding video file is %d.mp4\n", camId);
     cv::VideoCapture cap(BIN_PATH + "/testvideos/" + to_string(camId+1) + ".mp4");
     if (cap.isOpened())
-        printf ("Client connected: %d\n", camId+1);
+        printf ("Client connected: %d\n", camId);
     // Receive id of cam
     while (true) {
         if (MODE_FLAG == TERMINATE_MODE)
@@ -45,6 +45,7 @@ camera_handler (io_data& _io_data, config_data& _conf_data, int& WORK_FLAG, int&
     for (int i=0; i<camera_number; i++) {
         picture_flag[i] = false; // i번째 스레드의 사진이 수신되었으면 true로 변경됨
         // printf ("[thread %d] created!\n", i);
+        printf ("create thread, args of camId=%d\n", i);
         thrs[i] = std::thread(handle_thread, std::ref(i), std::ref(_io_data.imgs), std::ref(picture_flag[i]), std::ref(MODE_FLAG), std::ref(m));
     }
 
