@@ -6,7 +6,7 @@ handle_thread (int& camId, std::vector<cv::Mat>& imgs, bool& picture_flag, int& 
     int dummy;
     int recvd;
     printf ("Finding video file is %d.mp4\n", camId);
-    cv::VideoCapture cap(BIN_PATH + "/testvideos/" + to_string(camId+1) + ".mp4");
+    cv::VideoCapture cap(BIN_PATH + "/testvideos/" + to_string(camId) + ".mp4");
     if (cap.isOpened())
         printf ("Client connected: %d\n", camId);
     // Receive id of cam
