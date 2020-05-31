@@ -54,6 +54,7 @@ camera_handler (io_data& _io_data, config_data& _conf_data,
         clnt_addrs[i] = to_string(i) + ".mp4";
         thrs[i] = std::thread(handle_thread, i, std::ref(_io_data.imgs), std::ref(picture_flag[i]), std::ref(MODE_FLAG), std::ref(m));
     }
+    allConnected = true;
 
     // 각 스레드를 총괄하는 루프
     int dummy = 0;

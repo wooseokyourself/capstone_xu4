@@ -30,13 +30,9 @@ main (int argc, char* argv[]) {
     std::thread cam_thr (camera_handler, std::ref(_io_data), std::ref(_conf_data),
                         std::ref(clnt_addrs), std::ref(allConnected),
                         std::ref(WORK_FLAG), std::ref(MODE_FLAG), std::ref(m));
-    int dummy = 0;
-    while (true) {
+    while (true)
         if (allConnected)
             break;
-        else
-            dummy++;
-    }
 
     ups.upload_ips (clnt_addrs);
 
@@ -55,8 +51,6 @@ main (int argc, char* argv[]) {
             m.unlock();
             printf (" WORK_FLAG: DONE_TAKE_PICTURE --> GO_TAKE_PICTURE\n");
         }
-        else
-            dummy++;
     }
     return 0;
 }
