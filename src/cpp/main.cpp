@@ -10,7 +10,7 @@ int
 main (int argc, char* argv[]) {
     __root_path = string(argv[1]);
     config_data _conf_data;
-    _conf_data.sync(bool is_first_call = true);
+    _conf_data.sync(true);
     OpenCV_DNN dnn (_conf_data);
     Uploader ups;
 

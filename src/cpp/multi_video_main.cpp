@@ -13,7 +13,7 @@ main (int argc, char* argv[]) {
     config_data _conf_data;
     printf ("conf sync!\n");
     // conf_data.sync(); // 서비스 최초 실행시 제일 먼저 conf_data를 읽어온다.
-    _conf_data.sync();
+    _conf_data.sync(true);
     printf ("conf sync done!\n");
     OpenCV_DNN dnn (_conf_data);
     printf ("dnn done !\n");
