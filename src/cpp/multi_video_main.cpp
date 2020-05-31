@@ -40,7 +40,6 @@ main (int argc, char* argv[]) {
 
     ups.upload_ips (clnt_addrs);
 
-    int dummy = 0;
     while (true) {
         if (_conf_data.sync()) // prev==ADMIN && now==BASIC 이면 config 갱신
             dnn.update (_conf_data);
