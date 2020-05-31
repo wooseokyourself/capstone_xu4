@@ -18,7 +18,7 @@ handle_thread (int& camId, cv::VideoCapture& cap, std::vector<cv::Mat>& imgs, bo
         }
 
         if (!picture_flag) { // 사진을 가져오라는 명령이 떨어짐
-            imgs[camId] = frame.clone();
+            imgs[camId] = frame;
 
             m.lock();
             picture_flag = true; // 사진수신을 완료하였음을 알림
