@@ -27,11 +27,11 @@ OPT = #-DDIVIDE
 
 # Compile: release version
 
-all: $(CPP_MULTI_TARGET)
+all: $(CPP_TARGET)
 	@echo "Compile is done! Run with 'make run'"
 
-$(CPP_MULTI_TARGET):
-	$(CXX) $(CXXFLAGS) $(OPT) $(MULTI_VIDEO_SRC) $(OPENCV) -o $(CPP_MULTI_TARGET)
+$(CPP_TARGET):
+	$(CXX) $(CXXFLAGS) $(OPT) $(RELEASE_SRC) $(OPENCV) -o $(CPP_TARGET)
 	
 
 #-----------------------------------------------#
