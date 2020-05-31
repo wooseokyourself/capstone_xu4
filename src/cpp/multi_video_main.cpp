@@ -37,6 +37,8 @@ main (int argc, char* argv[]) {
     ups.upload_ips (clnt_addrs);
 
     while (true) {
+        if (MODE_FLAG == TERMINATE_MODE)
+            break;
         if (_conf_data.sync()) // prev==ADMIN && now==BASIC 이면 config 갱신
             dnn.update (_conf_data);
         if (WORK_FLAG == DONE_TAKE_PICTURE) { // 사진촬영을 모두 완료하였다면

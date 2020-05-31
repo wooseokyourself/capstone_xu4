@@ -16,18 +16,20 @@ public:
     int resize_res_height;
     float confThreshold; // default=0.4
     float nmsThreshold; // default=0.5
-    std::vector< std::pair<int, string> > overlapping_area;
+    std::vector< std::vector< int > > ovlaps;
 
 public:
     config_data ();
     bool
-    sync ();
+    sync (bool is_first_call = false);
 
 protected:
     int
     read_mode_flag ();
     void
-    read_all_config ();
+    read_admin_input ();
+    void
+    read_ovlaps ();
 
 };
 

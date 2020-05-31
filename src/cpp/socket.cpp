@@ -43,7 +43,6 @@ void
 handle_thread (const int& clntSock, std::vector<cv::Mat>& imgs, 
                 int& width, int& height, bool& picture_flag, 
                 int& MODE_FLAG, std::mutex& m) {
-    int dummy;
     int recvd;
 
     // Receive id of cam
@@ -82,9 +81,6 @@ handle_thread (const int& clntSock, std::vector<cv::Mat>& imgs,
             picture_flag = true; // 사진수신을 완료하였음을 알림
             m.unlock();
             printf ("<%d's camera sent a picture completely!>\n", camId);
-        }
-        else {// 사진수신할 필요가 없으므로 대기
-            dummy++;
         }
     }
     send_mode_flag (clntSock, MODE_FLAG);
@@ -162,7 +158,6 @@ camera_handler (io_data& _io_data, config_data& _conf_data,
     }
 
     // 각 스레드를 총괄하는 루프
-    int dummy = 0;
     while (true) { // 초기 스레드들을 배분하면 이후에는 프로그램이 종료될때까지 여기에서 머뭄
         if (MODE_FLAG == TERMINATE_MODE)
             break;
@@ -184,9 +179,6 @@ camera_handler (io_data& _io_data, config_data& _conf_data,
             m.lock();
             WORK_FLAG = DONE_TAKE_PICTURE; // 이를 확인한 메인스레드는 Mat* imgs를 입력으로 딥러닝 시행
             m.unlock();
-        }
-        else { // 현재 딥러닝중이므로 대기
-            dummy++;
         }
     }
 

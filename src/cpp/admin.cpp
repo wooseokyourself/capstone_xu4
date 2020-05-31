@@ -5,17 +5,19 @@ config_data::config_data () {
     this->confThreshold = 0.4;
     this->nmsThreshold = 0.5;
 
-    this->read_all_config();
+    this->read_admin_input();
 }
 
 /* Returns true when the server has to be reset with config data. */
 bool
-config_data::sync () {
+config_data::sync (bool is_first_call = false) {
     int now_flag = read_mode_flag();
     ASSERT (now_flag != -1);
     if (prev_flag == ADMIN_MODE && now_flag == BASIC_MODE) {
         // printf ("prev_flag == ADMIN && now_flag == BASIC\n");
-        this->read_all_config();
+        this->read_admin_input();
+        if (!is_first_call)
+            this->read_ovlaps();
         prev_flag = now_flag;
         return true;
     }
@@ -55,7 +57,7 @@ config_data::read_mode_flag () {
 }
 
 void
-config_data::read_all_config () {
+config_data::read_admin_input () {
     /* 주어진 경로로부터 텍스트파일을 읽어서 모든 멤버변수에 저장하기 */
     char buf[20];
     FILE* fp;
@@ -77,5 +79,22 @@ config_data::read_all_config () {
     fclose (fp);
 
     // ROI.txt 파일 여기에서 읽는 기능 추가해야함
+}
 
+void
+config_data::read_ovlaps () {
+    char buf[20];
+    FILE* fp;
+    
+    const char* path = (CONFIG_PATH + "/ROI.txt").c_str();
+    fp = fopen (path, "r");
+    for (int i=0; i<this->camera_number; i++) {
+        fgets(buf, sizeof(buf), fp);
+        char* ptr = strtok (buf, " ");
+        while (ptr != NULL) {
+            this->ovlaps[i].push_back (atoi(ptr));
+            ptr = strtok (NULL, " ");
+        }
+    }
+    fclose (fp);
 }

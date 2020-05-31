@@ -3,7 +3,6 @@
 /* Receive pictures in each thread. */
 void
 handle_thread (int camId, std::vector<cv::Mat>& imgs, bool& picture_flag, int& MODE_FLAG, std::mutex& m) {
-    int dummy;
     int recvd;
     camId += 1;
     printf ("Finding video file is %d.mp4\n", camId);
@@ -30,9 +29,6 @@ handle_thread (int camId, std::vector<cv::Mat>& imgs, bool& picture_flag, int& M
             
             printf ("<%d's camera sent a picture completely!>\n", camId);
         }
-        else {// 사진수신할 필요가 없으므로 대기
-            dummy++;
-        }
     }
     cap.release();
 }
@@ -51,13 +47,12 @@ camera_handler (io_data& _io_data, config_data& _conf_data,
         picture_flag[i] = false; // i번째 스레드의 사진이 수신되었으면 true로 변경됨
         // printf ("[thread %d] created!\n", i);
         printf ("create thread, args of camId=%d\n", i);
-        clnt_addrs[i] = to_string(i) + ".mp4";
+        clnt_addrs[i] = to_string(i+1) + ".mp4";
         thrs[i] = std::thread(handle_thread, i, std::ref(_io_data.imgs), std::ref(picture_flag[i]), std::ref(MODE_FLAG), std::ref(m));
     }
     allConnected = true;
 
     // 각 스레드를 총괄하는 루프
-    int dummy = 0;
     while (true) { // 초기 스레드들을 배분하면 이후에는 프로그램이 종료될때까지 여기에서 머뭄
         if (MODE_FLAG == TERMINATE_MODE)
             break;
@@ -79,9 +74,6 @@ camera_handler (io_data& _io_data, config_data& _conf_data,
             m.lock();
             WORK_FLAG = DONE_TAKE_PICTURE; // 이를 확인한 메인스레드는 Mat* imgs를 입력으로 딥러닝 시행
             m.unlock();
-        }
-        else { // 현재 딥러닝중이므로 대기
-            dummy++;
         }
     }
 
