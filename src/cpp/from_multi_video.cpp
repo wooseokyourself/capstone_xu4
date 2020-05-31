@@ -2,9 +2,10 @@
 
 /* Receive pictures in each thread. */
 void
-handle_thread (int& camId, std::vector<cv::Mat>& imgs, bool& picture_flag, int& MODE_FLAG, std::mutex& m) {
+handle_thread (int camId, std::vector<cv::Mat>& imgs, bool& picture_flag, int& MODE_FLAG, std::mutex& m) {
     int dummy;
     int recvd;
+    camId += 1;
     printf ("Finding video file is %d.mp4\n", camId);
     cv::VideoCapture cap(BIN_PATH + "/testvideos/" + to_string(camId) + ".mp4");
     if (cap.isOpened())
@@ -23,11 +24,11 @@ handle_thread (int& camId, std::vector<cv::Mat>& imgs, bool& picture_flag, int& 
 
         if (!picture_flag) { // 사진을 가져오라는 명령이 떨어짐
             m.lock();
-            imgs[camId] = frame.clone();
+            imgs[camId-1] = frame.clone();
             picture_flag = true; // 사진수신을 완료하였음을 알림
             m.unlock();
             
-            printf ("<%d's camera sent a picture completely!>\n", camId+1);
+            printf ("<%d's camera sent a picture completely!>\n", camId);
         }
         else {// 사진수신할 필요가 없으므로 대기
             dummy++;
@@ -46,7 +47,7 @@ camera_handler (io_data& _io_data, config_data& _conf_data, int& WORK_FLAG, int&
         picture_flag[i] = false; // i번째 스레드의 사진이 수신되었으면 true로 변경됨
         // printf ("[thread %d] created!\n", i);
         printf ("create thread, args of camId=%d\n", i);
-        thrs[i] = std::thread(handle_thread, std::ref(i), std::ref(_io_data.imgs), std::ref(picture_flag[i]), std::ref(MODE_FLAG), std::ref(m));
+        thrs[i] = std::thread(handle_thread, i, std::ref(_io_data.imgs), std::ref(picture_flag[i]), std::ref(MODE_FLAG), std::ref(m));
     }
 
     // 각 스레드를 총괄하는 루프
