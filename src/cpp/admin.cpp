@@ -6,6 +6,8 @@ config_data::config_data () {
     this->nmsThreshold = 0.5;
 
     this->read_admin_input();
+
+    // ovlaps가 입력되지 않을 시 초기값
     this->ovlaps.resize(this->camera_number);
     for (int i=0; i<this->camera_number; i++) {
         this->ovlaps[i].push_back(0);
@@ -90,6 +92,9 @@ config_data::read_admin_input () {
 
 void
 config_data::read_ovlaps () {
+    this->ovlaps.clear();
+    this->ovlaps.resize(this->camera_number);
+
     char buf[20];
     FILE* fp;
     
