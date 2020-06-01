@@ -117,4 +117,9 @@ config_data::read_ovlaps () {
         }
         printf ("\n");
     }
+    
+    // Admin Mode 에서 ROI를 재입력할 경우, ovlaps의 제일 뒤에 0이 붙는 현상을 해결하기 위함
+    for (int i=0; i<this->camera_number; i++)
+        while ( (this->ovlaps[i].size() % 4) != 0)
+            this->ovlaps[i].pop_back();
 }
