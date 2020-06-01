@@ -53,18 +53,6 @@ _RESULT__DIR__PATH();
 string 
 getCurrTime ();
 
-/*
-class P {
-public:
-    string ROOT_PATH;
-    string CONFIG_PATH;
-    string BIN_PATH;
-    string ROI_DIR_PATH;
-    string RESULT_DIR_PATH;
-public:
-    P();
-};*/
-
 class io_data {
 public:
     int camera_num;

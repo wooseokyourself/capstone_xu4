@@ -57,7 +57,6 @@ OpenCV_DNN::inference (io_data& _io_data) {
 /* Change @img to result image, and returns people number of the @img. */
 int 
 OpenCV_DNN::infer_util (const int& idx, Mat& img) {
-    printf (" this is infer_util!\n");
     // Image processig.
     vector<Mat> outs;
     preprocess(idx, img);

@@ -86,8 +86,6 @@ config_data::read_admin_input () {
     fgets(buf, sizeof(buf), fp);
     this->resize_res_height = atoi(buf);
     fclose (fp);
-
-    // ROI.txt 파일 여기에서 읽는 기능 추가해야함
 }
 
 void
