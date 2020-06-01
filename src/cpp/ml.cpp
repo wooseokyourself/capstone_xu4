@@ -32,11 +32,9 @@ OpenCV_DNN::OpenCV_DNN (const config_data& data) {
     this->update (data);
 }
 
+/* data 의 config 정보들을 dnn 클래스의 설정값에 적용 */
 void
 OpenCV_DNN::update (const config_data& data) {
-    /*
-        data 의 각 데이터를 현재 클래스에 적용
-    */
     this->resize_res.width = data.resize_res_width;
     this->resize_res.height = data.resize_res_height;
     this->confThreshold = data.confThreshold;

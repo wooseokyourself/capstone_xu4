@@ -22,25 +22,22 @@ bool
 config_data::sync (bool is_first_call) {
     int now_flag = read_mode_flag();
     ASSERT (now_flag != -1);
-    if (prev_flag == ADMIN_MODE && now_flag == BASIC_MODE) {
-        // printf ("prev_flag == ADMIN && now_flag == BASIC\n");
+    if (this->prev_flag == ADMIN_MODE && now_flag == BASIC_MODE) {
+        printf ("Configuration was changed. DNN has to be updated!\n");
         this->read_admin_input();
         if (!is_first_call)
             this->read_ovlaps();
-        prev_flag = now_flag;
+        this->prev_flag = now_flag;
         return true;
     }
-    else if (prev_flag == ADMIN_MODE && now_flag == ADMIN_MODE) {
-        // printf ("prev_flag == ADMIN && now_flag == ADMIN\n");
-        return false;        
-    }
-    else if (prev_flag == BASIC_MODE && now_flag == ADMIN_MODE) {
-        // printf ("prev_flag == BASIC && now_flag == ADMIN\n");
-        prev_flag = now_flag;
+    else if (this->prev_flag == ADMIN_MODE && now_flag == ADMIN_MODE) {
         return false;
     }
-    else if (prev_flag == BASIC_MODE && now_flag == BASIC_MODE) {
-        // printf ("prev_flag == BASIC && now_flag == BASIC\n");
+    else if (this->prev_flag == BASIC_MODE && now_flag == ADMIN_MODE) {
+        this->prev_flag = now_flag;
+        return false;
+    }
+    else if (this->prev_flag == BASIC_MODE && now_flag == BASIC_MODE) {
         return false;
     }
     else {
