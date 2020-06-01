@@ -55,7 +55,7 @@ private: // Variables for Machine Learning.
     double scalarfactor;
     bool swapRB;
 
-    // Admin Mode
+    // Admin Mode Config Data
     Size resize_res;
     float confThreshold;
     float nmsThreshold;

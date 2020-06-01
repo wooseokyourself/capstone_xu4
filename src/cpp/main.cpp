@@ -3,9 +3,9 @@
 #include "uploader.hpp"
 #include "admin.hpp"
 
-string __root_path;
+string __root_path; // argv[1]
 
-/* 어플 최초 실행시 conf_data를 웹에서 입력받은 뒤에 이 C++ 프로그램이 실행되어야 config data를 초기화할 수 있음 */
+/* argv[1] <-- Root dir path of this project (absolute path) */
 int
 main (int argc, char* argv[]) {
     __root_path = string(argv[1]);
@@ -35,8 +35,10 @@ main (int argc, char* argv[]) {
     while (true) {
         if (MODE_FLAG == TERMINATE_MODE)
             break;
-        if (_conf_data.sync(false)) // prev==ADMIN && now==BASIC 이면 config 갱신
-            dnn.update (_conf_data);
+        /* prev==ADMIN && now==BASIC 이면 config 갱신.
+            즉, ADMIN mode인 동안에도 기존의 conf_data를 가지고 계속 BASIC task를 진행. */
+        if (_conf_data.sync(false))
+            dnn.update (_conf_data); // _conf_data가 변경되었다면 dnn 설정 업데이트.
         if (WORK_FLAG == DONE_TAKE_PICTURE) { // 사진촬영을 모두 완료하였다면
             printf (" WORK_FLAG: DONE_TAKE_PICTURE --> GO_INFERENCE\n");
             m.lock();
