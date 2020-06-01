@@ -36,6 +36,18 @@ $(CPP_TARGET):
 
 #-----------------------------------------------#
 
+
+# Compile: release version
+
+debug: $(CPP_MULTI_TARGET)
+	@echo "Compile is done! Run with 'make run'"
+
+$(CPP_MULTI_TARGET):
+	$(CXX) $(CXXFLAGS) $(OPT) $(MULTI_VIDEO_SRC) $(OPENCV) -o $(CPP_MULTI_TARGET)
+	
+
+#-----------------------------------------------#
+
 # Run
 
 run:
