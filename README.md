@@ -15,9 +15,10 @@ You can also see [Client code here](https://github.com/wooseokyourself/capstone_
 * Ubuntu 16.04.6 LTS (Mate)
 * gcc/g++ 4.9.4
 * GNU Make 4.1
+* CMake 3.5.1
 * OpenCV 4.1.2
-* Apache 2.4.18
-* PHP 7.0.33   
+* Node.js 12.16.3
+* npm 6.14.4
 
 #### *OpenCV Build Options in Test Environment*
 
@@ -143,63 +144,60 @@ General configuration for OpenCV 4.1.2 =====================================
 # Install
 
 ### 1. Get YOLOv3 pre-trained model
-    cd model
+    cd bin/model
     ./getModels.sh
 * This program infers only 'person' class.
-* Nevertheless, you need to remove all classes but 'person' in 'model/coco.names' to shorten the elapsed time of inference.
+* Nevertheless, you need to remove all classes but 'person' in 'bin/model/coco.names' to shorten the elapsed time of inference.
 
    
-### 2. Set root path of your web into $(WEB_ROOT) in Makefile
-* The path **MUST be ABSOLUTE path**.
-* Also there must be **'/'** in the end of your path.   
-   ex. WEB_ROOT = /home/html/ws/www/
-   
-   
-### 3. Compile
+### 2. Compile
 
-#### 3.1. Compile Release ver.   
+#### 2.1. Compile Release ver.   
     make all
 
-#### 3.2. Compile Debugging ver.   
+#### 2.2. Compile Debugging ver.   
     make debug
-* Only **"Input local images --> Inference --> Print into web page"** is performed **WITHOUT SOCKET COMMUNICATION**.
-   
-   
+* Only **"Input local videos(mp4 format) --> Inference --> Print into web page"** is performed **WITHOUT SOCKET COMMUNICATION**.
+* The local videos are stored in bin/testvideos and its name must be ascending order from 1.
+* For example, if there are two videos, then the naming is required:    
+bin/testvideos/1.mp4    
+bin/testvideos/2.mp4
    
    
 # Run
 
-### 1. Init root directory of your Web   
+### 1. Init all configuration data and resources   
     make init
-* Notice. It **REMOVES ALL CONTENTS OF $(WEB_ROOT)**.   
-* You can omit this step but there should be   
-  directories: $(WEB_ROOT)inputs, $(WEB_ROOT)outputs   
-  file: $(WEB_ROOT)outputs/results.txt   
+* Notice. It **REMOVES ALL CONFIGURATION DATA AND PREVIOUS OUTPUTS**.   
+* You can omit this step.
+
+### 2. Create directories to store the result images.
+    mkdir resources/images/$(cameraID)
+* This directories should exist in ascending order from 1, depending on the number of cameras.
+* For example, if there are two cameras, then this directories are required:    
+resources/images/1    
+resources/images/2    
 
 ### 2. Run
 
 #### 2.1. Run Release ver.   
     make run   
-* Then the program will ask you the size of resizing square image which will input into YOLOv3.   
-* Next, the program will ask you the number of clients. You MUST run client after input this.
+* Then you can now access the webpage with either public IP or private IP.
+* Default port number of web is 10051 and this variable is stored in @express_port in  src/webapp/server.js
 * Also see [Client code here](https://github.com/wooseokyourself/capstone_pi).
    
 #### 2.2. Run Debugging ver.   
-    make debug_run
-* Debugging ver. supports for single image, just for testing performance of YOLOv3.
-* Program reads **.jpeg** files from '*debug/images/*' sequentially from 1.   
-    (ex. debug/images/*1.jpeg*, debug/images/*2.jpeg*, ... debug/images/**$(last).jpeg**)
-* $(last) should be less than 100.
-* 'make debug_run' will ask you the value of $(last)
-   
+    make run
+* Program reads **.mp4** files from '*bin/testvideos/*' sequentially from 1.   
+    (ex. bin/testvideos/*1.mp4*, bin/testvideos/*2.mp4*, ...)
+
    
 # Others
 
-+ #### Remove *.out
++ #### Cancel compilation
 ~~~
     make clean
 ~~~
-+ #### [Web Structures](https://github.com/wooseokyourself/capstone_xu4/wiki/Web-Structures)
    
 # Example Results
 
