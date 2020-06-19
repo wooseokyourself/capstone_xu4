@@ -178,15 +178,15 @@ bin/testvideos/2.mp4
 resources/images/1    
 resources/images/2    
 
-### 2. Run
+### 3. Run
 
-#### 2.1. Run Release ver.   
+#### 3.1. Run Release ver.   
     make run   
 * Then you can now access the webpage with either public IP or private IP.
 * Default port number of web is 10051 and this variable is stored in @express_port in  src/webapp/server.js
 * Also see [Client code here](https://github.com/wooseokyourself/capstone_pi).
    
-#### 2.2. Run Debugging ver.   
+#### 3.2. Run Debugging ver.   
     make run
 * Program reads **.mp4** files from '*bin/testvideos/*' sequentially from 1.   
     (ex. bin/testvideos/*1.mp4*, bin/testvideos/*2.mp4*, ...)
