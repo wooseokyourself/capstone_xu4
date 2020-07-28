@@ -19,8 +19,7 @@ You can also see [Client code here](https://github.com/wooseokyourself/capstone_
 * OpenCV 4.1.2
 * Node.js 12.16.3
 * npm 6.14.4
-* cURL
-* cURLpp
+* C++ REST SDK
 
 #### *OpenCV Build Options in Test Environment*
 
