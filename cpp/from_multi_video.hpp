@@ -27,11 +27,11 @@ using namespace std;
 static const int MAXPENDING = 10;
 
 void
-handle_thread (int camId, std::vector<cv::Mat>& imgs, bool& picture_flag, int& MODE_FLAG, std::mutex& m);
+handleThread (int camId, std::vector<cv::Mat>& imgs, bool& pictureFlag, int& MODE_FLAG, std::mutex& m);
 
 void
-camera_handler (io_data& _io_data, config_data& _conf_data, 
-                std::vector<string>& clnt_addrs, bool& allConnected,
+cameraHandler (IOdata& ioData, ConfigData& confData, 
+                std::vector<string>& clntAddrs, bool& allConnected,
                 int& WORK_FLAG, int& MODE_FLAG, std::mutex& m);
 
 #endif

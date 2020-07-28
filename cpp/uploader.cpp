@@ -1,49 +1,49 @@
 #include "uploader.hpp"
 
 void
-Uploader::upload_ips (const vector<string>& clnt_addrs) {
+Uploader::uploadIPs (const vector<string>& clntAddrs) {
     const char* path = (RESULT_DIR_PATH + "/camera_ip.txt").c_str();
     FILE* fp = fopen (path, "a");
-    for (int i=0; i<clnt_addrs.size(); i++) {
-        const char* each_clnt_name = (clnt_addrs[i] + "\n").c_str();
-        fputs (each_clnt_name, fp);
+    for (int i=0; i<clntAddrs.size(); i++) {
+        const char* eachClntName = (clntAddrs[i] + "\n").c_str();
+        fputs (eachClntName, fp);
     }
     fclose (fp);
 }
 
 void
-Uploader::upload_input (const io_data& _io_data) {
-    for (int i=0; i<_io_data.imgs.size(); i++) {
-        imwrite (ROI_DIR_PATH + "/" + to_string(i+1) + ".jpeg", _io_data.imgs[i]);
+Uploader::uploadInput (const IOdata& ioData) {
+    for (int i=0; i<ioData.imgs.size(); i++) {
+        imwrite (ROI_DIR_PATH + "/" + to_string(i+1) + ".jpeg", ioData.imgs[i]);
     }
 }
 
 /*
-    Write @resultMat as "@file_name.jpeg" into UPLOAD_PATH dir
+    Write @resultMat as "@fileName.jpeg" into UPLOAD_PATH dir
     and renew 'results.txt'.
 */
 void
-Uploader::upload_output (const io_data& _io_data) {
-    string file_name = getCurrTime();
+Uploader::uploadOutput (const IOdata& ioData) {
+    string fileName = getCurrTime();
 
-    for (int i=0; i<_io_data.imgs.size(); i++) {
-        imwrite (RESULT_DIR_PATH + "/images/" + to_string(i+1) + "/" + file_name + "_" + to_string(i+1) + ".jpeg", _io_data.imgs[i]);
+    for (int i=0; i<ioData.imgs.size(); i++) {
+        imwrite (RESULT_DIR_PATH + "/images/" + to_string(i+1) + "/" + fileName + "_" + to_string(i+1) + ".jpeg", ioData.imgs[i]);
     }
 
     // Open 'people.txt'.
-	const char* results_PATH = (RESULT_DIR_PATH + "/people.txt").c_str();
-	FILE* fp = fopen (results_PATH, "a");	
+	const char* resultsPATH = (RESULT_DIR_PATH + "/people.txt").c_str();
+	FILE* fp = fopen (resultsPATH, "a");	
 
     /*
-    const char* total_num = (to_string(_io_data.total_people_num) + "\n").c_str();
-    fputs (total_num, fp);
+    const char* totalNum = (to_string(ioData.totalPeopleNum) + "\n").c_str();
+    fputs (totalNum, fp);
     */
    
-    for (int i=0; i<_io_data.imgs.size(); i++) {
-        const char* each_picture_name = (file_name + "_" + to_string(i+1) + ".jpeg" + "\n").c_str();
-        const char* each_picture_num = (to_string(_io_data.nums[i]) + "\n").c_str();
-        fputs (each_picture_name, fp);
-        fputs (each_picture_num, fp);
+    for (int i=0; i<ioData.imgs.size(); i++) {
+        const char* eachPictureName = (fileName + "_" + to_string(i+1) + ".jpeg" + "\n").c_str();
+        const char* eachPictureNum = (to_string(ioData.nums[i]) + "\n").c_str();
+        fputs (eachPictureName, fp);
+        fputs (eachPictureNum, fp);
     }
 	fclose (fp);
 }

@@ -53,16 +53,16 @@ _RESULT__DIR__PATH();
 string 
 getCurrTime ();
 
-class io_data {
+class IOdata {
 public:
-    int camera_num;
+    int cameraNum;
     std::vector<cv::Mat> imgs; // output images
     std::vector<int> nums; // each outp's people number
-    int total_people_num; // all outp's total people number 
-    double inference_time; // inference time
+    int totalPeopleNum; // all outp's total people number 
+    double inferenceTime; // total inference time
 public:
-    io_data (int camera_num);
-    ~io_data ();
+    IOdata (int cameraNum);
+    ~IOdata ();
     void clear ();
 };
 

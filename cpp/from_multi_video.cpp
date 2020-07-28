@@ -2,7 +2,7 @@
 
 /* Receive pictures in each thread. */
 void
-handle_thread (int camId, std::vector<cv::Mat>& imgs, bool& picture_flag, int& MODE_FLAG, std::mutex& m) {
+handleThread (int camId, std::vector<cv::Mat>& imgs, bool& pictureFlag, int& MODE_FLAG, std::mutex& m) {
     int recvd;
     camId += 1;
     printf ("Finding video file is %d.mp4\n", camId);
@@ -21,10 +21,10 @@ handle_thread (int camId, std::vector<cv::Mat>& imgs, bool& picture_flag, int& M
             break;
         }
 
-        if (!picture_flag) { // 사진을 가져오라는 명령이 떨어짐
+        if (!pictureFlag) { // 사진을 가져오라는 명령이 떨어짐
             m.lock();
             imgs[camId-1] = frame.clone();
-            picture_flag = true; // 사진수신을 완료하였음을 알림
+            pictureFlag = true; // 사진수신을 완료하였음을 알림
             m.unlock();
             
             printf ("<%d's camera sent a picture completely!>\n", camId);
@@ -34,21 +34,21 @@ handle_thread (int camId, std::vector<cv::Mat>& imgs, bool& picture_flag, int& M
 }
 
 void
-camera_handler (io_data& _io_data, config_data& _conf_data, 
-                std::vector<string>& clnt_addrs, bool& allConnected,
+cameraHandler (IOdata& ioData, ConfigData& confData, 
+                std::vector<string>& clntAddrs, bool& allConnected,
                 int& WORK_FLAG, int& MODE_FLAG, std::mutex& m) {
-    const int& camera_number = _conf_data.camera_number;
-    clnt_addrs.resize (camera_number);
+    const int& cameraNumber = confData.cameraNumber;
+    clntAddrs.resize (cameraNumber);
     allConnected = false;
 
-    std::thread* thrs = new std::thread[camera_number];
-    bool* picture_flag = new bool[camera_number]; // 여기 스레드에서 각 스레드별 사진수신여부를 총합하는 플래그
-    for (int i=0; i<camera_number; i++) {
-        picture_flag[i] = false; // i번째 스레드의 사진이 수신되었으면 true로 변경됨
+    std::thread* thrs = new std::thread[cameraNumber];
+    bool* pictureFlag = new bool[cameraNumber]; // 여기 스레드에서 각 스레드별 사진수신여부를 총합하는 플래그
+    for (int i=0; i<cameraNumber; i++) {
+        pictureFlag[i] = false; // i번째 스레드의 사진이 수신되었으면 true로 변경됨
         // printf ("[thread %d] created!\n", i);
         printf ("create thread, args of camId=%d\n", i);
-        clnt_addrs[i] = to_string(i+1) + ".mp4";
-        thrs[i] = std::thread(handle_thread, i, std::ref(_io_data.imgs), std::ref(picture_flag[i]), std::ref(MODE_FLAG), std::ref(m));
+        clntAddrs[i] = to_string(i+1) + ".mp4";
+        thrs[i] = std::thread(handleThread, i, std::ref(ioData.imgs), std::ref(pictureFlag[i]), std::ref(MODE_FLAG), std::ref(m));
     }
     allConnected = true;
 
@@ -58,15 +58,15 @@ camera_handler (io_data& _io_data, config_data& _conf_data,
             break;
         if (WORK_FLAG == GO_TAKE_PICTURE) { // 사진을 가져오라는 명령이 떨어짐
 
-            for (int i=0; i<camera_number; i++)
-                picture_flag[i] = false; // 각 스레드들에게 사진 수신하라고 알리기
+            for (int i=0; i<cameraNumber; i++)
+                pictureFlag[i] = false; // 각 스레드들에게 사진 수신하라고 알리기
             
             while (true) { // 각 스레드 사진수신 완료되었는지 조사
-                bool go_to_next_work = true;
-                for (int i=0; i<camera_number; i++)
-                    if (!picture_flag[i]) // 아직 사진이 수신되지 않은 스레드가 있다면
-                        go_to_next_work = false;
-                if (go_to_next_work) // 모든 사진이 다 수신되었다면
+                bool goToNextWork = true;
+                for (int i=0; i<cameraNumber; i++)
+                    if (!pictureFlag[i]) // 아직 사진이 수신되지 않은 스레드가 있다면
+                        goToNextWork = false;
+                if (goToNextWork) // 모든 사진이 다 수신되었다면
                     break;
             }
             // 모든 스레드들이 사진수신을 완료하였으므로
@@ -77,9 +77,9 @@ camera_handler (io_data& _io_data, config_data& _conf_data,
         }
     }
 
-    for (int i=0; i<camera_number; i++) {
-        thrs[i].join(); // 각 스레드에서 handle_thread() 가 리턴될때까지 대기 (사진을 찍을 때까지 대기)
+    for (int i=0; i<cameraNumber; i++) {
+        thrs[i].join(); // 각 스레드에서 handleThread() 가 리턴될때까지 대기 (사진을 찍을 때까지 대기)
     }
     delete[] thrs;
-    delete[] picture_flag;
+    delete[] pictureFlag;
 }

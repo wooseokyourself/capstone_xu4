@@ -16,13 +16,13 @@ Recv (const int& sock, const void *buf, ssize_t size, ssize_t unit) {
 }
 
 void
-send_mode_flag (const int& clntSock, int& MODE_FLAG) {
+sendModeFlag (const int& clntSock, int& MODE_FLAG) {
     int sent = send (clntSock, &MODE_FLAG, sizeof(MODE_FLAG), 0);
     ASSERT (sent == sizeof(MODE_FLAG));
 }
 
 void
-send_res (const int& clntSock, int& width, int& height) {
+sendRes (const int& clntSock, int& width, int& height) {
     int sent = send (clntSock, &width, sizeof(width), 0);
     ASSERT (sent == sizeof(width));
     sent = send (clntSock, &height, sizeof(height), 0);
@@ -31,7 +31,7 @@ send_res (const int& clntSock, int& width, int& height) {
 
 /* Notify the client to take a picture. */
 void
-send_notification (const int& clntSock) {
+sendNotification (const int& clntSock) {
     bool notification = true;
     int sent = send (clntSock, &notification, sizeof(notification), 0);
     ASSERT (sent == sizeof(notification));
@@ -40,8 +40,8 @@ send_notification (const int& clntSock) {
 
 /* Receive pictures in each thread. */
 void
-handle_thread (const int& clntSock, std::vector<cv::Mat>& imgs, 
-                int& width, int& height, bool& picture_flag, 
+handleThread (const int& clntSock, std::vector<cv::Mat>& imgs, 
+                int& width, int& height, bool& pictureFlag, 
                 int& MODE_FLAG, std::mutex& m) {
     int recvd;
 
@@ -52,17 +52,17 @@ handle_thread (const int& clntSock, std::vector<cv::Mat>& imgs,
     while (true) {
         if (MODE_FLAG == TERMINATE_MODE)
             break;
-        if (!picture_flag) { // 사진을 가져오라는 명령이 떨어짐
+        if (!pictureFlag) { // 사진을 가져오라는 명령이 떨어짐
             // 스레드별로 camId를 먼저 수신
             // 이후 데이터를 수신하고 디코딩하여 imgs[camId-1] 에 저장.
             // imgs[camId-1] 저장이 끝난 스레드는 종료.
 
-            send_mode_flag (clntSock, MODE_FLAG);
+            sendModeFlag (clntSock, MODE_FLAG);
 
-            send_res (clntSock, width, height);
+            sendRes (clntSock, width, height);
 
             // Send notification
-            send_notification (clntSock);
+            sendNotification (clntSock);
 
             // Receive @vec.size()
             recvd = 0;
@@ -78,21 +78,21 @@ handle_thread (const int& clntSock, std::vector<cv::Mat>& imgs,
             vec.clear();
 
             m.lock();
-            picture_flag = true; // 사진수신을 완료하였음을 알림
+            pictureFlag = true; // 사진수신을 완료하였음을 알림
             m.unlock();
             printf ("<%d's camera sent a picture completely!>\n", camId);
         }
     }
-    send_mode_flag (clntSock, MODE_FLAG);
+    sendModeFlag (clntSock, MODE_FLAG);
 }
 
 void
-camera_handler (io_data& _io_data, config_data& _conf_data,
-                std::vector<string>& clnt_addrs, bool& allConnected, 
+cameraHandler (IOdata& ioData, ConfigData& confData,
+                std::vector<string>& clntAddrs, bool& allConnected, 
                 int& WORK_FLAG, int& MODE_FLAG, std::mutex& m) {
 
-    const int& camera_number = _conf_data.camera_number;
-    clnt_addrs.resize (camera_number);
+    const int& cameraNumber = confData.cameraNumber;
+    clntAddrs.resize (cameraNumber);
     allConnected = false;
 
     // Use LINGER.
@@ -124,37 +124,37 @@ camera_handler (io_data& _io_data, config_data& _conf_data,
     struct sockaddr_in clntAddr; // Create client address structure.
     socklen_t clntAddrLen = sizeof(clntAddr);
 
-    int* clntSock = new int[camera_number];
-    int connected_number = 0;
+    int* clntSock = new int[cameraNumber];
+    int connectedNumber = 0;
     
     // printf (" accessing cam connection loop... camera_number=%d\n", camera_number);
-    while (connected_number < camera_number) { // 초기 카메라 연결
+    while (connectedNumber < cameraNumber) { // 초기 카메라 연결
         //만약 카메라가 연결되지 않을 경우 여기에서 무한대기됨
         // Waiting for external connection.
         // Set LINGER: client socket
         // printf (" > setsockopt()\n");
-        setsockopt (clntSock[connected_number], SOL_SOCKET, SO_LINGER, (char *) &ling, sizeof(ling));
+        setsockopt (clntSock[connectedNumber], SOL_SOCKET, SO_LINGER, (char *) &ling, sizeof(ling));
         // printf (" > accept()\n");
-        clntSock[connected_number] = accept (servSock, (struct sockaddr *) &clntAddr, &clntAddrLen);
+        clntSock[connectedNumber] = accept (servSock, (struct sockaddr *) &clntAddr, &clntAddrLen);
         // Print Client's info.
         char clntName[INET_ADDRSTRLEN];
         // printf (" > inet_ntop()\n");
         ASSERT (inet_ntop (AF_INET, &clntAddr.sin_addr.s_addr, clntName, sizeof(clntName)) != NULL);
-        printf ("Client connected: %d\n", connected_number+1);
-        clnt_addrs[connected_number] = string(clntName);
-        connected_number++;
+        printf ("Client connected: %d\n", connectedNumber + 1);
+        clnt_addrs[connectedNumber] = string(clntName);
+        connectedNumber++;
     }
     allConnected = true;
 
     // 이 시점에서 클라이언트소켓은 모두 clntSock 에 저장되어있는상태
 
     // 각 소켓별로 송수신을 담당하는 스레드 할당
-    std::thread* thrs = new std::thread[camera_number];
-    bool* picture_flag = new bool[camera_number]; // 여기 스레드에서 각 스레드별 사진수신여부를 총합하는 플래그
-    for (int i=0; i<camera_number; i++) {
-        picture_flag[i] = false; // i번째 스레드의 사진이 수신되었으면 true로 변경됨
+    std::thread* thrs = new std::thread[cameraNumber];
+    bool* pictureFlag = new bool[cameraNumber]; // 여기 스레드에서 각 스레드별 사진수신여부를 총합하는 플래그
+    for (int i=0; i<cameraNumber; i++) {
+        pictureFlag[i] = false; // i번째 스레드의 사진이 수신되었으면 true로 변경됨
         // printf ("[thread %d] created!\n", i);
-        thrs[i] = std::thread(handle_thread, std::ref(clntSock[i]), std::ref(_io_data.imgs), std::ref(_conf_data.capture_res_width), std::ref(_conf_data.capture_res_height), std::ref(picture_flag[i]), std::ref(MODE_FLAG), std::ref(m));
+        thrs[i] = std::thread(handleThread, std::ref(clntSock[i]), std::ref(ioData.imgs), std::ref(confData.captureResWidth), std::ref(confData.captureResHeight), std::ref(pictureFlag[i]), std::ref(MODE_FLAG), std::ref(m));
     }
 
     // 각 스레드를 총괄하는 루프
@@ -163,15 +163,15 @@ camera_handler (io_data& _io_data, config_data& _conf_data,
             break;
         if (WORK_FLAG == GO_TAKE_PICTURE) { // 사진을 가져오라는 명령이 떨어짐
 
-            for (int i=0; i<camera_number; i++)
-                picture_flag[i] = false; // 각 스레드들에게 사진 수신하라고 알리기
+            for (int i=0; i<cameraNumber; i++)
+                pictureFlag[i] = false; // 각 스레드들에게 사진 수신하라고 알리기
             
             while (true) { // 각 스레드 사진수신 완료되었는지 조사
-                bool go_to_next_work = true;
-                for (int i=0; i<camera_number; i++)
-                    if (!picture_flag[i]) // 아직 사진이 수신되지 않은 스레드가 있다면
-                        go_to_next_work = false;
-                if (go_to_next_work) // 모든 사진이 다 수신되었다면
+                bool goToNextWork = true;
+                for (int i=0; i<cameraNumber; i++)
+                    if (!pictureFlag[i]) // 아직 사진이 수신되지 않은 스레드가 있다면
+                        goToNextWork = false;
+                if (goToNextWork) // 모든 사진이 다 수신되었다면
                     break;
             }
             // 모든 스레드들이 사진수신을 완료하였으므로
@@ -182,12 +182,12 @@ camera_handler (io_data& _io_data, config_data& _conf_data,
         }
     }
 
-    for (int i=0; i<camera_number; i++) {
-        thrs[i].join(); // 각 스레드에서 handle_thread() 가 리턴될때까지 대기 (사진을 찍을 때까지 대기)
+    for (int i=0; i<cameraNumber; i++) {
+        thrs[i].join(); // 각 스레드에서 handleThread() 가 리턴될때까지 대기 (사진을 찍을 때까지 대기)
         close (clntSock[i]); // 스레드가 종료되었으면 해당 소켓을 종료
     }
     close (servSock);
     delete[] thrs;
     delete[] clntSock;
-    delete[] picture_flag;
+    delete[] pictureFlag;
 }

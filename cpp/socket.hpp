@@ -30,22 +30,22 @@ ssize_t
 Recv (const int& sock, const void *buf, ssize_t size, ssize_t unit);
 
 void
-send_mode_flag (const int& clntSock, int& MODE_FLAG);
+sendModeFlag (const int& clntSock, int& MODE_FLAG);
 
 void
-send_res (const int& clntSock, int& width, int& height);
+sendRes (const int& clntSock, int& width, int& height);
 
 void
-send_notification (const int& clntSock);
+sendNotification (const int& clntSock);
 
 void
-handle_thread (const int& clntSock, std::vector<cv::Mat>& imgs, 
-                int& width, int& height, bool& picture_flag, 
+handleThread (const int& clntSock, std::vector<cv::Mat>& imgs, 
+                int& width, int& height, bool& pictureFlag, 
                 int& MODE_FLAG, std::mutex& m);
 
 void
-camera_handler (io_data& _io_data, config_data& _conf_data, 
-                std::vector<string>& clnt_addrs, bool& allConnected, 
+cameraHandler (IOdata& ioData, ConfigData& confData, 
+                std::vector<string>& clntAddrs, bool& allConnected, 
                 int& WORK_FLAG, int& MODE_FLAG, std::mutex& m);
 
 #endif

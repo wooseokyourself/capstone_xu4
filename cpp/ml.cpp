@@ -1,6 +1,6 @@
 #include "ml.hpp"
 
-OpenCV_DNN::OpenCV_DNN (const config_data& data) {
+OpenCV_DNN::OpenCV_DNN (const ConfigData& data) {
     // Set path.
     this->MODEL_PATH = BIN_PATH + "/model/yolov3.weights";
     this->CFG_PATH = BIN_PATH + "/model/yolov3.cfg";
@@ -34,48 +34,48 @@ OpenCV_DNN::OpenCV_DNN (const config_data& data) {
 
 /* data 의 config 정보들을 dnn 클래스의 설정값에 적용 */
 void
-OpenCV_DNN::update (const config_data& data) {
-    this->resize_res.width = data.resize_res_width;
-    this->resize_res.height = data.resize_res_height;
+OpenCV_DNN::update (const ConfigData& data) {
+    this->resizeRes.width = data.resizeResWidth;
+    this->resizeRes.height = data.resizeResHeight;
     this->confThreshold = data.confThreshold;
     this->nmsThreshold = data.nmsThreshold;
-    this->ovlaps = data.ovlaps;
+    this->overlaps = data.overlaps;
 }
 
 void
-OpenCV_DNN::inference (io_data& _io_data) {
-    printf ("in _io_data, number of image is %d\n", _io_data.imgs.size());
-    for (int i=0; i<_io_data.imgs.size(); i++) {
-        int each_pic_people_num = infer_util (i, _io_data.imgs[i]);
-        _io_data.nums[i] = each_pic_people_num;
-        _io_data.total_people_num += each_pic_people_num;
+OpenCV_DNN::inference (IOdata& ioData) {
+    printf ("in ioData, number of image is %d\n", ioData.imgs.size());
+    for (int i=0; i<ioData.imgs.size(); i++) {
+        int eachPicPeopleNum = inferUtil (i, ioData.imgs[i]);
+        ioData.nums[i] = eachPicPeopleNum;
+        ioData.totalPeopleNum += eachPicPeopleNum;
     }
 }
 
 /* Change @img to result image, and returns people number of the @img. */
 int 
-OpenCV_DNN::infer_util (const int& idx, Mat& img) {
+OpenCV_DNN::inferUtil (const int& idx, Mat& img) {
     // Image processig.
     vector<Mat> outs;
     preprocess(idx, img);
     net.forward(outs, outNames);
-    int people_num = postprocess(img, outs);
+    int peopleNum = postprocess(img, outs);
 
     // Draw rect and other info in output image.
     vector<double> layersTimes;
     double freq = getTickFrequency() / 1000;
     double t = net.getPerfProfile(layersTimes) / freq;
     
-    string label_inferTime = format ("Inference time: %.2f ms", t);
-    // string label_confThreshold = format ("confThreshold: %.1f", confThreshold);
-    // string label_resolution = format ("Resolution: %d X %d", img.cols, img.rows);
-    string label_people = format ("People: %d", people_num);
-    putText (img, label_inferTime, Point(0, 35), FONT_HERSHEY_SIMPLEX, 0.5, Scalar(0, 0, 255), 2);
-    // putText (img, label_confThreshold, Point(0, 70), FONT_HERSHEY_SIMPLEX, 0.5, Scalar(0, 0, 255), 2);
-    // putText (img, label_resolution, Point(0, 35), FONT_HERSHEY_SIMPLEX, 0.5, Scalar(0, 0, 255), 0.5);
-    putText (img, label_people, Point(0, 70), FONT_HERSHEY_SIMPLEX, 0.5, Scalar(0, 0, 255), 2);
+    string labelInferTime = format ("Inference time: %.2f ms", t);
+    // string labelConfThreshold = format ("confThreshold: %.1f", confThreshold);
+    // string labelResolution = format ("Resolution: %d X %d", img.cols, img.rows);
+    string labelPeople = format ("People: %d", peopleNum);
+    putText (img, labelInferTime, Point(0, 35), FONT_HERSHEY_SIMPLEX, 0.5, Scalar(0, 0, 255), 2);
+    // putText (img, labelConfThreshold, Point(0, 70), FONT_HERSHEY_SIMPLEX, 0.5, Scalar(0, 0, 255), 2);
+    // putText (img, labelResolution, Point(0, 35), FONT_HERSHEY_SIMPLEX, 0.5, Scalar(0, 0, 255), 0.5);
+    putText (img, labelPeople, Point(0, 70), FONT_HERSHEY_SIMPLEX, 0.5, Scalar(0, 0, 255), 2);
 
-    return people_num;
+    return peopleNum;
 }
 
 
@@ -85,21 +85,21 @@ OpenCV_DNN::preprocess (const int& idx, Mat& frame) {
     imagePadding (frame);
     static Mat blob;
     // Create a 4D blob from a frame.
-    if (this->resize_res.width <= 0)
-        this->resize_res.width = frame.cols;
-    if (this->resize_res.height <= 0)
-        this->resize_res.height = frame.rows;
+    if (this->resizeRes.width <= 0)
+        this->resizeRes.width = frame.cols;
+    if (this->resizeRes.height <= 0)
+        this->resizeRes.height = frame.rows;
 
-    blob = blobFromImage (frame, this->scalarfactor, this->resize_res, Scalar(), this->swapRB, false, CV_8U);
+    blob = blobFromImage (frame, this->scalarfactor, this->resizeRes, Scalar(), this->swapRB, false, CV_8U);
 
     // Run a model.
     this->net.setInput (blob, "", this->scale, this->mean);
     
-    if (net.getLayer(0)->outputNameToIndex("im_info") != -1)  // Faster-RCNN or R-FCN
+    if (net.getLayer(0)->outputNameToIndex("imInfo") != -1)  // Faster-RCNN or R-FCN
     {
-        resize(frame, frame, this->resize_res);
-        Mat imInfo = (Mat_<float>(1, 3) << this->resize_res.height, this->resize_res.width, 1.6f);
-        this->net.setInput(imInfo, "im_info");
+        resize(frame, frame, this->resizeRes);
+        Mat imInfo = (Mat_<float>(1, 3) << this->resizeRes.height, this->resizeRes.width, 1.6f);
+        this->net.setInput(imInfo, "imInfo");
     }
 }
 
@@ -199,7 +199,7 @@ OpenCV_DNN::postprocess (Mat& frame, const vector<Mat>& outs) {
 
 void
 OpenCV_DNN::removeOverlaps (const int& idx, Mat& frame) {
-    const vector<int>& ref = this->ovlaps[idx];
+    const vector<int>& ref = this->overlaps[idx];
     for (int i=0; i<ref.size(); i+=4) {
         int width = ref[i+2] - ref[i];
         int height = ref[i+3] - ref[i+1];

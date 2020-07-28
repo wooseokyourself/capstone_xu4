@@ -5,31 +5,31 @@
 
 using namespace cv;
 
-class config_data {
+class ConfigData {
 public:
 
-    int prev_flag;
-    int camera_number;
-    int capture_res_width;
-    int capture_res_height;
-    int resize_res_width;
-    int resize_res_height;
+    int prevFlag;
+    int cameraNumber;
+    int captureResWidth;
+    int captureResHeight;
+    int resizeResWidth;
+    int resizeResHeight;
     float confThreshold; // default=0.4
     float nmsThreshold; // default=0.5
-    std::vector< std::vector< int > > ovlaps;
+    std::vector< std::vector< int > > overlaps;
 
 public:
-    config_data ();
+    configData ();
     bool
-    sync (bool is_first_call);
+    sync (bool isFirstCall);
 
 protected:
     int
-    read_mode_flag ();
+    readModeFlag ();
     void
-    read_admin_input ();
+    readAdminInput ();
     void
-    read_ovlaps ();
+    readOverlaps ();
 
 };
 

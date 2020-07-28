@@ -13,13 +13,13 @@ class Uploader {
 public:
 
     void
-    upload_ips (const vector<string>& clnt_addrs);
+    uploadIPs (const vector<string>& clntAddrs);
 
     void
-    upload_input (const io_data& _io_data);
+    uploadInput (const IOdata& ioData);
 
     void
-    upload_output (const io_data& _io_data);
+    uploadOutput (const IOdata& ioData);
 
 };
 

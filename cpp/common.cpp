@@ -42,25 +42,25 @@ getCurrTime () {
     return currTime;
 }
 
-io_data::io_data (int camera_num) {
-    this->camera_num = camera_num;
-    this->imgs.resize (camera_num);
-    this->nums.resize (camera_num);
-    this->total_people_num = 0;
-    this->inference_time = 0;
+IOdata::IOdata (int cameraNum) {
+    this->cameraNum = cameraNum;
+    this->imgs.resize (cameraNum);
+    this->nums.resize (cameraNum);
+    this->totalPeopleNum = 0;
+    this->inferenceTime = 0;
 }
 
-io_data::~io_data () {
+IOdata::~IOdata () {
     this->imgs.clear();
     this->nums.clear();
 }
 
 void
-io_data::clear () {
+IOdata::clear () {
     this->imgs.clear();
     this->nums.clear();
-    this->imgs.resize (this->camera_num);
-    this->nums.resize (this->camera_num);
-    this->total_people_num = 0;
-    this->inference_time = 0;
+    this->imgs.resize (this->cameraNum);
+    this->nums.resize (this->cameraNum);
+    this->totalPeopleNum = 0;
+    this->inferenceTime = 0;
 }

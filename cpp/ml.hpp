@@ -12,18 +12,18 @@ using namespace dnn;
 class OpenCV_DNN {
 public:
 
-    OpenCV_DNN(const config_data& data);
+    OpenCV_DNN(const ConfigData& data);
 
     void
-    update (const config_data& data);
+    update (const ConfigData& data);
 
     void
-    inference (io_data& _io_data);
+    inference (IOdata& ioData);
 
 protected:
 
     int 
-    infer_util (const int& idx, Mat& img);
+    inferUtil (const int& idx, Mat& img);
 
     inline void
     preprocess (const int& idx, Mat& frame);
@@ -56,10 +56,10 @@ private: // Variables for Machine Learning.
     bool swapRB;
 
     // Admin Mode Config Data
-    Size resize_res;
+    Size resizeRes;
     float confThreshold;
     float nmsThreshold;
-    vector< vector<int> > ovlaps;
+    vector< vector<int> > overlaps;
 
     // Model Info
     vector<string> classes;
