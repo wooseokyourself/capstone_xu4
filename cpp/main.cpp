@@ -36,9 +36,9 @@ main (int argc, char* argv[]) {
         if (MODE_FLAG == TERMINATE_MODE)
             break;
         /* prev==ADMIN && now==BASIC 이면 config 갱신.
-            즉, ADMIN mode인 동안에도 기존의 conf_data를 가지고 계속 BASIC task를 진행. */
+            즉, ADMIN mode인 동안에도 기존의 confData를 가지고 계속 BASIC task를 진행. */
         if (confData.sync(false))
-            dnn.update (confData); // _conf_data가 변경되었다면 dnn 설정 업데이트.
+            dnn.update (confData); // confData가 변경되었다면 dnn 설정 업데이트.
         if (WORK_FLAG == DONE_TAKE_PICTURE) { // 사진촬영을 모두 완료하였다면
             printf (" WORK_FLAG: DONE_TAKE_PICTURE --> GO_INFERENCE\n");
             m.lock();
