@@ -10,7 +10,7 @@ int
 main (int argc, char* argv[]) {
     __root_path = string(argv[1]);
     ConfigData confData;
-    confData.sync(true);
+    confData.sync();
     OpenCV_DNN dnn (confData);
     Uploader ups;
 
@@ -29,23 +29,25 @@ main (int argc, char* argv[]) {
     while (true)
         if (allConnected)
             break;
-    ups.uploadIPs (clntAddrs);
     // Camera connection end
 
+
+    // 카메라의 ip: clntAddrs[i]
     while (true) {
         if (MODE_FLAG == TERMINATE_MODE)
             break;
         /* prev==ADMIN && now==BASIC 이면 config 갱신.
             즉, ADMIN mode인 동안에도 기존의 confData를 가지고 계속 BASIC task를 진행. */
-        if (confData.sync(false))
+        m.lock()
+        if (!confData.sync())
             dnn.update (confData); // confData가 변경되었다면 dnn 설정 업데이트.
+        m.unlock
         if (WORK_FLAG == DONE_TAKE_PICTURE) { // 사진촬영을 모두 완료하였다면
             printf (" WORK_FLAG: DONE_TAKE_PICTURE --> GO_INFERENCE\n");
             m.lock();
             WORK_FLAG = GO_INFERENCE;
-            ups.uploadInput (ioData);
             dnn.inference(ioData);
-            ups.uploadOutput (ioData);
+            http::postResultData("https://tproject-ye.herokuapp.com/api/basic/image-info", ioData.imgs, ioData.nums);
             ioData.clear();
             WORK_FLAG = GO_TAKE_PICTURE; // 다시 사진촬영 요청
             m.unlock();

@@ -2,12 +2,18 @@
 
 ConfigData::ConfigData () {
     this->prevFlag = ADMIN_MODE;
+    this->cameraNumber = -1;
+    this->captureResWidth = -1;
+    this->captureResHeight = -1;
+    this->resizeResWidth = -1;
+    this->resizeResHeight = -1;
     this->confThreshold = 0.4;
     this->nmsThreshold = 0.5;
 
-    this->readAdminInput();
+    // this->readAdminInput();
 
     // overlaps가 입력되지 않을 시 초기값
+    /*
     this->overlaps.resize(this->cameraNumber);
     for (int i=0; i<this->cameraNumber; i++) {
         this->overlaps[i].push_back(0);
@@ -15,9 +21,39 @@ ConfigData::ConfigData () {
         this->overlaps[i].push_back(0);
         this->overlaps[i].push_back(0);
     }
+    */
 }
 
-/* Returns true when the server has to be reset with config data. */
+bool
+ConfigData::sync () {
+    AdminData newData = http::getAdminSetting("https://tproject-ye.herokuapp.com/api/admin/setting");
+    bool isChanged = false;
+
+    if (this->cameraNumber != newData.cameraNumber) {
+        this->cameraNumber = newData.cameraNumber;
+        isChanged = true;
+    }
+    if (this->captureResWidth != newData.captureResWidth) {
+        this->captureResWidth = newData.captureResWidth;
+        isChanged = true;
+    }
+    if (this->captureResHeight != newData.captureResHeight) {
+        this->captureResHeight = newData.captureResHeight;
+        isChanged = true;
+    }
+    if (this->resizeResWidth != newData.resizeResWidth) {
+        this->resizeResWidth = newData.resizeResWidth;
+        isChanged = true
+    }
+    if (this->resizeResHeight != newData.resizeResHeight) {
+        this->resizeResHeight = newData.resizeResHeight;
+        isChanged = true;
+    }
+    this->overlaps = http::getRoiInfo("https://tproject-ye.herokuapp.com/api/admin/roi-info", this->cameraNumber);
+}
+
+/*
+// Returns true when the server has to be reset with config data.
 bool
 ConfigData::sync (bool isFirstCall) {
     int nowFlag = readModeFlag();
@@ -45,6 +81,7 @@ ConfigData::sync (bool isFirstCall) {
     }
 }
 
+
 int
 ConfigData::readModeFlag () {
     char buf[20];
@@ -64,7 +101,7 @@ ConfigData::readModeFlag () {
 
 void
 ConfigData::readAdminInput () {
-    /* 주어진 경로로부터 텍스트파일을 읽어서 모든 멤버변수에 저장하기 */
+    // 주어진 경로로부터 텍스트파일을 읽어서 모든 멤버변수에 저장하기 
     char buf[20];
     FILE* fp;
 
@@ -117,4 +154,5 @@ ConfigData::readOverlaps () {
         }
         printf ("\n");
     }
+*/
 }

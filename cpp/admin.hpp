@@ -28,6 +28,10 @@ public:
 
 public:
     configData ();
+
+    bool
+    sync ();
+/*
     bool
     sync (bool isFirstCall);
 
@@ -38,7 +42,7 @@ protected:
     readAdminInput ();
     void
     readOverlaps ();
-
+*/
 };
 
 #endif

@@ -1,6 +1,6 @@
 BIN = bin
-CPPSRC = src/cpp
-WEBAPP = src/webapp
+CPPSRC = cpp
+WEBAPP = src/webapp # 수정필요
 RSRC = resources
 CFG = config
 
@@ -15,20 +15,21 @@ CPP_SINGLE_TARGET = $(BIN)/a.out
 CXX = g++
 CXXFLAGS = -std=c++11 -pthread
 OPENCV = `pkg-config --cflags --libs opencv4`
+JSONCPP = `pkg-config --cflags --libs jsoncpp`
+FFI = `pkg-config --cflags --libs libffi`
+RESTCLIENT = -I /usr/local/restclient-cpp/include -l restclient-cpp
 
 # Sources
 RELEASE_SRC = $(CPPSRC)/common.cpp $(CPPSRC)/admin.cpp $(CPPSRC)/ml.cpp $(CPPSRC)/socket.cpp $(CPPSRC)/uploader.cpp $(CPPSRC)/main.cpp
 MULTI_VIDEO_SRC =  $(CPPSRC)/common.cpp $(CPPSRC)/admin.cpp $(CPPSRC)/ml.cpp $(CPPSRC)/from_multi_video.cpp $(CPPSRC)/uploader.cpp $(CPPSRC)/multi_video_main.cpp
 
-# Task options
-OPT = #-DDIVIDE
 #-----------------------------------------------#
 
 
 # Compile: release version
 
 all:
-	$(CXX) $(CXXFLAGS) $(OPT) $(RELEASE_SRC) $(OPENCV) -o $(CPP_TARGET)
+	$(CXX) $(CXXFLAGS) $(RELEASE_SRC) $(OPENCV) $(JSONCPP) $(FFI) $(RESTCLIENT) -o $(CPP_TARGET)
 	@echo "Compile is done! Run with 'make run'"
 
 
@@ -38,7 +39,7 @@ all:
 # Compile: release version
 
 debug:
-	$(CXX) $(CXXFLAGS) $(OPT) $(MULTI_VIDEO_SRC) $(OPENCV) -o $(CPP_MULTI_TARGET)
+	$(CXX) $(CXXFLAGS) $(MULTI_VIDEO_SRC) $(OPENCV) $(JSONCPP) $(FFI) $(RESTCLIENT) -o $(CPP_MULTI_TARGET)
 	@echo "Compile is done! Run with 'make run'"
 	
 
@@ -60,7 +61,7 @@ clean:
 
 # Remove all subdirs and files in $(WEB_ROOT)
 
-init:
+init: # 수정필요
 	rm -rf $(RSRC)
 	mkdir $(RSRC)
 	mkdir $(RSRC)/images

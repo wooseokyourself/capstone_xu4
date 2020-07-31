@@ -25,7 +25,7 @@ postImageForRoi (const string& url, const std::vector<cv::Mat>& imgs);
 AdminData
 getAdminSetting (const string& url);
 
-std::vector< vector<int> >
+std::vector< std::vector<int> >
 getRoiInfo (const string& url, const int& camNumber);
 
 }

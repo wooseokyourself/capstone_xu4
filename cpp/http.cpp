@@ -174,13 +174,11 @@ getAdminSetting (const string& url) {
     Json::Value jsonData;
     Json::Reader reader;
     reader.parse(r.body, jsonData);
-
-    /* jsonData의 각 값이 자동으로 타입지정되는지 모르겠음 */
-    data.captureResWidth = jsonData["sizeW"];
-    data.captureResHeight = jsonData["sizeH"];
-    data.resizeResWidth = jsonData["resizeW"];
-    data.resizeResHeight = jsonData["resizeH"];
-    data.cameraNumber = jsonData["camNum"];
+    data.captureResWidth = jsonData["sizeW"].asInt();
+    data.captureResHeight = jsonData["sizeH"].asInt();
+    data.resizeResWidth = jsonData["resizeW"].asInt();
+    data.resizeResHeight = jsonData["resizeH"].asInt();
+    data.cameraNumber = jsonData["camNum"].asInt();
     
     return data;
 }
@@ -200,11 +198,11 @@ getRoiInfo (const string& url, const int& camNumber) {
 
     int camID = 1;
     while(it != jsonData.end()) {
-        int camID = (*it)["id"];
-        data[camID-1].push_back( (*it)["leftX"] );
-        data[camID-1].push_back( (*it)["leftY"] );
-        data[camID-1].push_back( (*it)["rightX"] );
-        data[camID-1].push_back( (*it)["rightY"] );
+        int camID = (*it)["id"].asInt();
+        data[camID-1].push_back( (*it)["leftX"].asInt() );
+        data[camID-1].push_back( (*it)["leftY"].asInt() );
+        data[camID-1].push_back( (*it)["rightX"].asInt() );
+        data[camID-1].push_back( (*it)["rightY"].asInt() );
     }
 
     return data;
