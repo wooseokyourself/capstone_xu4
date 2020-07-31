@@ -5,6 +5,14 @@
 
 using namespace cv;
 
+typedef struct _AdminData {
+    int cameraNumber;
+    int captureResWidth;
+    int captureResHeight;
+    int resizeResWidth;
+    int resizeResHeight;
+} AdminData;
+
 class ConfigData {
 public:
 
