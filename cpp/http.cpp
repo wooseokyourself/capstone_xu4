@@ -127,8 +127,8 @@ postResultData (const string& url, const std::vector<cv::Mat>& imgs, const std::
     std::string data = toString.write(rootData);
     
     RestClient::Response r;
-    while(r.code != 200)
-        RestClient::post(url, "application/json", data);
+    while(r.code != 201)
+        r = RestClient::post(url, "application/json", data);
 }
 
 void
@@ -159,25 +159,26 @@ postImageForRoi (const string& url, const std::vector<cv::Mat>& imgs) {
     std::string data = toString.write(rootData);
     
     RestClient::Response r;
-    while(r.code != 200)
-        RestClient::post(url, "application/json", data);
+    while(r.code != 201)
+        r = RestClient::post(url, "application/json", data);
 }
 
 AdminData
 getAdminSetting (const string& url) {
     RestClient::Response r;
     while(r.code != 200)
-        RestClient::get(url);
+        r = RestClient::get(url);
     
     // r.body 의 데이터들을 data에 파싱
     AdminData data;
     Json::Value jsonData;
     Json::Reader reader;
     reader.parse(r.body, jsonData);
-    data.captureResWidth = jsonData["sizeW"].asInt();
-    data.captureResHeight = jsonData["sizeH"].asInt();
-    data.resizeResWidth = jsonData["resizeW"].asInt();
-    data.resizeResHeight = jsonData["resizeH"].asInt();
+
+    data.captureResWidth = jsonData["captureSizeWidth"].asInt();
+    data.captureResHeight = jsonData["captureSizeHeight"].asInt();
+    data.resizeResWidth = jsonData["resize"].asInt();
+    data.resizeResHeight = jsonData["resize"].asInt();
     data.cameraNumber = jsonData["camNum"].asInt();
     
     return data;
@@ -187,7 +188,7 @@ std::vector< vector<int> >
 getRoiInfo (const string& url, const int& camNumber) {
     RestClient::Response r;
     while(r.code != 200)
-        RestClient::get(url);
+        r = RestClient::get(url);
     
     // r.body 의 데이터들을 data에 파싱
     std::vector< vector<int> > data (camNumber);
